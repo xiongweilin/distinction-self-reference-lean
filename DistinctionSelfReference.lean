@@ -17,6 +17,7 @@ import DistinctionSelfReference.Purposeful
 import DistinctionSelfReference.LocalGlobal
 import DistinctionSelfReference.NestedGluing
 import DistinctionSelfReference.OverlapGluing
+import DistinctionSelfReference.LocalSufficiency
 import DistinctionSelfReference.InformationOrder
 import DistinctionSelfReference.MarkovGarbling
 import DistinctionSelfReference.InformationFutureBridge
