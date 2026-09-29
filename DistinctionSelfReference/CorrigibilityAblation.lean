@@ -129,7 +129,7 @@ theorem spuriousReopening_not_rejectsFalseAlarm :
   intro h
   have hx := h false rfl
   change true = false at hx
-  exact Bool.true_ne_false hx
+  exact Bool.false_ne_true hx.symm
 
 theorem spuriousReopening_not_exactCorrection :
     ¬ (∀ world, spuriousReopening.applied world =
@@ -137,7 +137,7 @@ theorem spuriousReopening_not_exactCorrection :
   intro h
   have hx := h false
   change true = false at hx
-  exact Bool.true_ne_false hx
+  exact Bool.false_ne_true hx.symm
 
 /-- A self-loop control system where only false is safe. -/
 def falseSafeControl : Viability.ControlledSystem Bool Unit where
@@ -160,7 +160,7 @@ theorem true_not_recoverable_falseSafe :
     simpa [hrun] using hplan
   have hsafe := falseSafeControl.kernel_subset_safe hkernel
   change true = false at hsafe
-  exact Bool.true_ne_false hsafe
+  exact Bool.false_ne_true hsafe.symm
 
 /--
 Correct mismatch handling alone does not imply operational recovery: the
