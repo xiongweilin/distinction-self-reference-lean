@@ -44,15 +44,15 @@ This is a particularly important bridge target for formalization because it give
 
 ## 4. Lawvere fixed-point theorem
 
-Lawvere's diagonal/fixed-point theorem provides a highly general mechanism by which sufficient internal representability forces fixed points. It is one of the strongest established mathematical bridges between self-reference, diagonalization, and fixed-point phenomena.
+Lawvere's diagonal/fixed-point theorem provides a highly general mechanism by which sufficient internal representability forces fixed points.
 
-Reference:
+There are two directly useful Lean routes:
 
-- F. W. Lawvere, "Diagonal arguments and cartesian closed categories", 1969.
-- Lean 4 formalization by Matthew Nestor:
+- Mathlib's `Function.exists_fixed_point_of_surjective`, documented as an instance of Lawvere's fixed-point theorem for types and functions.
+- Matthew Nestor's categorical Lean 4 formalization:
   https://github.com/mdnestor/LawvereFixedPoint
 
-The external Lean formalization is useful evidence that this bridge is feasible to integrate later without inventing a new theorem.
+The file `DistinctionSelfReference/Representational.lean` reuses the Mathlib theorem to keep the first bridge minimal.
 
 ## 5. Knaster-Tarski fixed-point theorem
 
@@ -60,26 +60,26 @@ For a monotone endomap on a complete lattice, the fixed points form a complete l
 
 This is already formalized in Mathlib:
 
-- Mathlib.Order.FixedPoints
-- fixedPoints.completeLattice
-- OrderHom.lfp / OrderHom.gfp
+- `Mathlib.Order.FixedPoints`
+- `fixedPoints.completeLattice`
+- `OrderHom.lfp` / `OrderHom.gfp`
 
-Source:
-https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/Order/FixedPoints.lean
+The file `DistinctionSelfReference/OrderTheoretic.lean` deliberately reuses this existing theorem instead of reproving it.
 
-The file DistinctionSelfReference/OrderTheoretic.lean deliberately reuses this existing theorem instead of reproving it.
+## 6. Rogers and Kleene computability fixed points
 
-## 6. Kleene recursion theorem
+Mathlib already formalizes program-code self-reference in `Mathlib.Computability.PartrecCode`:
 
-Kleene's recursion theorem is a computability-theoretic form of self-reference: computable transformations of program indices have extensional fixed points under standard numberings of partial computable functions.
+- `Nat.Partrec.Code.fixed_point`: Rogers' fixed-point theorem.
+- `Nat.Partrec.Code.fixed_point₂`: Kleene's second recursion theorem.
 
-This is conceptually different from:
+These are computability-theoretic forms of self-reference: computable transformations of program descriptions have extensional/behavioral fixed points. They are conceptually different from:
 
 - a literal state fixed point x = f(x);
 - a period-two dynamic orbit;
 - an order-theoretic least fixed point.
 
-A future computability framework should preserve this distinction rather than collapse all uses of "self-reference" into one predicate.
+The file `DistinctionSelfReference/Computability.lean` exposes both results as an explicit framework branch.
 
 ## 7. Working classification
 
@@ -89,7 +89,7 @@ For this project, established self-reference mechanisms are provisionally separa
 2. **dynamic recurrence / periodicity**: f^n(x) = x;
 3. **order-theoretic fixed points**: monotone endomaps on structured orders;
 4. **diagonal / representational fixed points**: Lawvere-style self-application;
-5. **computability fixed points**: Kleene-style fixed points of program descriptions;
+5. **computability fixed points**: Rogers/Kleene fixed points of program descriptions;
 6. **logical translation bridges**: isomorphisms between distinction calculi and standard logical calculi.
 
 The research question is which assumptions are necessary and sufficient to move between these classes.
