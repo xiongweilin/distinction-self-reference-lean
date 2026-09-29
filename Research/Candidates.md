@@ -526,6 +526,35 @@ Important limits:
 4. infinite capability growth is separated from the finite case, but general well-founded ranks / chain-condition classifications remain open;
 5. the M5 instance currently extracts only the trust/soundness-transfer core, not the full RSI core spanning capability, invariant, reality, and resource roles.
 
+### P6.22 — exact scheduling, resource viability, threshold trust, ranked growth, and full RSI core
+
+Strengthen the previous five open directions from sufficient examples into sharper structural criteria.
+
+Status: **PROVED HERE** in `SchedulingCriterion`, `ResourceViability`, `ThresholdTrust`, `RankedCapability`, and `FullRSIInvariantCore`.
+
+Results:
+
+- eventual freshness is not merely sufficient for stable reality alignment: it is **equivalent** to preserving convergence of every eventually stable Boolean requirement under scheduled sampling;
+- therefore every failure of eventual freshness admits some eventually stable Boolean requirement whose sampled retained sequence fails to converge to the same target;
+- endogenous verification resources are recast as an ordinary controlled viability problem; sustainable budgets are exactly its greatest-fixed-point viability kernel;
+- a resource floor is contained in that kernel when every budget above the floor can pay its current cost and choose regeneration at least equal to expenditure;
+- a fixed unit-cost / zero-regeneration model has an empty sustainable kernel;
+- quorum delegation is sound when an approving finite quorum has size at least k, fewer than k approvers are compromised, and every uncompromised approver in the quorum is sound;
+- quorum cardinality alone is insufficient: an all-compromised quorum can approve an unsound successor;
+- a strict-growth-reflecting rank into any `WellFoundedGT` order rules out infinite everywhere-strict capability improvement;
+- conversely, the explicit open-ended Nat capability chain rules out every such well-founded rank certificate;
+- two distinct RSI condition languages now each cover six shared semantic roles: self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability.
+
+Interpretation: the current RSI analysis is moving from a collection of sufficient conditions toward exact criteria and translation-invariant structure. In particular, scheduling now has a true iff theorem, resource sustainability is a fixed-point capability rather than a budget inequality, and M5 has expanded from trust-only roles to a six-axis RSI role core.
+
+Important limits:
+
+1. the exact scheduling result assumes faithful sampling of the selected source value; corruption/authenticity is still separate;
+2. resource viability currently models resource state only, not coupled capability/resource co-evolution;
+3. threshold trust proves one clean sufficient fault bound but does not yet give a full Byzantine/quorum characterization or ablation family;
+4. well-founded rank is proved sufficient to exclude open-ended growth, but rank completeness from the chain condition remains open;
+5. the full RSI core is still produced by explicit role maps rather than a general formal notion of framework morphism.
+
 The maintained next directions are recorded in the README after every completed phase.
 
 ## Meta-framework target
@@ -578,8 +607,10 @@ Interpretation: derivability-minimal but semantically impossible condition sets 
 
 If several incomparable minimal sufficient frameworks exist, extract the structure preserved by translations between all of them.
 
-Status: **FIRST CROSS-FRAMEWORK INSTANCE PROVED HERE; GENERAL PROGRAM ONGOING**.
+Status: **MULTIPLE CROSS-FRAMEWORK INSTANCES PROVED HERE; GENERAL MORPHISM PROGRAM ONGOING**.
 
-`RSIInvariantCore` translates three syntactically different trust architectures — conservative verifier refinement, proof-checked verifier expansion, and predecessor-checked kernel migration — into a shared semantic role vocabulary. Their translated intersection is proved to contain exactly `trustAnchor` and `soundnessTransfer`; `validationEvidence` is architecture-specific rather than invariant across the three.
+`RSIInvariantCore` translates three syntactically different trust architectures — conservative verifier refinement, proof-checked verifier expansion, and predecessor-checked kernel migration — into a shared semantic role vocabulary. Their translated intersection contains exactly `trustAnchor` and `soundnessTransfer`; `validationEvidence` is architecture-specific.
 
-This is the first concrete M5 result: the invariant core is taken **after semantic translation**, not by literal intersection of incompatible condition languages. The next target is a full-RSI invariant core spanning self-modification, capability order, invariant preservation, reality verification, trust, and resource callability across several feasible-minimal constructions.
+`FullRSIInvariantCore` extends this comparison to six RSI roles — self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability — and proves that two distinct condition languages each cover all six after translation.
+
+The next M5 step is no longer to find a first invariant core, but to formalize **framework morphisms** themselves so that invariant cores are defined by structure preserved under translations rather than by manually supplied role maps.
