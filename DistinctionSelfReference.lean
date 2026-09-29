@@ -9,6 +9,7 @@ import DistinctionSelfReference.LogicBridge
 import DistinctionSelfReference.FutureDistinction
 import DistinctionSelfReference.Bisimulation
 import DistinctionSelfReference.Viability
+import DistinctionSelfReference.LocalGlobal
 import DistinctionSelfReference.OrderTheoretic
 import DistinctionSelfReference.Representational
 import DistinctionSelfReference.Computability
