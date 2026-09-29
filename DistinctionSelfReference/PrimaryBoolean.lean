@@ -130,7 +130,7 @@ def ofBoolExpr : BoolExpr Var → Form Var
   induction a <;> simp_all [toBoolExpr, ofBoolExpr]
 
 /-- The two raw syntaxes are isomorphic for the false/OR/NOT basis. -/
-def syntaxEquiv : Form Var ≃ BoolExpr Var where
+def syntaxEquiv : Equiv (Form Var) (BoolExpr Var) where
   toFun := toBoolExpr
   invFun := ofBoolExpr
   left_inv := ofBoolExpr_toBoolExpr
