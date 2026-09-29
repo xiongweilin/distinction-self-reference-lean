@@ -13,6 +13,7 @@ import DistinctionSelfReference.FutureBisimulation
 import DistinctionSelfReference.Viability
 import DistinctionSelfReference.Recovery
 import DistinctionSelfReference.RecoverySeparation
+import DistinctionSelfReference.Purposeful
 import DistinctionSelfReference.LocalGlobal
 import DistinctionSelfReference.NestedGluing
 import DistinctionSelfReference.OverlapGluing
