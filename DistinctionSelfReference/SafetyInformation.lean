@@ -155,8 +155,8 @@ theorem mem_kernel_iff_of_safety_information
     (hsafe : A.safe = inducedSafe C h.map)
     (s : Concrete) :
     s ∈ C.kernel ↔ h.map s ∈ A.kernel := by
-  have hpres := h.safePreserving_of_inducedSafe hinv hsafe
-  have hrefl := h.safeReflecting_of_inducedSafe hinv hsafe
+  have hpres := safePreserving_of_inducedSafe h hinv hsafe
+  have hrefl := safeReflecting_of_inducedSafe h hinv hsafe
   constructor
   · exact h.map_kernel_of_forward hfwd hpres
   · exact h.mem_kernel_of_map_mem_kernel_of_backward hbwd hrefl
@@ -170,8 +170,8 @@ theorem recoverable_iff_of_safety_information
     (hsafe : A.safe = inducedSafe C h.map)
     (s : Concrete) :
     Recoverable C s ↔ Recoverable A (h.map s) := by
-  have hpres := h.safePreserving_of_inducedSafe hinv hsafe
-  have hrefl := h.safeReflecting_of_inducedSafe hinv hsafe
+  have hpres := safePreserving_of_inducedSafe h hinv hsafe
+  have hrefl := safeReflecting_of_inducedSafe h hinv hsafe
   constructor
   · exact h.map_recoverable_of_forward hfwd hpres
   · exact h.recoverable_of_map_recoverable_of_backward hbwd hrefl
