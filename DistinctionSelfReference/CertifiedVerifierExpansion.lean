@@ -86,7 +86,7 @@ theorem expansion_refines_old_iff
     · exact hp
     · exact h p hp
 
-/-- Tiny model witnessing strict but sound verifier expansion. -/
+/- Tiny model witnessing strict but sound verifier expansion. -/
 namespace Example
 
 def invariant (_ : Bool) : Prop := True
