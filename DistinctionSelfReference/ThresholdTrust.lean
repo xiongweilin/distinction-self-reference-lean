@@ -33,7 +33,7 @@ theorem sound_of_quorum
     [DecidableEq KernelVersion]
     [DecidablePred P.Compromised]
     {new : KernelVersion}
-    (q : P.QuorumApproval new)
+    (q : QuorumApproval P new)
     (threshold : Nat)
     (hsize : threshold ≤ q.voters.card)
     (hbad : (q.voters.filter P.Compromised).card < threshold)
@@ -75,7 +75,7 @@ def protocol : TrustDelegation.Protocol Nat where
   delegationSound := by
     intro checker new proof hhealthy hsound hcheck
     simp [check, hhealthy] at hcheck
-    exact of_decide_eq_true hcheck
+    exact hcheck
 
 instance : DecidablePred protocol.Compromised := by
   intro k
@@ -83,7 +83,7 @@ instance : DecidablePred protocol.Compromised := by
   infer_instance
 
 def badQuorum :
-    protocol.QuorumApproval 2 where
+    TrustDelegation.Protocol.QuorumApproval protocol 2 where
   voters := {0, 1}
   proofOf := fun _ => Unit.unit
   checked := by
