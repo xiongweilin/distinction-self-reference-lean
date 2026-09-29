@@ -1,4 +1,6 @@
 import Mathlib.Order.WellQuasiOrder
+import Mathlib.Data.Set.Finite.Lattice
+import Mathlib.Data.Fintype.Order
 
 namespace DistinctionSelfReference
 namespace ArchiveRSI
@@ -177,6 +179,52 @@ theorem wqo_forbids_strict_antichain_growth_every_step
   have heq :=
     (hanti (j + 1)).eq hi_succj (hnew j) hijle
   exact hne heq
+
+/--
+Full stabilization theorem for retained Pareto frontiers:
+under a WQO, a monotone sequence of antichain archives is eventually constant.
+-/
+theorem wqo_monotone_antichain_archive_eventually_stabilizes
+    {Version : Type u}
+    [Preorder Version]
+    [WellQuasiOrderedLE Version]
+    (archive : Nat → Archive Version)
+    (hmono : MonotoneArchive archive)
+    (hanti : AntichainArchive archive) :
+    ∃ N, ∀ n, N ≤ n → archive n = archive N := by
+  have hmonotone : Monotone archive :=
+    monotone_nat_of_le_succ hmono
+  let total : Set Version := ⋃ n, archive n
+  have htotalAnti : IsAntichain (· ≤ ·) total := by
+    intro a ha b hb hne hab
+    rcases Set.mem_iUnion.mp ha with ⟨i, hai⟩
+    rcases Set.mem_iUnion.mp hb with ⟨j, hbj⟩
+    let k := max i j
+    have haiK : a ∈ archive k :=
+      hmonotone (le_max_left i j) hai
+    have hbjK : b ∈ archive k :=
+      hmonotone (le_max_right i j) hbj
+    exact hne ((hanti k).eq haiK hbjK hab)
+  have htotalFinite : total.Finite :=
+    antichain_frontier_finite total htotalAnti
+  have hcover : total ⊆ ⋃ n, archive n := by
+    simpa [total]
+  rcases Set.finite_subset_iUnion htotalFinite hcover with
+    ⟨indices, hindicesFinite, hfiniteCover⟩
+  rcases hindicesFinite.exists_le with ⟨N, hN⟩
+  have htotalToN : total ⊆ archive N := by
+    intro x hx
+    have hxCover := hfiniteCover hx
+    rcases Set.mem_iUnion.mp hxCover with ⟨i, hxI⟩
+    rcases Set.mem_iUnion.mp hxI with ⟨hi, hxi⟩
+    exact hmonotone (hN i hi) hxi
+  refine ⟨N, ?_⟩
+  intro n hn
+  apply Set.Subset.antisymm
+  · intro x hx
+    apply htotalToN
+    exact Set.mem_iUnion.mpr ⟨n, hx⟩
+  · exact hmonotone hn
 
 end ArchiveRSI
 end DistinctionSelfReference
