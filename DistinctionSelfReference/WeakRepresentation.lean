@@ -81,5 +81,33 @@ theorem family_containing_diagonal_forces_fixed_point
   apply diagonalRepresentable_forces_fixed_point eval step
   exact hrep hdiag
 
+/-- A minimal partial evaluator for the two-state result type. -/
+def twoStateConstantEval : Unit → Unit → TwoState.Side :=
+  fun _ _ => TwoState.Side.unmarked
+
+/-- The one-function family represented by the minimal evaluator. -/
+def constantUnmarkedFamily : Set (Unit → TwoState.Side) :=
+  { f | f = fun _ => TwoState.Side.unmarked }
+
+theorem twoStateConstantEval_represents_family :
+    RepresentsFamily twoStateConstantEval constantUnmarkedFamily := by
+  intro f hf
+  refine ⟨Unit.unit, ?_⟩
+  change twoStateConstantEval Unit.unit = f
+  rw [hf]
+  funext x
+  rfl
+
+/--
+Partial representation can coexist with the fixed-point-free two-state crossing,
+provided the forbidden diagonal function is not included.
+-/
+theorem partial_twoState_representation_exists :
+    RepresentsFamily twoStateConstantEval constantUnmarkedFamily ∧
+      ¬ DiagonalRepresentable twoStateConstantEval TwoState.cross := by
+  constructor
+  · exact twoStateConstantEval_represents_family
+  · exact twoState_diagonal_unrepresentable twoStateConstantEval
+
 end WeakRepresentation
 end DistinctionSelfReference
