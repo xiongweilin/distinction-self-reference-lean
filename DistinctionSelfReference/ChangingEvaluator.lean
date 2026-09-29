@@ -36,7 +36,7 @@ theorem local_to_global
     (global : Evaluator State)
     (hlocal : LocalImprovement evaluators trajectory)
     (hcoherent : CoherentWithGlobal evaluators global)
-    (htrans : Transitive global.better) :
+    (htrans : ∀ ⦃a b c⦄, global.better a b → global.better b c → global.better a c) :
     ∀ n, global.better (trajectory 0) (trajectory (n + 1)) := by
   intro n
   induction n with
@@ -94,8 +94,7 @@ def toggle : Nat → Bool
 
 theorem toggle_two_step (n : Nat) :
     toggle (n + 2) = toggle n := by
-  change !(!(toggle n)) = toggle n
-  cases toggle n <;> rfl
+  simp [toggle]
 
 theorem toggle_locally_improves :
     LocalImprovement (pathEvaluator toggle) toggle :=
@@ -111,8 +110,8 @@ Hence local improvement alone does not imply any strict global order.
 -/
 theorem no_irreflexive_transitive_global_extension :
     ¬ ∃ global : Evaluator Bool,
-        Irreflexive global.better ∧
-        Transitive global.better ∧
+        (∀ a, ¬ global.better a a) ∧
+        (∀ ⦃a b c⦄, global.better a b → global.better b c → global.better a c) ∧
         CoherentWithGlobal (pathEvaluator toggle) global := by
   rintro ⟨global, hirr, htrans, hcoherent⟩
   have h01 :
