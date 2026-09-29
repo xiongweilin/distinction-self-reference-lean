@@ -73,7 +73,9 @@ theorem ablationMinimal_of_inclusionMinimal
     have hc' : c ∈ conditions \ {c} := by
       rw [heq]
       exact hc
-    exact hc'.2 (by simp)
+    exact hc'.2 (by
+      change c = c
+      rfl)
 
 /--
 For a monotone capability relation, single-condition ablation minimality is
