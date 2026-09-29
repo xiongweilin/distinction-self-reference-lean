@@ -169,17 +169,48 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - Can different self-reference frameworks be compared by implication / interpretation?
 - Is there a useful notion of a minimal sufficient self-reference meta-framework?
 
+## RSI phase summary
+
+The RSI line has now moved beyond a single monotone-upgrade model into a family of formally separated dimensions:
+
+- **Self-modification and invariant preservation** — verified upgrades, verifier migration, trusted-kernel handoff, proof-checked expansion, and compromise-aware delegation are formalized separately.
+- **Capability order and long-run dynamics** — strict growth, plateaus, recurrence, full-version cycles, finite growth bounds, infinite strict chains, and well-founded-rank obstructions are distinguished.
+- **Reality verification** — exact correction, fixed/variable delay, reordered observations, eventual freshness, and an iff criterion for preservation of all eventually stable Boolean requirements are proved.
+- **Verification resources** — certification is separated from callability; exogenous budgets, endogenous consumption/regeneration, indefinite callability, and a resource viability kernel are formalized.
+- **Trust and certification** — predecessor migration, dual overlap, quorum delegation, compromise recovery, and translated trust-role invariant cores are present, but they still assume some non-circular soundness premise.
+- **Meta-framework comparison** — feasible-minimal condition sets, incompatibility edges, semantic role translations, and a six-role RSI invariant core have been constructed.
+
+The current frontier is therefore no longer “can a monotone RSI chain grow?” but **when improvement remains meaningful as the evaluator, verifier, branch structure, and resource state themselves change**.
+
 ## Next construction directions
 
 This section is updated at the end of every completed construction phase.
 
 Current next directions, in priority order:
 
-1. **Adversarial reality channels** — extend the exact scheduling criterion from stale/reordered sampling to dropped, duplicated, corrupted, and selectively delayed observations; separate freshness from authenticity.
-2. **Coupled resource–capability dynamics** — let upgrades alter both future capability and future verification cost/regeneration, and characterize when apparent capability growth destroys its own sustainable callability.
-3. **Threshold trust ablation and Byzantine bounds** — generalize the current quorum theorem to explicit k-of-n/f-fault bounds and prove independent necessity of approval count, healthy overlap, and delegation soundness.
-4. **Rank completeness / chain-condition equivalence** — determine when absence of infinite strict capability growth admits a rank certificate into a suitable well-founded order rather than only proving the forward implication.
-5. **Framework morphisms for M5** — replace hand-written role maps with explicit structure-preserving translations between feasible-minimal RSI frameworks and define invariant cores functorially.
+1. **Changing evaluator: local improvement → global improvement** — formalize time-varying evaluators / preference orders and determine the minimum compatibility conditions under which
+   local steps
+   `x_t <_{E_t} x_{t+1}`
+   compose into a meaningful global improvement relation. Candidate conditions include a common potential, order-preserving evaluator migration, cross-evaluator comparison maps, and explicit counterexamples where every local step improves while the overall trajectory cycles or regresses under another evaluator.
+
+2. **Self-modifying verifier without an independent trust anchor** — characterize when certification becomes circular, vacuous, or non-informative if the verifier is allowed to modify and certify its own successor without an externally grounded soundness premise. The goal is to separate
+   `self-certified`
+   from
+   `sound`,
+   identify the weakest non-circular anchor/transfer assumptions, and construct finite countermodels where acceptance propagates while semantic correctness does not.
+
+3. **Archive / branching RSI instead of a single linear chain** — model a branching version graph and an archive ordered by retained capabilities / dominance. Prove the exact relations among:
+   - individual-branch strict growth,
+   - archive growth,
+   - branch recurrence,
+   - archive recurrence,
+   - individual plateau,
+   - archive plateau.
+   In particular, test whether an archive can grow monotonically while every individual branch eventually recurs or plateaus.
+
+4. **Resource dimension inside the above theories** — retain `IndefiniteCallability`, endogenous resources, and resource viability as feasibility conditions on evaluator migration, verifier migration, and archive expansion rather than as the primary ordering theory.
+
+5. **Finite capability universes as baselines, not the frontier** — keep finite-cardinality and well-founded-rank results as sanity checks / bounded models, while the main development allows open-ended capability spaces and changing evaluators.
 
 ## Scope warning
 
