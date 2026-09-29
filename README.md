@@ -65,6 +65,11 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Dual trust delegation | compromise predicate + overlapping approvals | one healthy overlapping checker is sufficient to transfer soundness after another checker is compromised; trust expansion and revocation are explicit |
 | Infinite capability order | chain condition versus infinite capability universe | finite universes forbid everywhere-strict infinite growth, while a canonical Nat-capability chain grows strictly forever |
 | First RSI invariant core | translations from three trust architectures into shared semantic roles | trust anchor + soundness transfer form the common translated core; validation evidence is architecture-specific |
+| Exact scheduling criterion | variable/reordered source schedule | eventual freshness iff every eventually stable Boolean requirement remains eventually stable when sampled through the schedule |
+| Resource viability bridge | controlled budget state + cost + regeneration actions | sustainable verification budgets are exactly a viability kernel; a no-regeneration unit-cost system has empty kernel |
+| Threshold trust delegation | finite approving quorum + compromise bound | quorum size at least k and fewer than k compromised approvers force a healthy approver and sound successor; quorum count alone is insufficient |
+| Ranked capability growth | strict-growth-reflecting rank into a WellFoundedGT order | such a rank rules out infinite strict capability growth; open-ended Nat capability growth forbids every such rank |
+| Full RSI invariant-role core | two distinct RSI condition languages + semantic role translation | both cover self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
 
@@ -126,6 +131,11 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/TrustDelegation.lean` — compromise-aware dual-checker delegation, recovery through one healthy overlap, and explicit trust expansion/revocation.
 - `DistinctionSelfReference/InfiniteCapabilityOrder.lean` — finite no-infinite-growth theorem, canonical open-ended Nat capability chain, and abstract ascending-chain condition.
 - `DistinctionSelfReference/RSIInvariantCore.lean` — first M5-style cross-framework role translation and trust invariant-core extraction.
+- `DistinctionSelfReference/SchedulingCriterion.lean` — exact equivalence between eventual freshness and preservation of all eventually stable Boolean reality requirements.
+- `DistinctionSelfReference/ResourceViability.lean` — verification-resource dynamics as a controlled viability problem, including sustainable floor theorem and empty-kernel depletion example.
+- `DistinctionSelfReference/ThresholdTrust.lean` — quorum handoff under bounded compromise plus an all-compromised-quorum counterexample.
+- `DistinctionSelfReference/RankedCapability.lean` — well-founded rank certificates that exclude open-ended strict capability growth.
+- `DistinctionSelfReference/FullRSIInvariantCore.lean` — six-role full-RSI semantic core across two distinct condition languages.
 - `DistinctionSelfReference/NextRSIDependencyGraph.lean` — next-phase minimal condition sets for recurrence diagnostics, indefinite callability, kernel migration, and joint stabilization.
 - `DistinctionSelfReference/NextRSIFeasibility.lean` — concrete semantic realizations proving all four next-phase condition sets feasible-inclusion-minimal.
 - `DistinctionSelfReference/NextRSIConflict.lean` — semantic incompatibility of non-degrading full-version recurrence with strict capability growth inside the cycle.
@@ -165,11 +175,11 @@ This section is updated at the end of every completed construction phase.
 
 Current next directions, in priority order:
 
-1. **Scheduling necessity / exact reality-alignment criterion** — test whether eventual freshness is not only sufficient but necessary for preserving convergence of every eventually stable reality requirement, and isolate weaker fair-scheduling variants.
-2. **Resource viability bridge** — recast endogenous verification budget as a controlled viability problem and characterize sustainable callability via a resource-state viability kernel rather than a single sufficient inequality.
-3. **Threshold trust delegation and ablation** — generalize dual overlap to k-of-n/quorum handoff, formalize compromise tolerance, and prove which health/approval assumptions are independently necessary.
-4. **Well-founded rank / chain-condition capability theory** — replace the current finite-vs-Nat separation with general rank or chain-condition theorems that classify when open-ended strict capability growth is possible.
-5. **Full-RSI invariant core** — extend the first trust-only M5 core to self-modification, capability order, invariant preservation, reality verification, and resource callability across several incomparable feasible-minimal RSI frameworks.
+1. **Adversarial reality channels** — extend the exact scheduling criterion from stale/reordered sampling to dropped, duplicated, corrupted, and selectively delayed observations; separate freshness from authenticity.
+2. **Coupled resource–capability dynamics** — let upgrades alter both future capability and future verification cost/regeneration, and characterize when apparent capability growth destroys its own sustainable callability.
+3. **Threshold trust ablation and Byzantine bounds** — generalize the current quorum theorem to explicit k-of-n/f-fault bounds and prove independent necessity of approval count, healthy overlap, and delegation soundness.
+4. **Rank completeness / chain-condition equivalence** — determine when absence of infinite strict capability growth admits a rank certificate into a suitable well-founded order rather than only proving the forward implication.
+5. **Framework morphisms for M5** — replace hand-written role maps with explicit structure-preserving translations between feasible-minimal RSI frameworks and define invariant cores functorially.
 
 ## Scope warning
 
