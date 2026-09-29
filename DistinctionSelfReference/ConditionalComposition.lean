@@ -35,7 +35,7 @@ structure Witness
 Local sufficiency + overlap compatibility + minimum recoverability construct
 a conditional composition witness.
 -/
-theorem witness_of_localSufficiency_compatibility_recoverability
+noncomputable def witness_of_localSufficiency_compatibility_recoverability
     {Index : Type u} {World : Type v} {Obs : Type w}
     {Var : Type x} {Value : Type y}
     {State : Type a} {Action : Type b}
@@ -46,22 +46,24 @@ theorem witness_of_localSufficiency_compatibility_recoverability
     (hlocal : R.LocallySufficient)
     (world : World) (state : State)
     (hrecover : Recoverable C state) :
-    Witness R C world state := by
-  have hcompose := R.local_sufficiency_glues_to_global hcover hcompat hlocal
-  rcases hcompose with ⟨hsuff, hextend⟩
-  rcases hsuff with ⟨decode, hdecode⟩
-  rcases hrecover with ⟨plan, hplan⟩
-  refine {
+    Witness R C world state :=
+  let hcompose := R.local_sufficiency_glues_to_global hcover hcompat hlocal
+  let hsuff := hcompose.1
+  let hextend := hcompose.2
+  let decode := Classical.choose hsuff
+  let hdecode := Classical.choose_spec hsuff
+  let plan := Classical.choose hrecover
+  let hplan := Classical.choose_spec hrecover
+  {
     decode := decode
     global := R.globalRequired hcover world
     recoveryPlan := plan
     recoveredViable := hplan
-    determined := ?_
-    respectsLocal := ?_
+    determined := congrFun hdecode world
+    respectsLocal := by
+      intro i z hz
+      exact hextend world i z hz
   }
-  · exact congrFun hdecode world
-  · intro i z hz
-    exact hextend world i z hz
 
 /--
 Every witness exposes the two guarantees separately: epistemic/compositional
