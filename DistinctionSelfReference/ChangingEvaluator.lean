@@ -160,13 +160,19 @@ theorem strict_global_extension_iff_acyclic_local_union
   constructor
   · rintro ⟨global, hirr, htrans, hcoherent⟩
     intro x hcycle
-    letI : IsTrans State global.better where
-      trans _ _ _ hab hbc := htrans hab hbc
-    have hsub : LocalEdge evaluators ≤ global.better := by
+    have hlift :
+        ∀ {a b},
+          Relation.TransGen (LocalEdge evaluators) a b →
+          global.better a b := by
       intro a b hab
-      rcases hab with ⟨n, hn⟩
-      exact hcoherent n a b hn
-    exact hirr x (Relation.transGen_minimal hsub hcycle)
+      induction hab with
+      | single hab =>
+          rcases hab with ⟨n, hn⟩
+          exact hcoherent n _ _ hn
+      | tail _ hbc ih =>
+          rcases hbc with ⟨n, hn⟩
+          exact htrans ih (hcoherent n _ _ hn)
+    exact hirr x (hlift hcycle)
   · intro hacyclic
     let global : Evaluator State :=
       ⟨Relation.TransGen (LocalEdge evaluators)⟩
