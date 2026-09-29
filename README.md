@@ -105,6 +105,9 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/LongRunRSI.lean` — discrete eventual-constancy notions for capability and reality convergence and their joint stabilization.
 - `DistinctionSelfReference/AdvancedRSIDependencyGraph.lean` — minimal conditions for certified expansion, bounded callability, strict growth, and long-run stability.
 - `DistinctionSelfReference/RSIFeasibility.lean` — concrete guarded-RSI realization proving the full first-layer condition set is feasible-inclusion-minimal.
+- `DistinctionSelfReference/TrustedKernel.lean` — explicit proof objects, a small Boolean proof checker, kernel soundness, and sound verifier expansion through checked proofs.
+- `DistinctionSelfReference/KernelVerificationResources.lean` — proof-dependent checking costs and budget-bounded callability for kernel-certified upgrades.
+- `DistinctionSelfReference/FiniteCapabilityGrowth.lean` — global finite-universe bound on consecutive strict capability-growth steps.
 - `DistinctionSelfReference/InformationOrder.lean` — deterministic refinement preorder and no-new-distinction theorem.
 - `DistinctionSelfReference/MarkovGarbling.lean` — Markov post-processing order with Bayes-risk, risk-increase, and KL data-processing bridges.
 - `DistinctionSelfReference/InformationFutureBridge.lean` — bridge from representation refinement to future indistinguishability.
@@ -133,6 +136,18 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - Which extra conditions create new states rather than contradictions?
 - Can different self-reference frameworks be compared by implication / interpretation?
 - Is there a useful notion of a minimal sufficient self-reference meta-framework?
+
+## Next construction directions
+
+This section is updated at the end of every completed construction phase.
+
+Current next directions, in priority order:
+
+1. **Full-version cycle / plateau diagnostics** — distinguish capability-profile plateaus from payload changes, version cycles, genuine modifier fixed points, and recurrent but non-improving self-modification.
+2. **Indefinite resource-bounded callability** — characterize when an infinite or long upgrade sequence remains callable as proof sizes, checking costs, and available budgets change.
+3. **Trusted-kernel migration** — allow the proof checker itself to change through predecessor-checked or dual-kernel handoff, while preserving an explicit trust invariant.
+4. **Joint trust / capability / reality convergence** — compare stabilization of verifier trust, capability profiles, and reality-facing commitments, including bounded tracking lag rather than only exact eventual constancy.
+5. **Advanced feasible-minimal RSI frameworks** — give semantic realizations and incompatibility edges for the new proof-kernel/resource conditions, not only dependency-graph minimality.
 
 ## Scope warning
 
