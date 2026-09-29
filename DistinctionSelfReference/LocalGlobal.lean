@@ -16,6 +16,9 @@ variable {Index : Type u} {Global : Type v}
 def LocallySatisfiable (C : ConstraintFamily Index Global) : Prop :=
   ∀ i, ∃ g, C.holds i g
 
+def PairwiseSatisfiable (C : ConstraintFamily Index Global) : Prop :=
+  ∀ ⦃i j⦄, i ≠ j → ∃ g, C.holds i g ∧ C.holds j g
+
 def GloballySatisfiable (C : ConstraintFamily Index Global) : Prop :=
   ∃ g, ∀ i, C.holds i g
 
@@ -27,6 +30,15 @@ theorem locallySatisfiable_of_globallySatisfiable
   rcases h with ⟨g, hg⟩
   intro i
   exact ⟨g, hg i⟩
+
+/-- A global witness also witnesses every pair of local constraints. -/
+theorem pairwiseSatisfiable_of_globallySatisfiable
+    (C : ConstraintFamily Index Global)
+    (h : C.GloballySatisfiable) :
+    C.PairwiseSatisfiable := by
+  rcases h with ⟨g, hg⟩
+  intro i j _
+  exact ⟨g, hg i, hg j⟩
 
 end ConstraintFamily
 
@@ -68,6 +80,70 @@ theorem local_does_not_imply_global :
   exact ⟨Opposed, Bool, opposedBool,
     opposedBool_locallySatisfiable,
     opposedBool_not_globallySatisfiable⟩
+
+/--
+Three constraints whose every distinct pair is jointly satisfiable:
+x = true, y = true, and x ≠ y.
+All three together are inconsistent.
+-/
+inductive Triangle
+  | requireX
+  | requireY
+  | requireDifferent
+  deriving DecidableEq, Repr
+
+def triangleBool : ConstraintFamily Triangle (Bool × Bool) where
+  holds
+    | .requireX, g => g.1 = true
+    | .requireY, g => g.2 = true
+    | .requireDifferent, g => g.1 ≠ g.2
+
+theorem triangleBool_pairwiseSatisfiable :
+    triangleBool.PairwiseSatisfiable := by
+  intro i j hij
+  cases i with
+  | requireX =>
+      cases j with
+      | requireX => exact (hij rfl).elim
+      | requireY => exact ⟨(true, true), rfl, rfl⟩
+      | requireDifferent =>
+          exact ⟨(true, false), rfl, by simp⟩
+  | requireY =>
+      cases j with
+      | requireX => exact ⟨(true, true), rfl, rfl⟩
+      | requireY => exact (hij rfl).elim
+      | requireDifferent =>
+          exact ⟨(false, true), rfl, by simp⟩
+  | requireDifferent =>
+      cases j with
+      | requireX => exact ⟨(true, false), by simp, rfl⟩
+      | requireY => exact ⟨(false, true), by simp, rfl⟩
+      | requireDifferent => exact (hij rfl).elim
+
+theorem triangleBool_not_globallySatisfiable :
+    ¬ triangleBool.GloballySatisfiable := by
+  rintro ⟨⟨x, y⟩, h⟩
+  have hx := h .requireX
+  have hy := h .requireY
+  have hd := h .requireDifferent
+  change x = true at hx
+  change y = true at hy
+  change x ≠ y at hd
+  subst x
+  subst y
+  exact hd rfl
+
+/--
+Even pairwise compatibility of all local constraints does not, by itself,
+guarantee a global witness.
+-/
+theorem pairwise_does_not_imply_global :
+    ∃ (Index Global : Type),
+      ∃ C : ConstraintFamily Index Global,
+        C.PairwiseSatisfiable ∧ ¬ C.GloballySatisfiable := by
+  exact ⟨Triangle, Bool × Bool, triangleBool,
+    triangleBool_pairwiseSatisfiable,
+    triangleBool_not_globallySatisfiable⟩
 
 end LocalGlobal
 end DistinctionSelfReference
