@@ -1,4 +1,5 @@
 import Mathlib.Logic.Relation
+import Mathlib.Order.OrderIsoNat
 import DistinctionSelfReference.CapabilityOrder
 
 namespace DistinctionSelfReference
@@ -183,6 +184,106 @@ theorem strict_global_extension_iff_acyclic_local_union
       exact hab.trans hbc
     · intro n a b hab
       exact Relation.TransGen.single ⟨n, hab⟩
+
+/--
+A common Nat-valued potential is strictly stronger than bare local coherence:
+it rules out every cycle in the union of local improvement edges.
+-/
+theorem commonPotential_implies_acyclic_local_union
+    {State : Type u}
+    (evaluators : Nat → Evaluator State)
+    (potential : State → Nat)
+    (hpotential : CommonPotential evaluators potential) :
+    AcyclicLocalUnion evaluators := by
+  intro x hcycle
+  have hpath :
+      ∀ {a b},
+        Relation.TransGen (LocalEdge evaluators) a b →
+        potential a < potential b := by
+    intro a b hab
+    induction hab with
+    | single hab =>
+        rcases hab with ⟨n, hn⟩
+        exact hpotential n _ _ hn
+    | tail _ hbc ih =>
+        rcases hbc with ⟨n, hn⟩
+        exact lt_trans ih (hpotential n _ _ hn)
+  exact (lt_irrefl (potential x)) (hpath hcycle)
+
+/--
+Therefore a common numerical potential always yields a strict transitive global
+extension.
+-/
+theorem commonPotential_gives_strict_global_extension
+    {State : Type u}
+    (evaluators : Nat → Evaluator State)
+    (potential : State → Nat)
+    (hpotential : CommonPotential evaluators potential) :
+    ∃ global : Evaluator State,
+      (∀ a, ¬ global.better a a) ∧
+      (∀ ⦃a b c⦄,
+        global.better a b →
+        global.better b c →
+        global.better a c) ∧
+      CoherentWithGlobal evaluators global := by
+  exact
+    (strict_global_extension_iff_acyclic_local_union evaluators).2
+      (commonPotential_implies_acyclic_local_union
+        evaluators potential hpotential)
+
+namespace PotentialStrictnessExample
+
+/--
+Every local evaluator uses the same predecessor edge: a version may improve
+from n+1 to n. The union is acyclic, but orienting every such edge upward in
+Nat would require an impossible infinite strictly decreasing potential.
+-/
+def predecessorEvaluators (_ : Nat) : Evaluator Nat where
+  better a b := a = b + 1
+
+theorem predecessor_acyclic :
+    AcyclicLocalUnion predecessorEvaluators := by
+  intro x hcycle
+  have hdecreases :
+      ∀ {a b},
+        Relation.TransGen (LocalEdge predecessorEvaluators) a b →
+        b < a := by
+    intro a b hab
+    induction hab with
+    | single hab =>
+        rcases hab with ⟨n, hn⟩
+        change a = b + 1 at hn
+        omega
+    | tail _ hbc ih =>
+        rcases hbc with ⟨n, hn⟩
+        change _ = _ + 1 at hn
+        omega
+  exact (lt_irrefl x) (hdecreases hcycle)
+
+theorem predecessor_has_no_nat_commonPotential :
+    ¬ ∃ potential : Nat → Nat,
+        CommonPotential predecessorEvaluators potential := by
+  rintro ⟨potential, hpotential⟩
+  have hstep : ∀ n, potential (n + 1) < potential n := by
+    intro n
+    exact hpotential 0 (n + 1) n (by
+      simp [predecessorEvaluators])
+  have hanti : StrictAnti potential :=
+    strictAnti_nat_of_succ_lt hstep
+  exact (not_strictAnti_of_wellFoundedLT potential) hanti
+
+/--
+The hierarchy is strict on infinite state spaces:
+acyclicity (hence existence of a strict global relation) need not admit a
+Nat-valued common potential.
+-/
+theorem acyclicity_strictly_weaker_than_nat_commonPotential :
+    AcyclicLocalUnion predecessorEvaluators ∧
+    ¬ ∃ potential : Nat → Nat,
+        CommonPotential predecessorEvaluators potential :=
+  ⟨predecessor_acyclic, predecessor_has_no_nat_commonPotential⟩
+
+end PotentialStrictnessExample
 
 end ChangingEvaluator
 end DistinctionSelfReference
