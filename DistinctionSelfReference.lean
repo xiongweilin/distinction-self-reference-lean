@@ -18,6 +18,7 @@ import DistinctionSelfReference.NestedGluing
 import DistinctionSelfReference.OverlapGluing
 import DistinctionSelfReference.InformationOrder
 import DistinctionSelfReference.MarkovGarbling
+import DistinctionSelfReference.InformationFutureBridge
 import DistinctionSelfReference.OrderTheoretic
 import DistinctionSelfReference.Representational
 import DistinctionSelfReference.Computability
