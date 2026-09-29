@@ -60,6 +60,11 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Trusted-kernel migration | explicit checker versions + predecessor-checked handoff proofs | initial trust propagates along migration and every migrated proposal kernel remains invariant-sound |
 | Joint RSI convergence | capability/trust/reality sequences + fixed tracking lag | eventual stabilization composes across all three axes; fixed-lag reality tracking preserves convergence in the shifted frame |
 | Next-phase feasible RSI graph | semantic realizations + incompatibility edges | four new condition sets are feasible-inclusion-minimal; non-degradation + recurrence + strict first-step capability growth is incompatible |
+| Variable-delay reality verification | arbitrary source schedule + eventual freshness | eventual requirement stability transfers through variable/out-of-order delay; permanent staleness gives a counterexample |
+| Endogenous verification resources | evolving budget + checking cost + regeneration | bounded costs with self-sustaining regeneration imply indefinite callability; certification alone does not prevent resource exhaustion |
+| Dual trust delegation | compromise predicate + overlapping approvals | one healthy overlapping checker is sufficient to transfer soundness after another checker is compromised; trust expansion and revocation are explicit |
+| Infinite capability order | chain condition versus infinite capability universe | finite universes forbid everywhere-strict infinite growth, while a canonical Nat-capability chain grows strictly forever |
+| First RSI invariant core | translations from three trust architectures into shared semantic roles | trust anchor + soundness transfer form the common translated core; validation evidence is architecture-specific |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
 
@@ -116,6 +121,11 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/IndefiniteCallability.lean` — infinite/eventual proposal-stream callability under changing budgets, including a certified-but-never-callable countermodel.
 - `DistinctionSelfReference/TrustedKernelMigration.lean` — predecessor-checked proof-kernel handoff with explicit trust-invariant and soundness propagation.
 - `DistinctionSelfReference/JointRSIConvergence.lean` — fixed-lag reality tracking and joint trust-version/capability/reality stabilization.
+- `DistinctionSelfReference/VariableDelayReality.lean` — eventual-freshness criterion for variable/reordered reality observations, with a permanently stale counterexample.
+- `DistinctionSelfReference/EndogenousResources.lean` — budget consumption/regeneration dynamics and a sustainable-callability theorem plus depletion counterexample.
+- `DistinctionSelfReference/TrustDelegation.lean` — compromise-aware dual-checker delegation, recovery through one healthy overlap, and explicit trust expansion/revocation.
+- `DistinctionSelfReference/InfiniteCapabilityOrder.lean` — finite no-infinite-growth theorem, canonical open-ended Nat capability chain, and abstract ascending-chain condition.
+- `DistinctionSelfReference/RSIInvariantCore.lean` — first M5-style cross-framework role translation and trust invariant-core extraction.
 - `DistinctionSelfReference/NextRSIDependencyGraph.lean` — next-phase minimal condition sets for recurrence diagnostics, indefinite callability, kernel migration, and joint stabilization.
 - `DistinctionSelfReference/NextRSIFeasibility.lean` — concrete semantic realizations proving all four next-phase condition sets feasible-inclusion-minimal.
 - `DistinctionSelfReference/NextRSIConflict.lean` — semantic incompatibility of non-degrading full-version recurrence with strict capability growth inside the cycle.
@@ -155,11 +165,11 @@ This section is updated at the end of every completed construction phase.
 
 Current next directions, in priority order:
 
-1. **Variable-delay / reordered reality verification** — generalize fixed-lag tracking to bounded variable delays, stale observations, and out-of-order updates; identify the extra scheduling conditions needed for eventual reality alignment.
-2. **Endogenous resource dynamics** — let proof checking and self-modification consume or regenerate budget, and characterize sustainable infinite callability rather than assuming an exogenous budget stream.
-3. **Nontrivial kernel trust delegation** — strengthen predecessor-checked migration with revocation, compromise recovery, dual-kernel overlap, and explicit conditions under which trust can expand rather than merely propagate.
-4. **Infinite capability orders** — replace finite-cardinality growth bounds with well-founded ranks / chain conditions, separating genuinely open-ended improvement from infinite version churn or plateau recurrence.
-5. **Invariant-core extraction across feasible RSI frameworks** — instantiate M5 on multiple incomparable feasible-minimal RSI constructions and formalize the structure preserved by translations between them.
+1. **Scheduling necessity / exact reality-alignment criterion** — test whether eventual freshness is not only sufficient but necessary for preserving convergence of every eventually stable reality requirement, and isolate weaker fair-scheduling variants.
+2. **Resource viability bridge** — recast endogenous verification budget as a controlled viability problem and characterize sustainable callability via a resource-state viability kernel rather than a single sufficient inequality.
+3. **Threshold trust delegation and ablation** — generalize dual overlap to k-of-n/quorum handoff, formalize compromise tolerance, and prove which health/approval assumptions are independently necessary.
+4. **Well-founded rank / chain-condition capability theory** — replace the current finite-vs-Nat separation with general rank or chain-condition theorems that classify when open-ended strict capability growth is possible.
+5. **Full-RSI invariant core** — extend the first trust-only M5 core to self-modification, capability order, invariant preservation, reality verification, and resource callability across several incomparable feasible-minimal RSI frameworks.
 
 ## Scope warning
 
