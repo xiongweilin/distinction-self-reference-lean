@@ -117,7 +117,7 @@ theorem twoCycle : TwoCycle togglePayload start := by
   · intro h
     have hp := congrArg CapVersion.payload h
     change true = false at hp
-    exact Bool.true_ne_false hp
+    cases hp
 
 theorem recurrent : Recurrent togglePayload start := by
   exact ⟨2, by decide, rfl⟩
