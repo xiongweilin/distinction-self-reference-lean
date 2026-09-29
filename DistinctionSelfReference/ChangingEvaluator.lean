@@ -1,3 +1,4 @@
+import Mathlib.Logic.Relation
 import DistinctionSelfReference.CapabilityOrder
 
 namespace DistinctionSelfReference
@@ -123,6 +124,59 @@ theorem no_irreflexive_transitive_global_extension :
   have h02 := htrans h01 h12
   rw [toggle_recurrence] at h02
   exact hirr (toggle 0) h02
+
+/-- The union of every time-local improvement edge. -/
+def LocalEdge
+    {State : Type u}
+    (evaluators : Nat → Evaluator State) :
+    State → State → Prop :=
+  fun a b => ∃ n, (evaluators n).better a b
+
+/--
+Exact acyclicity condition for admitting one strict transitive global
+improvement relation.
+-/
+def AcyclicLocalUnion
+    {State : Type u}
+    (evaluators : Nat → Evaluator State) : Prop :=
+  ∀ x, ¬ Relation.TransGen (LocalEdge evaluators) x x
+
+/--
+Necessary and sufficient boundary:
+the changing evaluators admit an irreflexive transitive global extension
+exactly when the transitive closure of their union has no cycle.
+-/
+theorem strict_global_extension_iff_acyclic_local_union
+    {State : Type u}
+    (evaluators : Nat → Evaluator State) :
+    (∃ global : Evaluator State,
+        (∀ a, ¬ global.better a a) ∧
+        (∀ ⦃a b c⦄,
+          global.better a b →
+          global.better b c →
+          global.better a c) ∧
+        CoherentWithGlobal evaluators global) ↔
+      AcyclicLocalUnion evaluators := by
+  constructor
+  · rintro ⟨global, hirr, htrans, hcoherent⟩
+    intro x hcycle
+    letI : IsTrans State global.better where
+      trans _ _ _ hab hbc := htrans hab hbc
+    have hsub : LocalEdge evaluators ≤ global.better := by
+      intro a b hab
+      rcases hab with ⟨n, hn⟩
+      exact hcoherent n a b hn
+    exact hirr x (Relation.transGen_minimal hsub hcycle)
+  · intro hacyclic
+    let global : Evaluator State :=
+      ⟨Relation.TransGen (LocalEdge evaluators)⟩
+    refine ⟨global, ?_, ?_, ?_⟩
+    · intro a
+      exact hacyclic a
+    · intro a b c hab hbc
+      exact hab.trans hbc
+    · intro n a b hab
+      exact Relation.TransGen.single ⟨n, hab⟩
 
 end ChangingEvaluator
 end DistinctionSelfReference
