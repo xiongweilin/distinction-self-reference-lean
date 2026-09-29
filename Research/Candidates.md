@@ -280,11 +280,42 @@ Results:
 
 Interpretation: exact transition commutation was stronger than necessary. For the capabilities studied here, the minimal transition-side condition is directional matching aligned with the desired implication direction.
 
+### P6.11 — safety information sufficiency
+
+Ask when safety preservation/reflection need not be postulated separately.
+
+Status: **PROVED HERE** in `SafetyInformation`.
+
+Define `FiberSafeInvariant`: two concrete states mapped to the same abstract state must agree on safety. This is equivalent to the existence of an abstract safety predicate through which concrete safety factors. When safety is decidable, it is also equivalent to the deterministic information-order statement
+
+`Refines abstractionMap safeBit`.
+
+Using the canonically induced abstract safe set, fiber safety invariance automatically supplies both safety preservation and safety reflection. Combined with forward/backward simulation, this yields exact iff results for viability and recoverability.
+
+The earlier good/bad collapse is proved not fiber-safe-invariant, precisely explaining its false-positive capability judgments.
+
+Interpretation: safety preservation/reflection are not irreducibly separate control assumptions. They follow from the sharper information condition that the abstraction retains exactly the distinction needed to decide safety.
+
+### P6.12 — control-condition ablation
+
+Test the four directional sufficient conditions independently.
+
+Status: **PROVED HERE** in `ControlAblation`.
+
+Explicit finite countermodels prove:
+
+- forward simulation without safety preservation does not preserve viability or recoverability;
+- safety preservation without forward simulation does not preserve viability or recoverability;
+- backward simulation without safety reflection does not reflect viability or recoverability;
+- safety reflection without backward simulation does not reflect viability or recoverability.
+
+Interpretation: at the current interface, the two conditions in each directional theorem are independently non-redundant. This is the first substantial completion of the condition-ablation methodology rather than merely another sufficient theorem.
+
 Next targets for this layer:
 
-1. separate safety preservation/reflection further into observation-level predicates and identify when they can be inferred from information refinement itself;
-2. determine which weaker-than-cover or partial-overlap hypotheses still suffice for gluing;
-3. investigate the converse direction of the Markov-garbling decision order only after the required regularity assumptions are explicit.
+1. add incompatibility edges, not only implication edges, beginning with fixed-point-free distinction versus universal Lawvere-style representation;
+2. encode the generic condition/capability graph and formal definitions of minimal sufficient assumption sets;
+3. determine which weaker-than-cover or partial-overlap hypotheses still suffice for gluing.
 
 ## Meta-framework target
 
