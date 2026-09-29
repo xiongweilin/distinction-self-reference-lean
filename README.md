@@ -86,6 +86,11 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/LocalSufficiency.lean` — observation-relative commitment sufficiency and ambiguity obstruction.
 - `DistinctionSelfReference/CompositionalSufficiency.lean` — local sufficiency + overlap gluing constructs a globally decodable commitment.
 - `DistinctionSelfReference/ConditionalComposition.lean` — adds minimum recoverability to produce a conditional composition witness.
+- `DistinctionSelfReference/FeasibleFramework.lean` — combines capability sufficiency with joint semantic realizability.
+- `DistinctionSelfReference/Reopening.lean` — mismatch-triggered reopening, successful revision, false-alarm rejection, and exact correction.
+- `DistinctionSelfReference/Corrigibility.lean` — bridges corrected revision to operational recovery and bisimulation-based self-continuity.
+- `DistinctionSelfReference/CorrigibilityDependencyGraph.lean` — inclusion-minimal condition sets for four corrigibility capabilities.
+- `DistinctionSelfReference/CorrigibilityAblation.lean` — finite countermodels for dropped reopening/recovery/continuity conditions plus a feasible minimal exact-correction framework.
 - `DistinctionSelfReference/InformationOrder.lean` — deterministic refinement preorder and no-new-distinction theorem.
 - `DistinctionSelfReference/MarkovGarbling.lean` — Markov post-processing order with Bayes-risk, risk-increase, and KL data-processing bridges.
 - `DistinctionSelfReference/InformationFutureBridge.lean` — bridge from representation refinement to future indistinguishability.
