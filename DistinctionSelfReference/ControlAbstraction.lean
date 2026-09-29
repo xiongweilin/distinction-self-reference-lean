@@ -48,7 +48,7 @@ theorem run_commute
   | nil => rfl
   | cons a plan ih =>
       simp only [run_cons]
-      rw [h.step_commute]
+      rw [← h.step_commute s a]
       exact ih (C.step s a)
 
 /--
