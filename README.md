@@ -91,6 +91,14 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/Corrigibility.lean` — bridges corrected revision to operational recovery and bisimulation-based self-continuity.
 - `DistinctionSelfReference/CorrigibilityDependencyGraph.lean` — inclusion-minimal condition sets for four corrigibility capabilities.
 - `DistinctionSelfReference/CorrigibilityAblation.lean` — finite countermodels for dropped reopening/recovery/continuity conditions plus a feasible minimal exact-correction framework.
+- `DistinctionSelfReference/CapabilityOrder.lean` — capability profiles as a partial order and monotone capability chains.
+- `DistinctionSelfReference/SelfModification.lean` — self-modification proposals, verifier soundness, invariant preservation, and non-degrading capability checks.
+- `DistinctionSelfReference/VerifiedUpgrade.lean` — verified self-modification chains preserve invariants and capability monotonicity.
+- `DistinctionSelfReference/IteratedReopening.lean` — repeated reality-facing revision, requirement tracking, and stabilization tracking.
+- `DistinctionSelfReference/VerifierMigration.lean` — conservative verifier refinement and soundness propagation across verifier self-migration.
+- `DistinctionSelfReference/GuardedRSI.lean` — composed guarded RSI loop combining self-modification, verifier migration, capability monotonicity, invariants, and reality tracking.
+- `DistinctionSelfReference/RSIDependencyGraph.lean` — minimal condition sets for the first RSI capability graph.
+- `DistinctionSelfReference/RSIAblation.lean` — countermodels for missing verifier soundness, capability non-degradation, verifier refinement, and reality detection.
 - `DistinctionSelfReference/InformationOrder.lean` — deterministic refinement preorder and no-new-distinction theorem.
 - `DistinctionSelfReference/MarkovGarbling.lean` — Markov post-processing order with Bayes-risk, risk-increase, and KL data-processing bridges.
 - `DistinctionSelfReference/InformationFutureBridge.lean` — bridge from representation refinement to future indistinguishability.
@@ -122,6 +130,6 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 
 ## Scope warning
 
-The code in this repository is **not** initially a formalization of all of Spencer-Brown's *Laws of Form* or Varela's calculus. Small models may be inspired by those ideas, but such relationships are stated explicitly and conservatively.
+The code in this repository is **not** initially a formalization of all of Spencer-Brown's *Laws of Form* or Varela's calculus. The RSI layer is likewise a guarded structural scaffold, not a claim of open-ended recursive self-improvement. Small models may be inspired by those ideas, but such relationships are stated explicitly and conservatively.
 
 In particular, `InvolutiveDistinction` captures only a crossing-style involution. `PrimaryBoolean.Form` adds a small primary-shaped syntax and Boolean semantics, but it still does not formalize the full quotient/equational theory of Spencer-Brown's primary algebra. Likewise, `KleeneThree` formalizes the Strong Kleene semantic side, and `LogicBridge` only proves a semantic conservative-extension result on determined valuations. The full Varela syntax and Schwartz derivability-preserving isomorphism remain future targets.
