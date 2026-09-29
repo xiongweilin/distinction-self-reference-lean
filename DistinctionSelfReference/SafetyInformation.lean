@@ -78,6 +78,7 @@ theorem fiberSafeInvariant_iff_refines_safeBit
     (map : State → Abstract)
     [DecidablePred (fun s => s ∈ C.safe)] :
     FiberSafeInvariant C map ↔ Refines map (safeBit C) := by
+  classical
   constructor
   · intro hinv
     let post : Abstract → Bool := fun a => decide (a ∈ inducedSafe C map)
