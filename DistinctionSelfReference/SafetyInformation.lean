@@ -16,19 +16,19 @@ An abstraction retains all safety-relevant information when safety is
 constant on every fiber of the abstraction map.
 -/
 def FiberSafeInvariant
-    {State : Type u} {Abstract : Type v}
-    (C : ControlledSystem State w) (map : State → Abstract) : Prop :=
+    {State : Type u} {Abstract : Type v} {Action : Type w}
+    (C : ControlledSystem State Action) (map : State → Abstract) : Prop :=
   ∀ ⦃x y⦄, map x = map y → (x ∈ C.safe ↔ y ∈ C.safe)
 
 /-- The canonical abstract safety set induced by a state abstraction. -/
 def inducedSafe
-    {State : Type u} {Abstract : Type v}
-    (C : ControlledSystem State w) (map : State → Abstract) : Set Abstract :=
+    {State : Type u} {Abstract : Type v} {Action : Type w}
+    (C : ControlledSystem State Action) (map : State → Abstract) : Set Abstract :=
   { a | ∃ s, map s = a ∧ s ∈ C.safe }
 
 theorem safe_iff_mem_inducedSafe
-    {State : Type u} {Abstract : Type v}
-    {C : ControlledSystem State w} {map : State → Abstract}
+    {State : Type u} {Abstract : Type v} {Action : Type w}
+    {C : ControlledSystem State Action} {map : State → Abstract}
     (hinv : FiberSafeInvariant C map)
     (s : State) :
     s ∈ C.safe ↔ map s ∈ inducedSafe C map := by
@@ -43,8 +43,8 @@ Safety is fiber-invariant exactly when it factors through some abstract safety
 predicate.
 -/
 theorem fiberSafeInvariant_iff_exists_factor
-    {State : Type u} {Abstract : Type v}
-    (C : ControlledSystem State w) (map : State → Abstract) :
+    {State : Type u} {Abstract : Type v} {Action : Type w}
+    (C : ControlledSystem State Action) (map : State → Abstract) :
     FiberSafeInvariant C map ↔
       ∃ safeA : Set Abstract, ∀ s, s ∈ C.safe ↔ map s ∈ safeA := by
   constructor
@@ -64,7 +64,7 @@ theorem fiberSafeInvariant_iff_exists_factor
 
 /-- Boolean encoding of the safety predicate, when safety is decidable. -/
 def safeBit
-    {State : Type u} (C : ControlledSystem State w)
+    {State : Type u} {Action : Type w} (C : ControlledSystem State Action)
     [DecidablePred (fun s => s ∈ C.safe)] : State → Bool :=
   fun s => decide (s ∈ C.safe)
 
@@ -73,8 +73,8 @@ Information-theoretic form: safety is fiber-invariant exactly when the safety
 bit is obtainable by deterministic post-processing of the abstraction.
 -/
 theorem fiberSafeInvariant_iff_refines_safeBit
-    {State : Type u} {Abstract : Type v}
-    (C : ControlledSystem State w)
+    {State : Type u} {Abstract : Type v} {Action : Type w}
+    (C : ControlledSystem State Action)
     (map : State → Abstract)
     [DecidablePred (fun s => s ∈ C.safe)] :
     FiberSafeInvariant C map ↔ Refines map (safeBit C) := by
@@ -84,8 +84,14 @@ theorem fiberSafeInvariant_iff_refines_safeBit
     refine ⟨post, ?_⟩
     funext s
     simp only [safeBit, Function.comp_apply, post]
-    apply decide_congr
-    exact safe_iff_mem_inducedSafe hinv s
+    have hiff := safe_iff_mem_inducedSafe hinv s
+    by_cases hs : s ∈ C.safe
+    · have hi : map s ∈ inducedSafe C map := hiff.mp hs
+      simp [hs, hi]
+    · have hi : map s ∉ inducedSafe C map := by
+        intro hmem
+        exact hs (hiff.mpr hmem)
+      simp [hs, hi]
   · intro href x y hxy
     have hbit : safeBit C x = safeBit C y :=
       equality_preserved_by_postprocessing href hxy
