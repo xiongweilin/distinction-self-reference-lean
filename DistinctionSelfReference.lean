@@ -1,4 +1,5 @@
 import DistinctionSelfReference.Core
+import DistinctionSelfReference.Finite
 import DistinctionSelfReference.TwoState
 import DistinctionSelfReference.Dynamic
 import DistinctionSelfReference.ThreeState
