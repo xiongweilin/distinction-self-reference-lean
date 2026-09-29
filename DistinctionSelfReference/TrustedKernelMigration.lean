@@ -17,7 +17,7 @@ preserves an explicit trust invariant.
 structure Protocol
     (KernelVersion : Type u) (Version : Type v) where
   MigrationProof : Type w
-  proposalKernel : KernelVersion → Kernel Version
+  proposalKernel : KernelVersion → Kernel.{v, w} Version
   Invariant : Version → Prop
   Trusted : KernelVersion → Prop
   checkMigration : KernelVersion → KernelVersion → MigrationProof → Bool
