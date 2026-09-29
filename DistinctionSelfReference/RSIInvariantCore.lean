@@ -59,24 +59,58 @@ def predecessorRoles : Set Role :=
 theorem guardedRoles_eq :
     guardedRoles = {Role.trustAnchor, Role.soundnessTransfer} := by
   ext r
-  cases r <;>
-    simp [guardedRoles, translate, guardedMap,
-      RSIDependencyGraph.required]
+  constructor
+  · rintro ⟨cond, hcond, rfl⟩
+    cases cond <;>
+      simp [RSIDependencyGraph.required, guardedMap] at hcond ⊢
+  · intro hr
+    cases r with
+    | trustAnchor =>
+        exact ⟨RSIDependencyGraph.Condition.verifierSoundness,
+          by simp [RSIDependencyGraph.required], rfl⟩
+    | soundnessTransfer =>
+        exact ⟨RSIDependencyGraph.Condition.verifierRefinement,
+          by simp [RSIDependencyGraph.required], rfl⟩
+    | validationEvidence =>
+        simp at hr
 
 theorem proofCheckedRoles_eq :
     proofCheckedRoles =
       {Role.trustAnchor, Role.soundnessTransfer, Role.validationEvidence} := by
   ext r
-  cases r <;>
-    simp [proofCheckedRoles, translate, advancedMap,
-      AdvancedRSIDependencyGraph.required]
+  constructor
+  · rintro ⟨cond, hcond, rfl⟩
+    cases cond <;>
+      simp [AdvancedRSIDependencyGraph.required, advancedMap] at hcond ⊢
+  · intro hr
+    cases r with
+    | trustAnchor =>
+        exact ⟨AdvancedRSIDependencyGraph.Condition.oldVerifierSoundness,
+          by simp [AdvancedRSIDependencyGraph.required], rfl⟩
+    | soundnessTransfer =>
+        exact ⟨AdvancedRSIDependencyGraph.Condition.proofChecking,
+          by simp [AdvancedRSIDependencyGraph.required], rfl⟩
+    | validationEvidence =>
+        exact ⟨AdvancedRSIDependencyGraph.Condition.explicitProofObject,
+          by simp [AdvancedRSIDependencyGraph.required], rfl⟩
 
 theorem predecessorRoles_eq :
     predecessorRoles = {Role.trustAnchor, Role.soundnessTransfer} := by
   ext r
-  cases r <;>
-    simp [predecessorRoles, translate, nextMap,
-      NextRSIDependencyGraph.required]
+  constructor
+  · rintro ⟨cond, hcond, rfl⟩
+    cases cond <;>
+      simp [NextRSIDependencyGraph.required, nextMap] at hcond ⊢
+  · intro hr
+    cases r with
+    | trustAnchor =>
+        exact ⟨NextRSIDependencyGraph.Condition.initialKernelTrust,
+          by simp [NextRSIDependencyGraph.required], rfl⟩
+    | soundnessTransfer =>
+        exact ⟨NextRSIDependencyGraph.Condition.predecessorCheckedMigration,
+          by simp [NextRSIDependencyGraph.required], rfl⟩
+    | validationEvidence =>
+        simp at hr
 
 /-- First M5-style invariant core across three distinct trust architectures. -/
 def trustCore : Set Role :=
