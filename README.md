@@ -70,6 +70,10 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Threshold trust delegation | finite approving quorum + compromise bound | quorum size at least k and fewer than k compromised approvers force a healthy approver and sound successor; quorum count alone is insufficient |
 | Ranked capability growth | strict-growth-reflecting rank into a WellFoundedGT order | such a rank rules out infinite strict capability growth; open-ended Nat capability growth forbids every such rank |
 | Full RSI invariant-role core | two distinct RSI condition languages + semantic role translation | both cover self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability |
+| Self-certification barrier | internal certification + semantic soundness + abstract Löb rule | universal self-certification can be semantically unsound; internal reflection collapses to proof under Löb; a grounded root restores sound transfer |
+| Changing evaluator | time-indexed local improvement relations | coherent embedding into one transitive global relation composes local improvements; arbitrary changing evaluators can rationalize a recurrent path |
+| Branch/archive RSI | recurrent selected branch + retained archive | branch recurrence and branch-score plateau can coexist with strict archive growth; WQO makes antichain frontiers finite but does not itself imply archive stabilization |
+| Partial Lawvere | Option-valued evaluator + diagonal representation | a represented partial diagonal forces a fixed point exactly when self-application is defined; fixed-point-free steps force the representing self-application to be undefined |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
 
@@ -136,6 +140,11 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/ThresholdTrust.lean` — quorum handoff under bounded compromise plus an all-compromised-quorum counterexample.
 - `DistinctionSelfReference/RankedCapability.lean` — well-founded rank certificates that exclude open-ended strict capability growth.
 - `DistinctionSelfReference/FullRSIInvariantCore.lean` — six-role full-RSI semantic core across two distinct condition languages.
+- `DistinctionSelfReference/SelfCertificationBarrier.lean` — circular-certification countermodel, semantic transfer with an external anchor, and an abstract Löb reflection barrier.
+- `DistinctionSelfReference/ChangingEvaluator.lean` — local-to-global coherence theorem, common-potential interface, and recurrent locally-improving counterexample.
+- `DistinctionSelfReference/ArchiveRSI.lean` — branch recurrence versus archive growth plus Mathlib WQO/finite-antichain bridge.
+- `DistinctionSelfReference/PartialLawvere.lean` — partial diagonal representation and the defined-self-application threshold for Lawvere fixed points.
+- `Research/FoundationBridge.md` — exact Foundation modules for Gödel I/II, Löb, and Tarski, with current Lean-toolchain integration constraint.
 - `DistinctionSelfReference/NextRSIDependencyGraph.lean` — next-phase minimal condition sets for recurrence diagnostics, indefinite callability, kernel migration, and joint stabilization.
 - `DistinctionSelfReference/NextRSIFeasibility.lean` — concrete semantic realizations proving all four next-phase condition sets feasible-inclusion-minimal.
 - `DistinctionSelfReference/NextRSIConflict.lean` — semantic incompatibility of non-degrading full-version recurrence with strict capability growth inside the cycle.
@@ -186,31 +195,17 @@ The current frontier is therefore no longer “can a monotone RSI chain grow?”
 
 This section is updated at the end of every completed construction phase.
 
-Current next directions, in priority order:
+Current deep-frontier priorities, in order:
 
-1. **Changing evaluator: local improvement → global improvement** — formalize time-varying evaluators / preference orders and determine the minimum compatibility conditions under which
-   local steps
-   `x_t <_{E_t} x_{t+1}`
-   compose into a meaningful global improvement relation. Candidate conditions include a common potential, order-preserving evaluator migration, cross-evaluator comparison maps, and explicit counterexamples where every local step improves while the overall trajectory cycles or regresses under another evaluator.
+1. **Self-modifying verifier without an independent trust anchor** — instantiate the current abstract Löb interface with `FormalizedFormalLogic/Foundation` once the Lean/Mathlib pins align, then characterize exactly which self-certification / verifier-migration interfaces imply an internal reflection principle. Connect those interfaces to Löb, Gödel II, and Tarski rather than treating verifier soundness as an external invariant by default. The key target is an iff-style boundary between circular/vacuous certification and migration justified by a genuinely non-circular grounding.
 
-2. **Self-modifying verifier without an independent trust anchor** — characterize when certification becomes circular, vacuous, or non-informative if the verifier is allowed to modify and certify its own successor without an externally grounded soundness premise. The goal is to separate
-   `self-certified`
-   from
-   `sound`,
-   identify the weakest non-circular anchor/transfer assumptions, and construct finite countermodels where acceptance propagates while semantic correctness does not.
+2. **Changing evaluator: local improvement → global improvement** — strengthen the current common-global-relation theorem toward a necessary-and-sufficient characterization. Candidate formulations include acyclicity of the union of local improvement edges, existence of a common potential, coherent order embeddings between evaluator versions, and minimal finite counterexamples showing that local improvement can cycle when evaluator migration is unconstrained.
 
-3. **Archive / branching RSI instead of a single linear chain** — model a branching version graph and an archive ordered by retained capabilities / dominance. Prove the exact relations among:
-   - individual-branch strict growth,
-   - archive growth,
-   - branch recurrence,
-   - archive recurrence,
-   - individual plateau,
-   - archive plateau.
-   In particular, test whether an archive can grow monotonically while every individual branch eventually recurs or plateaus.
+3. **Archive / branching RSI** — replace the single linear version chain by a branching version graph and a retained Pareto/archive object. Formalize exact relations among branch growth, branch recurrence, individual plateau, archive dominance growth, archive recurrence, and archive plateau. Use Mathlib's WQO/antichain machinery to determine which capability orders force finite Pareto frontiers and which still permit indefinite archive progress.
 
-4. **Resource dimension inside the above theories** — retain `IndefiniteCallability`, endogenous resources, and resource viability as feasibility conditions on evaluator migration, verifier migration, and archive expansion rather than as the primary ordering theory.
+4. **Partial / guarded Lawvere self-reference** — extend the proved Option-valued threshold from plain partiality to typed evaluators, guarded/later modalities, and effectful computation. The main question is the exact representational threshold at which diagonal self-application becomes defined strongly enough to force a fixed point.
 
-5. **Finite capability universes as baselines, not the frontier** — keep finite-cardinality and well-founded-rank results as sanity checks / bounded models, while the main development allows open-ended capability spaces and changing evaluators.
+5. **Resources remain a feasibility dimension** — keep `IndefiniteCallability`, endogenous resources, and resource viability as constraints on the four theories above. Finite capability universes and finite strict-growth bounds remain useful baseline models, not the main frontier.
 
 ## Scope warning
 
