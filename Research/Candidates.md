@@ -189,9 +189,9 @@ Add executable actions and a safe/acceptable state predicate.
 
 Status: **PROVED HERE** in `Viability`. The safe-predecessor operator is monotone; its greatest fixed point is the viability kernel. Every viable state is safe and admits an action whose successor remains viable. Any post-fixed controlled-invariant set is contained in the kernel.
 
-`Recovery` adds finite action plans and proves `viable ⊆ recoverable-to-viability`; irrecoverable states are necessarily outside the viability kernel. The converse is deliberately not assumed.
+`Recovery` adds finite action plans and proves `viable ⊆ recoverable-to-viability`; irrecoverable states are necessarily outside the viability kernel. `RecoverySeparation` then gives a two-state controlled system with an unsafe outside state that reaches a stable viable state in one step, proving the inclusion is strict: `viable ⊊ recoverable` in general.
 
-Interpretation: `possible`, `reachable`, sustainably `viable`, and finitely `recoverable` should not be collapsed. Recovery is a strictly additional structural question.
+Interpretation: `possible`, `reachable`, sustainably `viable`, and finitely `recoverable` should not be collapsed. Recoverability can exist outside the currently sustainable region.
 
 ### P6.4 — local/global obstruction
 
@@ -199,13 +199,21 @@ Add a family of local constraints on possible global states.
 
 Status: **PROVED HERE** in `LocalGlobal`. Global satisfiability implies local and pairwise satisfiability. A two-constraint Boolean model shows local satisfiability alone does not compose; a three-constraint Boolean model is pairwise jointly satisfiable while all three constraints have no common global witness.
 
-Interpretation: even pairwise compatibility is insufficient for global composition. A genuine gluing condition must control higher-order compatibility, not merely each component or pair.
+Interpretation: even pairwise compatibility is insufficient for global composition. A genuine gluing condition must control higher-order structure, not merely each component or pair.
+
+### P6.5 — nested finite gluing
+
+Add a finite nonempty linearly ordered index set and require the local constraints to be nested: every witness for a stronger constraint also satisfies each weaker constraint.
+
+Status: **PROVED HERE** in `NestedGluing`. Local satisfiability then implies global satisfiability: choose a witness for the maximal (strongest) constraint and nesting propagates it to every other constraint. Consequently pairwise satisfiability is redundant under nesting.
+
+Interpretation: this is the first positive composition theorem. It identifies one explicit extra condition that closes the gap exposed by the local and pairwise counterexamples, without assuming a global witness directly.
 
 Next targets for this layer:
 
-1. formulate an explicit gluing condition that is sufficient for global composition and prove its necessity/sufficiency in a minimal finite model;
-2. construct a model separating recoverable-but-nonviable states from viable states, proving the inclusion can be strict;
-3. add information-order / Blackwell-style comparison only after these condition dependencies are stable.
+1. weaken total nesting toward a genuine overlap/gluing condition and locate the minimum sufficient compatibility structure;
+2. add information-order / Blackwell-style comparison as another condition axis;
+3. compare whether information refinement preserves future distinction, viability, and gluing capabilities.
 
 ## Meta-framework target
 
