@@ -1,4 +1,5 @@
 import Mathlib.Data.Bool.Basic
+import Mathlib.Logic.Equiv.Defs
 
 namespace DistinctionSelfReference
 namespace PrimaryBoolean
