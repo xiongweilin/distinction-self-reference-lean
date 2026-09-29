@@ -29,18 +29,21 @@ def natProfile (n : Nat) : Profile Nat where
 
 theorem natProfile_strict (n : Nat) :
     StrictGrowth (natProfile n) (natProfile (n + 1)) := by
-  apply lt_of_le_not_le
-  · intro c hc
+  have hle : natProfile n ≤ natProfile (n + 1) := by
+    intro c hc
     change c < n at hc
     change c < n + 1
     omega
-  · intro hback
+  have hne : natProfile n ≠ natProfile (n + 1) := by
+    intro heq
+    have hcaps := congrArg Profile.capabilities heq
     have hn : n ∈ (natProfile (n + 1)).capabilities := by
       change n < n + 1
       omega
-    have h := hback hn
-    change n < n at h
+    rw [← hcaps] at hn
+    change n < n at hn
     omega
+  exact lt_of_le_of_ne hle hne
 
 /--
 Infinite capability types can support genuinely open-ended strict capability
