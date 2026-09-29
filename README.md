@@ -14,21 +14,25 @@ The first milestone starts from the weakest concrete crossing model we can test 
 
 | Framework | Added conditions | Main result |
 | --- | --- | --- |
-| Core crossing | cross² = id | every state returns after two crossings |
+| Core crossing | cross² = id | every state is a boundary fixed point or belongs to a nontrivial two-cycle |
 | Two-state | exactly two states, both changed by cross | no static fixed point; the swap is the unique fixed-point-free endomap |
 | Dynamic two-state | iteration of the swap | every orbit has exact period two rather than period one |
 | Three-state | add one self-dual boundary state | exactly one static fixed point |
 | Order-theoretic | complete lattice + monotone endomap | least and greatest fixed points exist by Knaster-Tarski |
+| Representational | a surjective internal evaluator | every endomap of the represented result type has a fixed point (type-level Lawvere bridge) |
+| Computability | program codes + evaluator + computability | Rogers fixed point and Kleene's second recursion theorem |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
 
 ## Repository layout
 
-- `DistinctionSelfReference/Core.lean` — weak interfaces for crossing and re-entry.
+- `DistinctionSelfReference/Core.lean` — weak interfaces for crossing and re-entry; fixed-point/two-cycle classification.
 - `DistinctionSelfReference/TwoState.lean` — minimal binary crossing.
 - `DistinctionSelfReference/Dynamic.lean` — dynamic period-two re-entry.
 - `DistinctionSelfReference/ThreeState.lean` — one self-dual boundary state.
 - `DistinctionSelfReference/OrderTheoretic.lean` — Mathlib / Knaster-Tarski bridge.
+- `DistinctionSelfReference/Representational.lean` — Mathlib's type-level Lawvere fixed-point bridge.
+- `DistinctionSelfReference/Computability.lean` — Mathlib's Rogers/Kleene computability fixed-point bridge.
 - `Research/Established.md` — established mathematical results and existing formalizations.
 - `Research/Candidates.md` — proved-here propositions, next targets, and the meta-framework program.
 
