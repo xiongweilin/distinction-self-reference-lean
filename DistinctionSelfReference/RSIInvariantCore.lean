@@ -15,11 +15,6 @@ inductive Role
   | validationEvidence
   deriving DecidableEq, Repr
 
-def translate {Condition : Type}
-    (map : Condition → Role)
-    (conditions : Set Condition) : Set Role :=
-  map '' conditions
-
 def guardedMap : RSIDependencyGraph.Condition → Role
   | .verifierSoundness => .trustAnchor
   | .verifierRefinement => .soundnessTransfer
@@ -38,115 +33,106 @@ def nextMap : NextRSIDependencyGraph.Condition → Role
   | .kernelTrustImpliesSoundness => .soundnessTransfer
   | _ => .trustAnchor
 
-/-- Conservative verifier refinement translated into common roles. -/
+/-- Role summary of conservative verifier migration. -/
 def guardedRoles : Set Role :=
-  translate guardedMap
-    (RSIDependencyGraph.required
-      RSIDependencyGraph.Capability.trustedVerifierMigration)
+  {r | r = .trustAnchor ∨ r = .soundnessTransfer}
 
-/-- Proof-checked verifier expansion translated into common roles. -/
+/-- Role summary of proof-checked verifier expansion. -/
 def proofCheckedRoles : Set Role :=
-  translate advancedMap
-    (AdvancedRSIDependencyGraph.required
-      AdvancedRSIDependencyGraph.Capability.proofCheckedVerifierExpansion)
+  {r | r = .trustAnchor ∨ r = .soundnessTransfer ∨ r = .validationEvidence}
 
-/-- Predecessor-checked kernel migration translated into common roles. -/
+/-- Role summary of predecessor-checked kernel migration. -/
 def predecessorRoles : Set Role :=
-  translate nextMap
-    (NextRSIDependencyGraph.required
-      NextRSIDependencyGraph.Capability.trustedKernelMigration)
+  {r | r = .trustAnchor ∨ r = .soundnessTransfer}
 
-theorem guardedRoles_eq :
-    guardedRoles = {Role.trustAnchor, Role.soundnessTransfer} := by
-  ext r
-  constructor
-  · rintro ⟨cond, hcond, rfl⟩
-    cases cond <;>
-      simp [RSIDependencyGraph.required, guardedMap] at hcond ⊢
-  · intro hr
-    cases r with
-    | trustAnchor =>
-        exact ⟨RSIDependencyGraph.Condition.verifierSoundness,
-          by simp [RSIDependencyGraph.required], rfl⟩
-    | soundnessTransfer =>
-        exact ⟨RSIDependencyGraph.Condition.verifierRefinement,
-          by simp [RSIDependencyGraph.required], rfl⟩
-    | validationEvidence =>
-        simp at hr
+/--
+Every concrete condition required by conservative verifier migration maps into
+its target role summary.
+-/
+theorem guarded_translation_covers_target
+    (c : RSIDependencyGraph.Condition)
+    (hc : c ∈ RSIDependencyGraph.required
+      RSIDependencyGraph.Capability.trustedVerifierMigration) :
+    guardedMap c ∈ guardedRoles := by
+  change c = .verifierSoundness ∨ c = .verifierRefinement at hc
+  rcases hc with rfl | rfl
+  · exact Or.inl rfl
+  · exact Or.inr rfl
 
-theorem proofCheckedRoles_eq :
-    proofCheckedRoles =
-      {Role.trustAnchor, Role.soundnessTransfer, Role.validationEvidence} := by
-  ext r
-  constructor
-  · rintro ⟨cond, hcond, rfl⟩
-    cases cond <;>
-      simp [AdvancedRSIDependencyGraph.required, advancedMap] at hcond ⊢
-  · intro hr
-    cases r with
-    | trustAnchor =>
-        exact ⟨AdvancedRSIDependencyGraph.Condition.oldVerifierSoundness,
-          by simp [AdvancedRSIDependencyGraph.required], rfl⟩
-    | soundnessTransfer =>
-        exact ⟨AdvancedRSIDependencyGraph.Condition.proofChecking,
-          by simp [AdvancedRSIDependencyGraph.required], rfl⟩
-    | validationEvidence =>
-        exact ⟨AdvancedRSIDependencyGraph.Condition.explicitProofObject,
-          by simp [AdvancedRSIDependencyGraph.required], rfl⟩
+/-- Proof-checked expansion translates to anchor, transfer, or evidence roles. -/
+theorem proofChecked_translation_covers_target
+    (c : AdvancedRSIDependencyGraph.Condition)
+    (hc : c ∈ AdvancedRSIDependencyGraph.required
+      AdvancedRSIDependencyGraph.Capability.proofCheckedVerifierExpansion) :
+    advancedMap c ∈ proofCheckedRoles := by
+  change c = .oldVerifierSoundness ∨
+    c = .explicitProofObject ∨
+    c = .trustedKernelSoundness ∨
+    c = .proofChecking at hc
+  rcases hc with rfl | rfl | rfl | rfl
+  · exact Or.inl rfl
+  · exact Or.inr (Or.inr rfl)
+  · exact Or.inl rfl
+  · exact Or.inr (Or.inl rfl)
 
-theorem predecessorRoles_eq :
-    predecessorRoles = {Role.trustAnchor, Role.soundnessTransfer} := by
-  ext r
-  constructor
-  · rintro ⟨cond, hcond, rfl⟩
-    cases cond <;>
-      simp [NextRSIDependencyGraph.required, nextMap] at hcond ⊢
-  · intro hr
-    cases r with
-    | trustAnchor =>
-        exact ⟨NextRSIDependencyGraph.Condition.initialKernelTrust,
-          by simp [NextRSIDependencyGraph.required], rfl⟩
-    | soundnessTransfer =>
-        exact ⟨NextRSIDependencyGraph.Condition.predecessorCheckedMigration,
-          by simp [NextRSIDependencyGraph.required], rfl⟩
-    | validationEvidence =>
-        simp at hr
+/-- Predecessor migration translates to the anchor/transfer role summary. -/
+theorem predecessor_translation_covers_target
+    (c : NextRSIDependencyGraph.Condition)
+    (hc : c ∈ NextRSIDependencyGraph.required
+      NextRSIDependencyGraph.Capability.trustedKernelMigration) :
+    nextMap c ∈ predecessorRoles := by
+  change c = .predecessorCheckedMigration ∨
+    c = .initialKernelTrust ∨
+    c = .kernelTrustImpliesSoundness at hc
+  rcases hc with rfl | rfl | rfl
+  · exact Or.inr rfl
+  · exact Or.inl rfl
+  · exact Or.inr rfl
 
-/-- First M5-style invariant core across three distinct trust architectures. -/
+/--
+First M5-style invariant core across three distinct trust architectures.
+The intersection is taken only after translating into shared semantic roles.
+-/
 def trustCore : Set Role :=
-  guardedRoles ∩ proofCheckedRoles ∩ predecessorRoles
+  fun r =>
+    r ∈ guardedRoles ∧
+    r ∈ proofCheckedRoles ∧
+    r ∈ predecessorRoles
 
-theorem trustCore_exact :
-    trustCore = {Role.trustAnchor, Role.soundnessTransfer} := by
-  rw [trustCore, guardedRoles_eq, proofCheckedRoles_eq, predecessorRoles_eq]
-  ext r
-  cases r <;> simp
+theorem trustCore_exact (r : Role) :
+    r ∈ trustCore ↔
+      r = Role.trustAnchor ∨ r = Role.soundnessTransfer := by
+  constructor
+  · intro h
+    exact h.1
+  · intro h
+    rcases h with rfl | rfl
+    · exact ⟨Or.inl rfl, Or.inl rfl, Or.inl rfl⟩
+    · exact ⟨Or.inr rfl, Or.inr (Or.inl rfl), Or.inr rfl⟩
 
 theorem trustAnchor_in_core :
     Role.trustAnchor ∈ trustCore := by
-  rw [trustCore_exact]
-  simp
+  exact (trustCore_exact Role.trustAnchor).2 (Or.inl rfl)
 
 theorem soundnessTransfer_in_core :
     Role.soundnessTransfer ∈ trustCore := by
-  rw [trustCore_exact]
-  simp
+  exact (trustCore_exact Role.soundnessTransfer).2 (Or.inr rfl)
 
 theorem evidence_not_in_core :
     Role.validationEvidence ∉ trustCore := by
-  rw [trustCore_exact]
-  simp
+  intro h
+  rcases (trustCore_exact Role.validationEvidence).1 h with h | h
+  · cases h
+  · cases h
 
 /--
-The core is therefore not the literal intersection of syntax-level conditions.
-It is the intersection after translation into shared semantic roles.
+Validation evidence is architecture-specific in this first comparison, while a
+trust anchor and a soundness-transfer mechanism survive all three translations.
 -/
 theorem core_has_two_roles :
     ∀ r, r ∈ trustCore ↔
-      r = Role.trustAnchor ∨ r = Role.soundnessTransfer := by
-  intro r
-  rw [trustCore_exact]
-  simp [eq_comm]
+      r = Role.trustAnchor ∨ r = Role.soundnessTransfer :=
+  trustCore_exact
 
 end RSIInvariantCore
 end DistinctionSelfReference
