@@ -3,6 +3,8 @@ import DistinctionSelfReference.Finite
 import DistinctionSelfReference.TwoState
 import DistinctionSelfReference.Dynamic
 import DistinctionSelfReference.ThreeState
+import DistinctionSelfReference.PrimaryBoolean
+import DistinctionSelfReference.KleeneThree
 import DistinctionSelfReference.OrderTheoretic
 import DistinctionSelfReference.Representational
 import DistinctionSelfReference.Computability
