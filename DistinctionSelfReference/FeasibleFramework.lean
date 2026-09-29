@@ -62,10 +62,6 @@ theorem feasibleSufficient_of_subset_of_compatible
   exact ⟨hBcompat, G.sufficient_mono hAB hA.2⟩
 
 /--
-Any semantically incompatible condition set is automatically excluded from
-feasible sufficiency, even if the derivability graph marks it sufficient.
--/
-/--
 If an ordinary inclusion-minimal sufficient set is jointly realizable, it is
 automatically feasible-inclusion-minimal.
 -/
@@ -81,6 +77,10 @@ theorem feasibleInclusionMinimal_of_inclusionMinimal_of_compatible
   · intro smaller hsmall hfeasible
     exact hmin.2 hsmall hfeasible.2
 
+/--
+Any semantically incompatible condition set is automatically excluded from
+feasible sufficiency, even if the derivability graph marks it sufficient.
+-/
 theorem not_feasibleSufficient_of_incompatible
     (G : FrameworkGraph Condition Capability)
     (M : ConditionSemantics.{u, w} Condition)
