@@ -23,6 +23,10 @@ variable {α : Type u}
 def IsBoundary (D : InvolutiveDistinction α) (x : α) : Prop :=
   D.cross x = x
 
+/-- A nontrivial re-entry orbit has two distinct states and returns after two crossings. -/
+def IsTwoCycle (D : InvolutiveDistinction α) (x : α) : Prop :=
+  D.cross x ≠ x ∧ D.cross (D.cross x) = x
+
 /-- Every state returns after two crossings. -/
 theorem returnsAfterTwo (D : InvolutiveDistinction α) (x : α) :
     D.cross (D.cross x) = x :=
@@ -32,6 +36,21 @@ theorem returnsAfterTwo (D : InvolutiveDistinction α) (x : α) :
 theorem isBoundary_iff_fixedPoint (D : InvolutiveDistinction α) (x : α) :
     D.IsBoundary x ↔ Function.IsFixedPt D.cross x :=
   Iff.rfl
+
+/--
+Every state of an involutive distinction is either a static fixed point or
+belongs to a nontrivial two-cycle. No longer orbit can occur.
+-/
+theorem boundary_or_twoCycle (D : InvolutiveDistinction α) (x : α) :
+    D.IsBoundary x ∨ D.IsTwoCycle x := by
+  by_cases h : D.cross x = x
+  · exact Or.inl h
+  · exact Or.inr ⟨h, D.involutive x⟩
+
+/-- A two-cycle state cannot simultaneously be a boundary state. -/
+theorem twoCycle_not_boundary (D : InvolutiveDistinction α) (x : α)
+    (h : D.IsTwoCycle x) : ¬ D.IsBoundary x :=
+  h.1
 
 end InvolutiveDistinction
 
