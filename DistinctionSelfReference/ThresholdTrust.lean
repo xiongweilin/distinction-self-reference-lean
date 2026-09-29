@@ -53,7 +53,7 @@ theorem sound_of_quorum
         exact h ⟨checker, hmem, hcomp⟩
       have hfilter :
           q.voters.filter P.Compromised = q.voters :=
-        filter_eq_self.2 hall
+        Finset.filter_eq_self.2 hall
       rw [hfilter] at hbad
       exact (Nat.not_lt_of_ge hsize hbad).elim
   rcases hex with ⟨checker, hmem, hhealthy⟩
