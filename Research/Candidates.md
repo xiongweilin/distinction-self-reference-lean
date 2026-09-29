@@ -436,13 +436,35 @@ Important limits:
 2. finite capability cardinality bounds strict growth but does not itself prove that an arbitrary process must converge;
 3. long-run reality convergence and capability convergence are independent conditions; neither is derived from the other.
 
-Next targets for this layer:
+### P6.19 — explicit trusted kernel, proof-check cost, and finite strict-growth bound
 
-1. replace the abstract certificate authority with proof objects checked by a smaller trusted kernel;
-2. formalize bounded numbers of strict-growth steps in finite capability universes, rather than only per-step cardinal growth;
-3. study verifier/certificate cost under self-modification and whether trust expansion can remain callable;
-4. add explicit plateau/cycle diagnostics at the full version level;
-5. determine which weaker-than-cover or partial-overlap hypotheses still suffice for composition.
+Replace the abstract certificate-authority boundary with explicit proof objects checked by a small trusted kernel, and strengthen the finite-capability result from a per-step observation to a global prefix bound.
+
+Status: **PROVED HERE** in `TrustedKernel`, `KernelVerificationResources`, `FiniteCapabilityGrowth`, and the extended `AdvancedRSIDependencyGraph`.
+
+Results:
+
+- a trusted kernel consists of an explicit proof type and a Boolean checker on modification proposals;
+- kernel soundness is the single semantic trust obligation: every proof object that checks must imply the target invariant of the proposed successor;
+- every sound trusted kernel induces the earlier abstract certificate-authority interface;
+- verifier expansion through checked proof objects preserves invariant soundness while still allowing strict acceptance-domain expansion;
+- proof-check cost is proof-dependent rather than merely proposal-dependent;
+- a proposal can be kernel-certified but still not callable when every checking proof exceeds the available budget;
+- callability is monotone in budget and implies both expanded-verifier acceptance and invariant preservation;
+- if the first n capability transitions are all strict in a finite capability universe, the final profile contains at least n capabilities;
+- therefore the number of consecutive strict capability-growth steps is globally bounded by the total finite capability universe;
+- any attempted strict-growth prefix of length `Nat.card Capability + 1` contains a non-strict step;
+- the advanced dependency graph now contains explicit minimal requirement sets for proof-checked verifier expansion, finite strict-growth bounds, and proof-bounded callable expansion.
+
+Interpretation: trust expansion, capability expansion, and practical execution now each have an explicit finite boundary: a checked proof object, a finite capability universe, and a checking budget. None of the three is inferred from the others.
+
+Important limits:
+
+1. kernel soundness is still a trusted semantic obligation; making the checker syntactically small does not prove it sound;
+2. the finite bound is on consecutive strict capability growth, not on arbitrary version changes or capability plateaus;
+3. proof-check budgets are local to proposals; long-run budget dynamics remain open.
+
+The maintained next directions are recorded in the README after every completed phase.
 
 ## Meta-framework target
 
