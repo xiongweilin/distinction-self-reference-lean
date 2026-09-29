@@ -40,7 +40,7 @@ This general theorem unifies the two-state and three-state experiments: every st
 
 A finite fixed-point-free involution acts on a carrier of even cardinality.
 
-Status: **PROVED HERE** as `InvolutiveDistinction.even_fintype_card_of_noBoundary` and `even_natCard_of_noBoundary`.
+Status: **PROVED HERE** as `InvolutiveDistinction.even_fintype_card_of_noBoundary` and `even_natCard_of_noBoundary`. The contrapositive existence form is also proved as `existsBoundary_of_odd_fintype_card` and `existsBoundary_of_odd_natCard`: every finite odd-cardinality involutive crossing has at least one boundary/static fixed point.
 
 The proof pairs crossing partners in `ZMod 2`, making the global parity constraint a direct consequence of the local two-cycle structure.
 
@@ -122,6 +122,14 @@ Formalize Varela's self-reference calculus and prove the isomorphic translation 
 Status: **PARTIAL HERE**. `KleeneThree` now formalizes the Strong Kleene truth values, negation, conjunction, disjunction, Boolean embedding, De Morgan laws, and an explicit equivalence between the repository's three-state crossing carrier and K3 truth values. Under this equivalence, crossing is exactly K3 negation and the boundary state is exactly the unique unknown/undefined fixed point.
 
 The **full target remains open**: formalize Varela's syntax/initials and prove the Schwartz translation preserves and reflects derivability.
+
+### P3.3 — conservative Boolean-to-K3 semantic bridge
+
+Interpret the same primary-shaped syntax in Strong Kleene K3 and compare it with the Boolean interpretation.
+
+Status: **PROVED HERE** in `LogicBridge`. For Boolean-valued valuations, K3 evaluation is exactly the Boolean evaluation embedded by `KleeneThree.ofBool`. For arbitrary K3 valuations, the position/excluded-middle form `a ∨ ¬a` evaluates to true exactly when `a` is determined (not `unknown`); an unknown variable gives a concrete counterexample.
+
+Interpretation: the three-valued extension does not merely add an ad hoc third symbol. It is a conservative extension on the old determined fragment, while making the precise failure boundary of a classical law formally visible.
 
 ## Layer 4: representational / diagonal self-reference
 
