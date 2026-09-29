@@ -141,9 +141,10 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/RankedCapability.lean` — well-founded rank certificates that exclude open-ended strict capability growth.
 - `DistinctionSelfReference/FullRSIInvariantCore.lean` — six-role full-RSI semantic core across two distinct condition languages.
 - `DistinctionSelfReference/SelfCertificationBarrier.lean` — circular-certification countermodel, semantic transfer with an external anchor, and an abstract Löb reflection barrier.
-- `DistinctionSelfReference/ChangingEvaluator.lean` — local-to-global coherence theorem, common-potential interface, and recurrent locally-improving counterexample.
-- `DistinctionSelfReference/ArchiveRSI.lean` — branch recurrence versus archive growth plus Mathlib WQO/finite-antichain bridge.
+- `DistinctionSelfReference/ChangingEvaluator.lean` — exact acyclicity iff for strict transitive global evaluator extensions, plus common-potential and recurrent counterexample results.
+- `DistinctionSelfReference/ArchiveRSI.lean` — branch recurrence versus archive growth, WQO finite-frontier results, and eventual stabilization of monotone antichain archives.
 - `DistinctionSelfReference/PartialLawvere.lean` — partial diagonal representation and the defined-self-application threshold for Lawvere fixed points.
+- `DistinctionSelfReference/GuardedLawvere.lean` — guard-separated diagonal representation; open self-application forces a fixed point and fixed-point-free maps force the self guard closed.
 - `Research/FoundationBridge.md` — exact Foundation modules for Gödel I/II, Löb, and Tarski, with current Lean-toolchain integration constraint.
 - `DistinctionSelfReference/NextRSIDependencyGraph.lean` — next-phase minimal condition sets for recurrence diagnostics, indefinite callability, kernel migration, and joint stabilization.
 - `DistinctionSelfReference/NextRSIFeasibility.lean` — concrete semantic realizations proving all four next-phase condition sets feasible-inclusion-minimal.
@@ -199,11 +200,11 @@ Current deep-frontier priorities, in order:
 
 1. **Self-modifying verifier without an independent trust anchor** — instantiate the current abstract Löb interface with `FormalizedFormalLogic/Foundation` once the Lean/Mathlib pins align, then characterize exactly which self-certification / verifier-migration interfaces imply an internal reflection principle. Connect those interfaces to Löb, Gödel II, and Tarski rather than treating verifier soundness as an external invariant by default. The key target is an iff-style boundary between circular/vacuous certification and migration justified by a genuinely non-circular grounding.
 
-2. **Changing evaluator: local improvement → global improvement** — strengthen the current common-global-relation theorem toward a necessary-and-sufficient characterization. Candidate formulations include acyclicity of the union of local improvement edges, existence of a common potential, coherent order embeddings between evaluator versions, and minimal finite counterexamples showing that local improvement can cycle when evaluator migration is unconstrained.
+2. **Changing evaluator beyond existence of a global strict order** — the existence question is now exact: a strict transitive coherent global evaluator exists iff the transitive closure of the union of local improvement edges is acyclic. Next compare this minimal relational criterion with stronger witnesses such as common potentials and coherent evaluator-to-evaluator embeddings.
 
-3. **Archive / branching RSI** — replace the single linear version chain by a branching version graph and a retained Pareto/archive object. Formalize exact relations among branch growth, branch recurrence, individual plateau, archive dominance growth, archive recurrence, and archive plateau. Use Mathlib's WQO/antichain machinery to determine which capability orders force finite Pareto frontiers and which still permit indefinite archive progress.
+3. **Archive / branching RSI beyond retained antichains** — WQO now implies every monotone antichain archive eventually stabilizes. Next study realistic Pareto archives that may delete dominated versions, so the frontier set itself is not monotone, and distinguish frontier replacement from genuine archive-level progress.
 
-4. **Partial / guarded Lawvere self-reference** — extend the proved Option-valued threshold from plain partiality to typed evaluators, guarded/later modalities, and effectful computation. The main question is the exact representational threshold at which diagonal self-application becomes defined strongly enough to force a fixed point.
+4. **Typed/modal guarded Lawvere self-reference** — the Option-specific result now has a guard-separated abstraction: represented diagonal self-application forces a fixed point exactly when its self guard is open. Next replace the Boolean guard by typed/later modalities or effectful computation and compare the resulting thresholds.
 
 5. **Resources remain a feasibility dimension** — keep `IndefiniteCallability`, endogenous resources, and resource viability as constraints on the four theories above. Finite capability universes and finite strict-growth bounds remain useful baseline models, not the main frontier.
 
