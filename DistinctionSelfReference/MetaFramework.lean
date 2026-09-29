@@ -66,12 +66,14 @@ theorem ablationMinimal_of_inclusionMinimal
   intro c hc
   apply hmin.2
   rw [Set.ssubset_iff_subset_ne]
-  refine ⟨Set.sdiff_subset, ?_⟩
-  intro heq
-  have hc' : c ∈ conditions \ {c} := by
-    rw [heq]
-    exact hc
-  simpa using hc'
+  refine ⟨?_, ?_⟩
+  · intro x hx
+    exact hx.1
+  · intro heq
+    have hc' : c ∈ conditions \ {c} := by
+      rw [heq]
+      exact hc
+    exact hc'.2 (by simp)
 
 /--
 For a monotone capability relation, single-condition ablation minimality is
@@ -89,7 +91,7 @@ theorem inclusionMinimal_of_ablationMinimal
     intro x hx
     refine ⟨hsmall.1 hx, ?_⟩
     intro hxc
-    have : x = c := by simpa using hxc
+    change x = c at hxc
     subst x
     exact hcnot hx
   have hAfterDelete :
