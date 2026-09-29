@@ -151,7 +151,21 @@ The two-state crossing is an immediate instance: because `TwoState.cross` has no
 
 Interpretation: representability is not merely another stronger assumption that can always be added. It can be structurally incompatible with a fixed-point-free distinction on the represented result type. The meta-framework therefore needs incompatibility edges in addition to implication edges.
 
-Next target: weaken full point-surjectivity toward partial / typed / guarded representation conditions that can coexist with nontrivial distinctions.
+### P4.3 — minimal diagonal representation condition
+
+Full point-surjectivity is stronger than the Lawvere diagonal argument actually needs.
+
+Status: **PROVED HERE** in `WeakRepresentation`.
+
+For a specific endomap `step : β → β`, it is enough that the single diagonal function
+`x ↦ step (eval x x)`
+be representable by some code. `DiagonalRepresentable` formalizes this weaker condition and proves it already forces a fixed point. Full surjectivity implies this condition, but is not required.
+
+For a fixed-point-free endomap the corresponding diagonal is therefore unrepresentable. A concrete `Unit` evaluator into the two-state carrier still represents a nonempty singleton family of constant functions while coexisting with the fixed-point-free crossing, proving that **partial representation itself is compatible**; the obstruction is precisely inclusion of the forbidden diagonal.
+
+Interpretation: the relevant incompatibility boundary is sharper than “representation versus distinction.” It is “fixed-point-free dynamics versus representation of the corresponding self-applied diagonal.”
+
+Next target: generalize from total function evaluators to typed / guarded / partial evaluators and compare which diagonal forms remain expressible.
 
 ## Layer 5: computability self-reference
 
@@ -321,11 +335,43 @@ Explicit finite countermodels prove:
 
 Interpretation: at the current interface, the two conditions in each directional theorem are independently non-redundant. This is the first substantial completion of the condition-ablation methodology rather than merely another sufficient theorem.
 
+### P6.13 — purpose-relative capability
+
+Separate bare dynamics from action-relevant direction.
+
+Status: **PROVED HERE** in `Purposeful`.
+
+A minimal `Purpose` is a nontrivial acceptable/unacceptable distinction on states. Supplying a purpose turns bare dynamics into a controlled system. If one purpose relaxes another, viability and recoverability are monotone: every state viable/recoverable under the stricter purpose remains so under the weaker one.
+
+A Boolean self-loop example proves that the same dynamics can yield opposite viability judgments under different purposes.
+
+Interpretation: sustainable capability is not determined by dynamics alone; it is purpose-relative.
+
+### P6.14 — observation-relative local sufficiency
+
+Add a current observation and a reality-dependent required commitment.
+
+Status: **PROVED HERE** in `LocalSufficiency`.
+
+Current information is sufficient exactly in the factorization sense used by the deterministic information order: the required commitment must be computable from the observation. Any pair of reality states with the same current observation but different required choices is an explicit ambiguity witness and proves insufficiency. Finer observations preserve sufficiency; a strict information loss can destroy it.
+
+Interpretation: this gives a formal explore/commit boundary. If commitment-relevant distinctions remain collapsed by the current representation, the representation is not sufficient for that commitment.
+
+### P6.15 — compositional and conditional sufficiency
+
+Add multiple local commitment requirements over shared variables.
+
+Status: **PROVED HERE** in `CompositionalSufficiency` and `ConditionalComposition`.
+
+Local observation sufficiency, variable cover, and agreement on overlaps construct one global commitment decodable from the combined local observations and extending every local requirement. Adding recoverability constructs a witness carrying both that global commitment and a finite plan back to the viability kernel.
+
+Interpretation: local epistemic sufficiency, compatibility/gluing, and operational recoverability remain separate conditions; together they support a stronger conditional composition claim.
+
 Next targets for this layer:
 
-1. add incompatibility edges, not only implication edges, beginning with fixed-point-free distinction versus universal Lawvere-style representation;
-2. encode the generic condition/capability graph and formal definitions of minimal sufficient assumption sets;
-3. determine which weaker-than-cover or partial-overlap hypotheses still suffice for gluing.
+1. formalize corrigibility/reopening as reality-side mismatch that can revise a retained boundary;
+2. determine which weaker-than-cover or partial-overlap hypotheses still suffice for composition;
+3. add bounded-resource/finitude conditions beyond finite representational quotients.
 
 ## Meta-framework target
 
@@ -353,9 +399,17 @@ For a target capability set T, identify all minimal assumption sets C such that 
 
 Status: **GENERIC MACHINERY PROVED HERE; CONCRETE ENUMERATION ONGOING**.
 
-`MetaFramework` formalizes sufficient target sets, inclusion-minimal sufficient condition sets, capability dominance, and capability equivalence. The next step is to instantiate this graph with the concrete condition/capability results already proved in Layers 0–6.
+`MetaFramework` formalizes sufficient target sets, inclusion-minimal sufficient condition sets, capability dominance, and capability equivalence. `ControlDependencyGraph` now gives the first concrete instantiation: the forward-simulation/safety-preservation pair is inclusion-minimal for forward viability and recovery preservation; the backward-simulation/safety-reflection pair is inclusion-minimal for reflection; all four conditions are minimal for all four directional capabilities.
 
-### M3 — invariant core
+### M3 — incompatibility edges
+
+Condition sets also need semantic compatibility, not only derivability.
+
+Status: **GENERIC MACHINERY + FIRST INSTANCE PROVED HERE**.
+
+`MetaFramework.ConditionSemantics` defines realizations, joint satisfaction, compatibility, and incompatibility; compatibility is downward closed and incompatibility upward closed. `RepresentationConflict` instantiates this layer and proves that fixed-point-free endomaps and universal surjective representation cannot be jointly realized.
+
+### M4 — invariant core
 
 If several incomparable minimal sufficient frameworks exist, extract the structure preserved by translations between all of them.
 
