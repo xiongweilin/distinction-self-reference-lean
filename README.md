@@ -24,6 +24,7 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Boolean → K3 bridge | interpret primary-shaped forms in K3 | K3 conservatively extends Boolean valuations; `a ∨ ¬a` is true exactly when `a` is determined |
 | Order-theoretic | complete lattice + monotone endomap | least and greatest fixed points exist by Knaster-Tarski |
 | Representational | a surjective internal evaluator | every endomap of the represented result type has a fixed point (type-level Lawvere bridge) |
+| Representational obstruction | fixed-point-free endomap on the result type | universal surjective self-representation is impossible; instantiated by the two-state crossing |
 | Future distinction | histories + continuation tests | histories are equivalent exactly when all future continuations agree; finite quotient iff regular by Myhill–Nerode |
 | Bisimulation | observed transition system | persistent identity-as-behavior is a greatest fixed point with a coinduction principle |
 | Labelled bisimulation bridge | canonical residual DFA + label preservation | future indistinguishability is exactly canonical labelled bisimilarity |
@@ -39,6 +40,7 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Directional control simulation | possibly different action types + forward/backward step matching | forward simulation preserves capability forward; backward simulation reflects it back |
 | Safety information sufficiency | abstraction fibers + safety label factorization | fiber-invariant safety iff the safety bit factors through the abstraction; exact capability follows with two-way simulation |
 | Control condition ablation | remove one simulation/safety condition at a time | each of forward simulation, safety preservation, backward simulation, and safety reflection has an independent counterexample when omitted |
+| Meta-framework | monotone condition→capability graph | one-condition ablation minimality is equivalent to inclusion-minimal sufficiency; capability dominance/equivalence are formalized |
 | Computability | program codes + evaluator + computability | Rogers fixed point and Kleene's second recursion theorem |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
@@ -70,8 +72,10 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/ControlSimulation.lean` — weaker directional simulations with possibly different action types; forward/backward conditions independently control capability preservation/reflection.
 - `DistinctionSelfReference/SafetyInformation.lean` — safety sufficiency as fiber invariance / deterministic information factorization.
 - `DistinctionSelfReference/ControlAblation.lean` — independent counterexamples showing the directional simulation and safety conditions cannot simply be dropped.
+- `DistinctionSelfReference/MetaFramework.lean` — monotone condition/capability graphs, sufficient target sets, ablation minimality, inclusion minimality, dominance, and capability equivalence.
 - `DistinctionSelfReference/OrderTheoretic.lean` — Mathlib / Knaster-Tarski bridge.
 - `DistinctionSelfReference/Representational.lean` — Mathlib's type-level Lawvere fixed-point bridge.
+- `DistinctionSelfReference/RepresentationalObstruction.lean` — fixed-point-free endomaps forbid Lawvere-style universal surjective representation.
 - `DistinctionSelfReference/Computability.lean` — Mathlib's Rogers/Kleene computability fixed-point bridge.
 - `Research/Established.md` — established mathematical results and existing formalizations.
 - `Research/Candidates.md` — proved-here propositions, next targets, and the meta-framework program.
