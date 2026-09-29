@@ -55,6 +55,11 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Meta-framework | monotone condition→capability graph + condition semantics | ablation minimality = inclusion minimality; compatibility/incompatibility, dominance, and capability equivalence are formalized |
 | Concrete control dependency graph | four directional simulation/safety conditions | the proved two-condition pairs are inclusion-minimal for their viability/recovery capabilities |
 | Computability | program codes + evaluator + computability | Rogers fixed point and Kleene's second recursion theorem |
+| Full-version recurrence diagnostics | non-degrading self-modifier + complete version identity | recurrent version segments are capability plateaus; payload/version cycles need not be modifier fixed points |
+| Indefinite proof-bounded callability | proposal stream + proof costs + time-indexed budgets | uniform bounded witnesses and covering budgets imply callability forever; certification alone need not imply eventual callability |
+| Trusted-kernel migration | explicit checker versions + predecessor-checked handoff proofs | initial trust propagates along migration and every migrated proposal kernel remains invariant-sound |
+| Joint RSI convergence | capability/trust/reality sequences + fixed tracking lag | eventual stabilization composes across all three axes; fixed-lag reality tracking preserves convergence in the shifted frame |
+| Next-phase feasible RSI graph | semantic realizations + incompatibility edges | four new condition sets are feasible-inclusion-minimal; non-degradation + recurrence + strict first-step capability growth is incompatible |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
 
@@ -101,12 +106,19 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/RSIAblation.lean` — countermodels for missing verifier soundness, capability non-degradation, verifier refinement, and reality detection.
 - `DistinctionSelfReference/CertifiedVerifierExpansion.lean` — safe acceptance-domain expansion using an independently sound certificate authority, with a strict-expansion witness.
 - `DistinctionSelfReference/CapabilityDynamics.lean` — strict capability growth, plateaus, modifier fixed points, and finite-universe cardinality bounds.
+- `DistinctionSelfReference/FullVersionDiagnostics.lean` — distinguishes profile plateaus, full-version recurrence, two-cycles, and genuine modifier fixed points; proves recurrent non-degrading cycles contain no strict capability growth.
 - `DistinctionSelfReference/VerificationResources.lean` — separates verifier acceptance from budget-bounded callability.
 - `DistinctionSelfReference/LongRunRSI.lean` — discrete eventual-constancy notions for capability and reality convergence and their joint stabilization.
 - `DistinctionSelfReference/AdvancedRSIDependencyGraph.lean` — minimal conditions for certified expansion, bounded callability, strict growth, and long-run stability.
 - `DistinctionSelfReference/RSIFeasibility.lean` — concrete guarded-RSI realization proving the full first-layer condition set is feasible-inclusion-minimal.
 - `DistinctionSelfReference/TrustedKernel.lean` — explicit proof objects, a small Boolean proof checker, kernel soundness, and sound verifier expansion through checked proofs.
 - `DistinctionSelfReference/KernelVerificationResources.lean` — proof-dependent checking costs and budget-bounded callability for kernel-certified upgrades.
+- `DistinctionSelfReference/IndefiniteCallability.lean` — infinite/eventual proposal-stream callability under changing budgets, including a certified-but-never-callable countermodel.
+- `DistinctionSelfReference/TrustedKernelMigration.lean` — predecessor-checked proof-kernel handoff with explicit trust-invariant and soundness propagation.
+- `DistinctionSelfReference/JointRSIConvergence.lean` — fixed-lag reality tracking and joint trust-version/capability/reality stabilization.
+- `DistinctionSelfReference/NextRSIDependencyGraph.lean` — next-phase minimal condition sets for recurrence diagnostics, indefinite callability, kernel migration, and joint stabilization.
+- `DistinctionSelfReference/NextRSIFeasibility.lean` — concrete semantic realizations proving all four next-phase condition sets feasible-inclusion-minimal.
+- `DistinctionSelfReference/NextRSIConflict.lean` — semantic incompatibility of non-degrading full-version recurrence with strict capability growth inside the cycle.
 - `DistinctionSelfReference/FiniteCapabilityGrowth.lean` — global finite-universe bound on consecutive strict capability-growth steps.
 - `DistinctionSelfReference/InformationOrder.lean` — deterministic refinement preorder and no-new-distinction theorem.
 - `DistinctionSelfReference/MarkovGarbling.lean` — Markov post-processing order with Bayes-risk, risk-increase, and KL data-processing bridges.
@@ -143,11 +155,11 @@ This section is updated at the end of every completed construction phase.
 
 Current next directions, in priority order:
 
-1. **Full-version cycle / plateau diagnostics** — distinguish capability-profile plateaus from payload changes, version cycles, genuine modifier fixed points, and recurrent but non-improving self-modification.
-2. **Indefinite resource-bounded callability** — characterize when an infinite or long upgrade sequence remains callable as proof sizes, checking costs, and available budgets change.
-3. **Trusted-kernel migration** — allow the proof checker itself to change through predecessor-checked or dual-kernel handoff, while preserving an explicit trust invariant.
-4. **Joint trust / capability / reality convergence** — compare stabilization of verifier trust, capability profiles, and reality-facing commitments, including bounded tracking lag rather than only exact eventual constancy.
-5. **Advanced feasible-minimal RSI frameworks** — give semantic realizations and incompatibility edges for the new proof-kernel/resource conditions, not only dependency-graph minimality.
+1. **Variable-delay / reordered reality verification** — generalize fixed-lag tracking to bounded variable delays, stale observations, and out-of-order updates; identify the extra scheduling conditions needed for eventual reality alignment.
+2. **Endogenous resource dynamics** — let proof checking and self-modification consume or regenerate budget, and characterize sustainable infinite callability rather than assuming an exogenous budget stream.
+3. **Nontrivial kernel trust delegation** — strengthen predecessor-checked migration with revocation, compromise recovery, dual-kernel overlap, and explicit conditions under which trust can expand rather than merely propagate.
+4. **Infinite capability orders** — replace finite-cardinality growth bounds with well-founded ranks / chain conditions, separating genuinely open-ended improvement from infinite version churn or plateau recurrence.
+5. **Invariant-core extraction across feasible RSI frameworks** — instantiate M5 on multiple incomparable feasible-minimal RSI constructions and formalize the structure preserved by translations between them.
 
 ## Scope warning
 
