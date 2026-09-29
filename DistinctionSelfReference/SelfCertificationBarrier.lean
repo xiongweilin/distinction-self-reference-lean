@@ -54,6 +54,51 @@ theorem unprovable_blocks_internal_reflection
 end LobInterface
 
 /--
+A concrete verifier family enters the Löb regime once semantic soundness claims
+are represented by sentences of the same internal provability system.
+-/
+structure SoundnessEncoding
+    (Verifier : Type u)
+    (Sentence : Type u) where
+  soundSentence : Verifier → Sentence
+
+def LobSelfCertification
+    {Verifier Sentence : Type u}
+    (L : LobInterface Sentence)
+    (E : SoundnessEncoding Verifier Sentence)
+    (v : Verifier) : Prop :=
+  L.InternalReflection (E.soundSentence v)
+
+/--
+Exact interface boundary: if self-certification means proving internal
+reflection for the verifier's own soundness sentence, Löb turns that
+certificate into an internal proof of the soundness sentence itself.
+-/
+theorem lob_barrier_for_verifier_selfCertification
+    {Verifier Sentence : Type u}
+    (L : LobInterface Sentence)
+    (E : SoundnessEncoding Verifier Sentence)
+    (v : Verifier)
+    (hcert : LobSelfCertification L E v) :
+    L.Provable (E.soundSentence v) :=
+  L.reflection_collapses_to_proof (E.soundSentence v) hcert
+
+/--
+Therefore any verifier soundness sentence known to be unprovable internally
+cannot receive this form of self-certification.
+-/
+theorem unprovable_soundness_blocks_lob_selfCertification
+    {Verifier Sentence : Type u}
+    (L : LobInterface Sentence)
+    (E : SoundnessEncoding Verifier Sentence)
+    (v : Verifier)
+    (hunprovable : ¬ L.Provable (E.soundSentence v)) :
+    ¬ LobSelfCertification L E v := by
+  intro hcert
+  exact hunprovable
+    (lob_barrier_for_verifier_selfCertification L E v hcert)
+
+/--
 A generic certification graph between verifier versions. Sound is semantic;
 Certifies is merely an internal acceptance/certification relation.
 -/
