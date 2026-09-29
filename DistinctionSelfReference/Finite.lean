@@ -60,5 +60,17 @@ theorem even_natCard_of_noBoundary
   simpa [Nat.card_eq_fintype_card] using
     D.even_fintype_card_of_noBoundary hfree
 
+/--
+Finite-type odd-cardinality version using Nat.card.
+-/
+theorem existsBoundary_of_odd_natCard
+    {α : Type u} [Finite α]
+    (D : InvolutiveDistinction α)
+    (hodd : Odd (Nat.card α)) :
+    ∃ x, D.IsBoundary x := by
+  letI := Fintype.ofFinite α
+  apply D.existsBoundary_of_odd_fintype_card
+  simpa [Nat.card_eq_fintype_card] using hodd
+
 end InvolutiveDistinction
 end DistinctionSelfReference
