@@ -153,5 +153,60 @@ theorem capabilityEquivalent_iff_mutualDominance
     exact ⟨hBA t, hAB t⟩
 
 end FrameworkGraph
+
+/--
+A semantic layer for condition compatibility. A realization is any model/world
+on which individual conditions can be tested.
+-/
+structure ConditionSemantics (Condition : Type u) where
+  Realization : Type v
+  holds : Realization → Condition → Prop
+
+namespace ConditionSemantics
+
+variable {Condition : Type u}
+
+/-- One realization satisfies every condition in the set. -/
+def Satisfies
+    (M : ConditionSemantics.{u, v} Condition)
+    (r : M.Realization)
+    (conditions : Set Condition) : Prop :=
+  ∀ ⦃c⦄, c ∈ conditions → M.holds r c
+
+/-- A condition set is compatible when some realization satisfies all of it. -/
+def Compatible
+    (M : ConditionSemantics.{u, v} Condition)
+    (conditions : Set Condition) : Prop :=
+  ∃ r, M.Satisfies r conditions
+
+/-- Incompatibility is semantic unsatisfiability of the joint condition set. -/
+def Incompatible
+    (M : ConditionSemantics.{u, v} Condition)
+    (conditions : Set Condition) : Prop :=
+  ¬ M.Compatible conditions
+
+/-- Compatibility is downward closed under removing conditions. -/
+theorem compatible_mono
+    (M : ConditionSemantics.{u, v} Condition)
+    {smaller larger : Set Condition}
+    (hsub : smaller ⊆ larger)
+    (hcompat : M.Compatible larger) :
+    M.Compatible smaller := by
+  rcases hcompat with ⟨r, hr⟩
+  refine ⟨r, ?_⟩
+  intro c hc
+  exact hr (hsub hc)
+
+/-- Incompatibility is upward closed under adding conditions. -/
+theorem incompatible_mono
+    (M : ConditionSemantics.{u, v} Condition)
+    {smaller larger : Set Condition}
+    (hsub : smaller ⊆ larger)
+    (hincompat : M.Incompatible smaller) :
+    M.Incompatible larger := by
+  intro hlarge
+  exact hincompat (M.compatible_mono hsub hlarge)
+
+end ConditionSemantics
 end MetaFramework
 end DistinctionSelfReference
