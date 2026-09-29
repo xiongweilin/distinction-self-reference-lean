@@ -31,7 +31,7 @@ theorem evalPrimaryK3_ofBool
     evalPrimaryK3 (fun v => KleeneThree.ofBool (ρ v)) a =
       KleeneThree.ofBool (PrimaryBoolean.Form.eval ρ a) := by
   induction a <;>
-    simp_all [evalPrimaryK3, PrimaryBoolean.Form.eval]
+    simp_all [evalPrimaryK3, PrimaryBoolean.Form.eval, KleeneThree.ofBool]
 
 /--
 The primary Boolean position/excluded-middle form remains true under every
