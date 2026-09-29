@@ -408,12 +408,40 @@ Interpretation: the current formalization supports **guarded** self-improvement,
 
 Important limit: current verifier migration is conservative refinement — the new verifier may accept no proposal that the old verifier rejected. This proves trust preservation but does not yet justify safe expansion of the verifier's acceptance domain.
 
+### P6.18 — certified expansion, resource bounds, and long-run RSI structure
+
+Strengthen the guarded scaffold without allowing ungrounded self-trust.
+
+Status: **PROVED HERE** in `CertifiedVerifierExpansion`, `CapabilityDynamics`, `VerificationResources`, `LongRunRSI`, `AdvancedRSIDependencyGraph`, and `RSIFeasibility`.
+
+Results:
+
+- a verifier acceptance domain may safely expand beyond conservative refinement when newly accepted proposals carry certificates from an independently sound authority;
+- a concrete Boolean model proves the expansion can be strict while soundness is retained, and therefore need not refine the old verifier in the conservative sense;
+- non-degrading capability evolution splits into plateaus versus strict growth;
+- modifier fixed points imply capability plateaus, while a capability plateau need not be a full system-version fixed point;
+- in a finite capability universe, every strict growth step strictly increases capability-set cardinality and remains bounded by the total finite capability universe;
+- verifier acceptance is separated from practical callability by a verification-cost model and finite budget; larger budgets are monotone, and an accepted over-budget proposal is formally not callable;
+- eventual constancy is used as a first discrete long-run convergence notion;
+- stable reality requirements plus exact iterated reopening yield stable corrected boundaries;
+- capability convergence and reality convergence remain logically separate, but if both occur their observable pair eventually stabilizes;
+- `AdvancedRSIDependencyGraph` records inclusion-minimal condition sets for certified verifier expansion, bounded callable upgrade, strict capability growth, reality convergence, and joint long-run stability;
+- `RSIFeasibility` supplies a concrete guarded loop realization and upgrades the full first-layer guarded RSI condition set from graph-minimal to **feasible-inclusion-minimal**.
+
+Interpretation: safe verifier expansion is possible without verifier self-endorsement, but only by moving trust to an explicit certificate authority/checking boundary. Likewise, verification and capability are not enough for execution: finite resources introduce a separate callability condition.
+
+Important limits:
+
+1. certificate-authority soundness is assumed/proved externally; this does not solve unrestricted self-trust;
+2. finite capability cardinality bounds strict growth but does not itself prove that an arbitrary process must converge;
+3. long-run reality convergence and capability convergence are independent conditions; neither is derived from the other.
+
 Next targets for this layer:
 
-1. formalize certified verifier expansion using an external/older proof object rather than self-trust;
-2. distinguish strict capability improvement from mere non-degradation and study plateaus/cycles/fixed points;
-3. connect resource bounds and finite verification cost to which improvements are callable;
-4. compare long-run reality convergence with long-run capability convergence;
+1. replace the abstract certificate authority with proof objects checked by a smaller trusted kernel;
+2. formalize bounded numbers of strict-growth steps in finite capability universes, rather than only per-step cardinal growth;
+3. study verifier/certificate cost under self-modification and whether trust expansion can remain callable;
+4. add explicit plateau/cycle diagnostics at the full version level;
 5. determine which weaker-than-cover or partial-overlap hypotheses still suffice for composition.
 
 ## Meta-framework target
@@ -458,7 +486,7 @@ A condition set should count as a candidate framework only if it is both capabil
 
 Status: **PROVED HERE / FIRST INSTANCE PROVED HERE**.
 
-`FeasibleFramework` defines `FeasibleSufficient` and `FeasibleInclusionMinimal`. Ordinary inclusion-minimal sufficiency lifts to feasible minimality once joint compatibility is proved. `CorrigibilityAblation` supplies the first concrete instance: mismatch detection + revision success + false-alarm rejection are jointly realizable and feasible-inclusion-minimal for exact correction.
+`FeasibleFramework` defines `FeasibleSufficient` and `FeasibleInclusionMinimal`. Ordinary inclusion-minimal sufficiency lifts to feasible minimality once joint compatibility is proved. `CorrigibilityAblation` supplies the first concrete instance: mismatch detection + revision success + false-alarm rejection are jointly realizable and feasible-inclusion-minimal for exact correction. `RSIFeasibility` now supplies a larger concrete instance: the full first-layer guarded-RSI requirement set is jointly realizable and feasible-inclusion-minimal for the guarded RSI capability.
 
 Interpretation: derivability-minimal but semantically impossible condition sets are now excluded from the search space.
 
