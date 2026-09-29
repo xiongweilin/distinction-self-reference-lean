@@ -19,13 +19,18 @@ def CoveredBy {Condition : Type}
     (role : Role) : Prop :=
   ∃ c, c ∈ conditions ∧ map c = role
 
+/--
+A role-complete representative condition family drawn from the advanced RSI
+language. Each member already occurs in one of its proved minimal components.
+-/
 def advancedConditions : Set AdvancedRSIDependencyGraph.Condition :=
-  AdvancedRSIDependencyGraph.required
-      AdvancedRSIDependencyGraph.Capability.finiteStrictGrowthBound ∪
-  AdvancedRSIDependencyGraph.required
-      AdvancedRSIDependencyGraph.Capability.proofBoundedCallableExpansion ∪
-  AdvancedRSIDependencyGraph.required
-      AdvancedRSIDependencyGraph.Capability.realityConvergence
+  {c |
+    c = .strictImprovement ∨
+    c = .capabilityOrder ∨
+    c = .trustedKernelSoundness ∨
+    c = .exactRealityCorrection ∨
+    c = .proofChecking ∨
+    c = .sufficientBudget}
 
 def advancedMap : AdvancedRSIDependencyGraph.Condition → Role
   | .strictImprovement => .selfModification
@@ -40,15 +45,18 @@ def advancedMap : AdvancedRSIDependencyGraph.Condition → Role
   | .sufficientBudget => .resourceCallability
   | _ => .capabilityOrder
 
+/--
+A role-complete representative condition family drawn from the next-phase RSI
+language.
+-/
 def nextConditions : Set NextRSIDependencyGraph.Condition :=
-  NextRSIDependencyGraph.required
-      NextRSIDependencyGraph.Capability.recurrentPlateauDiagnostic ∪
-  NextRSIDependencyGraph.required
-      NextRSIDependencyGraph.Capability.indefiniteCallability ∪
-  NextRSIDependencyGraph.required
-      NextRSIDependencyGraph.Capability.trustedKernelMigration ∪
-  NextRSIDependencyGraph.required
-      NextRSIDependencyGraph.Capability.jointTrustCapabilityRealityStability
+  {c |
+    c = .fullVersionRecurrence ∨
+    c = .pointwiseNonDegradation ∨
+    c = .kernelTrustImpliesSoundness ∨
+    c = .fixedLagRealityTracking ∨
+    c = .predecessorCheckedMigration ∨
+    c = .budgetCoverage}
 
 def nextMap : NextRSIDependencyGraph.Condition → Role
   | .fullVersionRecurrence => .selfModification
@@ -68,45 +76,45 @@ theorem advanced_covers_all (r : Role) :
     CoveredBy advancedMap advancedConditions r := by
   cases r with
   | selfModification =>
-      exact ⟨AdvancedRSIDependencyGraph.Condition.strictImprovement,
-        by simp [advancedConditions, AdvancedRSIDependencyGraph.required], rfl⟩
+      refine ⟨.strictImprovement, ?_, rfl⟩
+      exact Or.inl rfl
   | capabilityOrder =>
-      exact ⟨AdvancedRSIDependencyGraph.Condition.capabilityOrder,
-        by simp [advancedConditions, AdvancedRSIDependencyGraph.required], rfl⟩
+      refine ⟨.capabilityOrder, ?_, rfl⟩
+      exact Or.inr (Or.inl rfl)
   | invariantPreservation =>
-      exact ⟨AdvancedRSIDependencyGraph.Condition.trustedKernelSoundness,
-        by simp [advancedConditions, AdvancedRSIDependencyGraph.required], rfl⟩
+      refine ⟨.trustedKernelSoundness, ?_, rfl⟩
+      exact Or.inr (Or.inr (Or.inl rfl))
   | realityVerification =>
-      exact ⟨AdvancedRSIDependencyGraph.Condition.exactRealityCorrection,
-        by simp [advancedConditions, AdvancedRSIDependencyGraph.required], rfl⟩
+      refine ⟨.exactRealityCorrection, ?_, rfl⟩
+      exact Or.inr (Or.inr (Or.inr (Or.inl rfl)))
   | trustTransfer =>
-      exact ⟨AdvancedRSIDependencyGraph.Condition.proofChecking,
-        by simp [advancedConditions, AdvancedRSIDependencyGraph.required], rfl⟩
+      refine ⟨.proofChecking, ?_, rfl⟩
+      exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl))))
   | resourceCallability =>
-      exact ⟨AdvancedRSIDependencyGraph.Condition.sufficientBudget,
-        by simp [advancedConditions, AdvancedRSIDependencyGraph.required], rfl⟩
+      refine ⟨.sufficientBudget, ?_, rfl⟩
+      exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr rfl))))
 
 theorem next_covers_all (r : Role) :
     CoveredBy nextMap nextConditions r := by
   cases r with
   | selfModification =>
-      exact ⟨NextRSIDependencyGraph.Condition.fullVersionRecurrence,
-        by simp [nextConditions, NextRSIDependencyGraph.required], rfl⟩
+      refine ⟨.fullVersionRecurrence, ?_, rfl⟩
+      exact Or.inl rfl
   | capabilityOrder =>
-      exact ⟨NextRSIDependencyGraph.Condition.pointwiseNonDegradation,
-        by simp [nextConditions, NextRSIDependencyGraph.required], rfl⟩
+      refine ⟨.pointwiseNonDegradation, ?_, rfl⟩
+      exact Or.inr (Or.inl rfl)
   | invariantPreservation =>
-      exact ⟨NextRSIDependencyGraph.Condition.kernelTrustImpliesSoundness,
-        by simp [nextConditions, NextRSIDependencyGraph.required], rfl⟩
+      refine ⟨.kernelTrustImpliesSoundness, ?_, rfl⟩
+      exact Or.inr (Or.inr (Or.inl rfl))
   | realityVerification =>
-      exact ⟨NextRSIDependencyGraph.Condition.fixedLagRealityTracking,
-        by simp [nextConditions, NextRSIDependencyGraph.required], rfl⟩
+      refine ⟨.fixedLagRealityTracking, ?_, rfl⟩
+      exact Or.inr (Or.inr (Or.inr (Or.inl rfl)))
   | trustTransfer =>
-      exact ⟨NextRSIDependencyGraph.Condition.predecessorCheckedMigration,
-        by simp [nextConditions, NextRSIDependencyGraph.required], rfl⟩
+      refine ⟨.predecessorCheckedMigration, ?_, rfl⟩
+      exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl))))
   | resourceCallability =>
-      exact ⟨NextRSIDependencyGraph.Condition.budgetCoverage,
-        by simp [nextConditions, NextRSIDependencyGraph.required], rfl⟩
+      refine ⟨.budgetCoverage, ?_, rfl⟩
+      exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr rfl))))
 
 /--
 Roles preserved by both independent RSI condition languages after semantic
