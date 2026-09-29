@@ -32,9 +32,9 @@ Every involution decomposes its carrier into:
 - singleton orbits at fixed points;
 - two-element orbits away from fixed points.
 
-Status: **TARGET**.
+Status: **PROVED HERE** as InvolutiveDistinction.boundary_or_twoCycle.
 
-This is a strong candidate for the first general theorem because it unifies the two-state and three-state experiments.
+This general theorem unifies the two-state and three-state experiments: every state is either a fixed boundary or belongs to a nontrivial two-cycle, so involutive re-entry cannot generate longer primitive orbits.
 
 ### P0.3 — finite parity theorem
 
