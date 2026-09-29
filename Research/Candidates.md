@@ -495,6 +495,37 @@ Important limits:
 4. finite capability bounds do not address infinite capability orders;
 5. the meta-framework still lacks the M5 invariant-core construction across incomparable feasible-minimal RSI frameworks.
 
+### P6.21 — variable-delay reality, endogenous resources, trust delegation, infinite capability order, and first M5 core
+
+Continue the RSI program beyond fixed delay, exogenous budgets, single-predecessor trust, and finite capability universes.
+
+Status: **PROVED HERE** in `VariableDelayReality`, `EndogenousResources`, `TrustDelegation`, `InfiniteCapabilityOrder`, and `RSIInvariantCore`.
+
+Results:
+
+- an arbitrary observation-source schedule preserves eventual reality alignment whenever it is **eventually fresh**: every finite stale prefix is eventually left behind;
+- bounded staleness implies eventual freshness, and the theorem does not require source-index monotonicity, so bounded out-of-order observations are permitted;
+- a permanently stale schedule gives a concrete counterexample: the underlying requirement converges while the retained boundary never does;
+- endogenous resource dynamics are modeled by budget, checking cost, regeneration, and an explicit evolution equation;
+- uniformly bounded step cost, sufficient initial budget, and regeneration at least equal to expenditure imply indefinite callability;
+- a concrete depletion model shows that every step may remain formally certified while sustainable callability still fails because verification resources are exhausted;
+- compromise-aware dual-checker delegation separates checker health from mere approval: if both overlapping checkers approve a successor and at least one is healthy, successor soundness follows;
+- trust-set expansion and revocation are represented independently of semantic soundness, making handoff and retirement distinct operations;
+- finite capability universes satisfy a no-infinite-strict-growth condition, while the canonical profile `{c | c < n}` over Nat capabilities forms an everywhere-strict infinite chain;
+- therefore finite cardinality bounds are not generic RSI convergence arguments: an infinite capability order can support genuine open-ended extensional growth;
+- `RSIInvariantCore` provides the first M5-style comparison across three different trust architectures: conservative verifier refinement, proof-checked expansion, and predecessor-checked kernel migration are translated into a shared semantic role language;
+- after translation, **trust anchor** and **soundness transfer** are in the common core, while explicit validation evidence is not universal to all three architectures.
+
+Interpretation: reality alignment, practical execution, trust transfer, and capability growth each need their own long-run structural condition. The first invariant-core result also shows that M5 should compare frameworks after semantic translation rather than by literal intersection of their syntax-level assumptions.
+
+Important limits:
+
+1. eventual freshness is currently proved sufficient but not yet characterized as necessary for all eventually stable reality processes;
+2. the endogenous-resource theorem gives a clean sufficient self-sustaining condition, not yet the full resource viability kernel;
+3. dual trust delegation has not yet been generalized to threshold/quorum compromise tolerance or fully ablated;
+4. infinite capability growth is separated from the finite case, but general well-founded ranks / chain-condition classifications remain open;
+5. the M5 instance currently extracts only the trust/soundness-transfer core, not the full RSI core spanning capability, invariant, reality, and resource roles.
+
 The maintained next directions are recorded in the README after every completed phase.
 
 ## Meta-framework target
@@ -547,6 +578,8 @@ Interpretation: derivability-minimal but semantically impossible condition sets 
 
 If several incomparable minimal sufficient frameworks exist, extract the structure preserved by translations between all of them.
 
-Status: **CONJECTURAL PROGRAM**.
+Status: **FIRST CROSS-FRAMEWORK INSTANCE PROVED HERE; GENERAL PROGRAM ONGOING**.
 
-This invariant core is a stronger candidate for a "minimal sufficient self-reference meta-framework" than any one preferred notation or ontology.
+`RSIInvariantCore` translates three syntactically different trust architectures — conservative verifier refinement, proof-checked verifier expansion, and predecessor-checked kernel migration — into a shared semantic role vocabulary. Their translated intersection is proved to contain exactly `trustAnchor` and `soundnessTransfer`; `validationEvidence` is architecture-specific rather than invariant across the three.
+
+This is the first concrete M5 result: the invariant core is taken **after semantic translation**, not by literal intersection of incompatible condition languages. The next target is a full-RSI invariant core spanning self-modification, capability order, invariant preservation, reality verification, trust, and resource callability across several feasible-minimal constructions.
