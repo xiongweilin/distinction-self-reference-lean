@@ -25,16 +25,22 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Order-theoretic | complete lattice + monotone endomap | least and greatest fixed points exist by Knaster-Tarski |
 | Representational | a surjective internal evaluator | every endomap of the represented result type has a fixed point (type-level Lawvere bridge) |
 | Representational obstruction | fixed-point-free endomap on the result type | universal surjective self-representation is impossible; instantiated by the two-state crossing |
+| Weak representation | represent only the endomap-specific Lawvere diagonal | one represented diagonal already forces a fixed point; partial families can coexist when that diagonal is excluded |
+| Semantic incompatibility | conditions interpreted on common realizations | fixed-point-free endomap and universal surjective representation form an explicit incompatible pair |
 | Weak representation | represent only the endomap-specific diagonal function / selected family | the diagonal condition alone forces a fixed point; partial families can coexist with two-state crossing when the forbidden diagonal is absent |
 | Future distinction | histories + continuation tests | histories are equivalent exactly when all future continuations agree; finite quotient iff regular by Myhill–Nerode |
 | Bisimulation | observed transition system | persistent identity-as-behavior is a greatest fixed point with a coinduction principle |
 | Labelled bisimulation bridge | canonical residual DFA + label preservation | future indistinguishability is exactly canonical labelled bisimilarity |
 | Viability | actions + safe-state predicate | sustainable action region is the greatest fixed point of the safe-predecessor operator |
 | Recovery | finite action plans + viability kernel | viable states are recoverable; a two-state model proves recoverable need not imply viable |
+| Purpose-relative viability | bare dynamics + nontrivial acceptability direction | viability/recovery are monotone under purpose relaxation; identical dynamics can yield different kernels under different purposes |
 | Purpose-relative capability | fixed dynamics + nontrivial acceptable-state distinction | changing only action-relevant direction can change the viability kernel; relaxing purpose is monotone for viability/recovery |
 | Local/global | family of local constraints | even pairwise joint satisfiability need not imply a global witness |
 | Nested gluing | finite nonempty linear order + nested constraints | local satisfiability already implies one global witness |
 | Overlap gluing | local scopes + cover + agreement on overlaps | compatible local patches construct a global assignment; nesting is not required |
+| Local sufficiency | observation + required commitment | sufficiency is factorization through the current observation; ambiguity witnesses certify insufficiency |
+| Compositional sufficiency | locally sufficient observations + cover + overlap compatibility | local commitments glue into a global commitment decodable from combined observations |
+| Conditional composition | compositional sufficiency + finite recoverability | constructs a global commitment witness together with a recovery plan back to viability |
 | Local sufficiency | observation + commitment requirement | sufficiency is factorization of the required commitment through the current observation; ambiguity certifies insufficiency |
 | Compositional sufficiency | local sufficiency + cover + overlap agreement | combined observations determine one global commitment extending every local requirement |
 | Conditional composition | compositional sufficiency + recoverability | constructs a global commitment together with a finite recovery path to viability |
@@ -45,6 +51,7 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Directional control simulation | possibly different action types + forward/backward step matching | forward simulation preserves capability forward; backward simulation reflects it back |
 | Safety information sufficiency | abstraction fibers + safety label factorization | fiber-invariant safety iff the safety bit factors through the abstraction; exact capability follows with two-way simulation |
 | Control condition ablation | remove one simulation/safety condition at a time | each of forward simulation, safety preservation, backward simulation, and safety reflection has an independent counterexample when omitted |
+| Concrete control dependency graph | four control conditions + four directional capabilities | forward/backward condition pairs are inclusion-minimal; all four are minimal for all four capabilities |
 | Meta-framework | monotone condition→capability graph + condition semantics | ablation minimality = inclusion minimality; compatibility/incompatibility, dominance, and capability equivalence are formalized |
 | Concrete control dependency graph | four directional simulation/safety conditions | the proved two-condition pairs are inclusion-minimal for their viability/recovery capabilities |
 | Computability | program codes + evaluator + computability | Rogers fixed point and Kleene's second recursion theorem |
@@ -68,10 +75,14 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/Viability.lean` — controlled viability kernel as a greatest fixed point.
 - `DistinctionSelfReference/Recovery.lean` — finite-plan recoverability back to the viability kernel.
 - `DistinctionSelfReference/RecoverySeparation.lean` — minimal model proving recoverable does not imply viable.
+- `DistinctionSelfReference/Purposeful.lean` — minimal action-relevant direction, purpose-relative viability/recovery monotonicity, and same-dynamics/different-purpose separation.
 - `DistinctionSelfReference/Purposeful.lean` — action-relevant acceptable-state direction; purpose refinement is monotone for viability/recovery.
 - `DistinctionSelfReference/LocalGlobal.lean` — local and pairwise-compatible counterexamples to global composition.
 - `DistinctionSelfReference/NestedGluing.lean` — positive finite gluing theorem for nested constraint families.
 - `DistinctionSelfReference/OverlapGluing.lean` — cover + overlap agreement gluing theorem, with a non-nested example.
+- `DistinctionSelfReference/LocalSufficiency.lean` — observation-relative commitment sufficiency and ambiguity witnesses.
+- `DistinctionSelfReference/CompositionalSufficiency.lean` — composition of locally sufficient commitments under cover and overlap agreement.
+- `DistinctionSelfReference/ConditionalComposition.lean` — compositional commitment witness augmented with finite recovery to viability.
 - `DistinctionSelfReference/LocalSufficiency.lean` — observation-relative commitment sufficiency and ambiguity obstruction.
 - `DistinctionSelfReference/CompositionalSufficiency.lean` — local sufficiency + overlap gluing constructs a globally decodable commitment.
 - `DistinctionSelfReference/ConditionalComposition.lean` — adds minimum recoverability to produce a conditional composition witness.
@@ -87,6 +98,8 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/OrderTheoretic.lean` — Mathlib / Knaster-Tarski bridge.
 - `DistinctionSelfReference/Representational.lean` — Mathlib's type-level Lawvere fixed-point bridge.
 - `DistinctionSelfReference/RepresentationalObstruction.lean` — fixed-point-free endomaps forbid Lawvere-style universal surjective representation.
+- `DistinctionSelfReference/WeakRepresentation.lean` — per-endomap diagonal representability, family representation, and a partial two-state representation that coexists with fixed-point-free crossing.
+- `DistinctionSelfReference/RepresentationConflict.lean` — semantic incompatibility instance for fixed-point-free endomaps versus universal representation.
 - `DistinctionSelfReference/RepresentationConflict.lean` — instantiates the Lawvere obstruction as an upward-closed semantic incompatibility edge.
 - `DistinctionSelfReference/WeakRepresentation.lean` — isolates per-endomap diagonal representability and exhibits partial representation compatible with two-state crossing.
 - `DistinctionSelfReference/Computability.lean` — Mathlib's Rogers/Kleene computability fixed-point bridge.
