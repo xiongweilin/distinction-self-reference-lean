@@ -33,6 +33,22 @@ theorem even_fintype_card_of_noBoundary
   simpa only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, mul_one] using hsum
 
 /--
+On a finite carrier of odd cardinality, an involutive distinction must have
+a boundary/static fixed point.
+-/
+theorem existsBoundary_of_odd_fintype_card
+    {α : Type u} [Fintype α]
+    (D : InvolutiveDistinction α)
+    (hodd : Odd (Fintype.card α)) :
+    ∃ x, D.IsBoundary x := by
+  by_contra hnone
+  have hfree : ∀ x, ¬ D.IsBoundary x := by
+    intro x hx
+    exact hnone ⟨x, hx⟩
+  exact (Nat.not_even_iff_odd.mpr hodd)
+    (D.even_fintype_card_of_noBoundary hfree)
+
+/--
 Finite-type version stated with Nat.card, avoiding a chosen Fintype in the API.
 -/
 theorem even_natCard_of_noBoundary
