@@ -92,8 +92,8 @@ theorem degrading_false_not_viable :
     false ∉ degrading.kernel := by
   intro h
   have hs := degrading.kernel_subset_safe h
-  have : False := by simpa [degrading] using hs
-  exact this
+  change false = true at hs
+  exact Bool.false_eq_true_eq_False hs
 
 theorem degrading_true_not_viable :
     true ∉ degrading.kernel := by
@@ -101,8 +101,8 @@ theorem degrading_true_not_viable :
   rcases degrading.viable_has_viable_action h with ⟨a, hnext⟩
   cases a
   have hs := degrading.kernel_subset_safe hnext
-  have : False := by simpa [degrading] using hs
-  exact this
+  change false = true at hs
+  exact Bool.false_eq_true_eq_False hs
 
 theorem degrading_kernel_empty (b : Bool) :
     b ∉ degrading.kernel := by
