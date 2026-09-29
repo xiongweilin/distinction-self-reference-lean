@@ -53,7 +53,7 @@ theorem forwardPair_minimal_for_viability :
     intro c hc
     exact hc
   · intro c hc hafter
-    have hreq := hafter (cap := Capability.preserveViability) (by rfl)
+    have hreq := hafter (t := Capability.preserveViability) (by rfl)
     change required Capability.preserveViability ⊆
       ({Condition.forwardSimulation, Condition.safetyPreservation} \ {c}) at hreq
     have hcReq : c ∈ required Capability.preserveViability := by
@@ -76,7 +76,7 @@ theorem forwardPair_minimal_for_recovery :
     intro c hc
     exact hc
   · intro c hc hafter
-    have hreq := hafter (cap := Capability.preserveRecovery) (by rfl)
+    have hreq := hafter (t := Capability.preserveRecovery) (by rfl)
     have hcReq : c ∈ required Capability.preserveRecovery := by
       change c ∈ ({Condition.forwardSimulation, Condition.safetyPreservation} : Set Condition)
       exact hc
@@ -95,7 +95,7 @@ theorem backwardPair_minimal_for_viability :
     intro c hc
     exact hc
   · intro c hc hafter
-    have hreq := hafter (cap := Capability.reflectViability) (by rfl)
+    have hreq := hafter (t := Capability.reflectViability) (by rfl)
     have hcReq : c ∈ required Capability.reflectViability := by
       change c ∈ ({Condition.backwardSimulation, Condition.safetyReflection} : Set Condition)
       exact hc
@@ -114,7 +114,7 @@ theorem backwardPair_minimal_for_recovery :
     intro c hc
     exact hc
   · intro c hc hafter
-    have hreq := hafter (cap := Capability.reflectRecovery) (by rfl)
+    have hreq := hafter (t := Capability.reflectRecovery) (by rfl)
     have hcReq : c ∈ required Capability.reflectRecovery := by
       change c ∈ ({Condition.backwardSimulation, Condition.safetyReflection} : Set Condition)
       exact hc
@@ -134,19 +134,19 @@ theorem allFour_minimal_for_allCapabilities :
   · intro c hc hafter
     cases c with
     | forwardSimulation =>
-        have hreq := hafter (cap := Capability.preserveViability) (Set.mem_univ _)
+        have hreq := hafter (t := Capability.preserveViability) (Set.mem_univ _)
         have hcDiff := hreq (by simp [required])
         exact hcDiff.2 (by rfl)
     | safetyPreservation =>
-        have hreq := hafter (cap := Capability.preserveViability) (Set.mem_univ _)
+        have hreq := hafter (t := Capability.preserveViability) (Set.mem_univ _)
         have hcDiff := hreq (by simp [required])
         exact hcDiff.2 (by rfl)
     | backwardSimulation =>
-        have hreq := hafter (cap := Capability.reflectViability) (Set.mem_univ _)
+        have hreq := hafter (t := Capability.reflectViability) (Set.mem_univ _)
         have hcDiff := hreq (by simp [required])
         exact hcDiff.2 (by rfl)
     | safetyReflection =>
-        have hreq := hafter (cap := Capability.reflectViability) (Set.mem_univ _)
+        have hreq := hafter (t := Capability.reflectViability) (Set.mem_univ _)
         have hcDiff := hreq (by simp [required])
         exact hcDiff.2 (by rfl)
 
