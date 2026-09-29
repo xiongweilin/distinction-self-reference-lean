@@ -99,6 +99,12 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/GuardedRSI.lean` — composed guarded RSI loop combining self-modification, verifier migration, capability monotonicity, invariants, and reality tracking.
 - `DistinctionSelfReference/RSIDependencyGraph.lean` — minimal condition sets for the first RSI capability graph.
 - `DistinctionSelfReference/RSIAblation.lean` — countermodels for missing verifier soundness, capability non-degradation, verifier refinement, and reality detection.
+- `DistinctionSelfReference/CertifiedVerifierExpansion.lean` — safe acceptance-domain expansion using an independently sound certificate authority, with a strict-expansion witness.
+- `DistinctionSelfReference/CapabilityDynamics.lean` — strict capability growth, plateaus, modifier fixed points, and finite-universe cardinality bounds.
+- `DistinctionSelfReference/VerificationResources.lean` — separates verifier acceptance from budget-bounded callability.
+- `DistinctionSelfReference/LongRunRSI.lean` — discrete eventual-constancy notions for capability and reality convergence and their joint stabilization.
+- `DistinctionSelfReference/AdvancedRSIDependencyGraph.lean` — minimal conditions for certified expansion, bounded callability, strict growth, and long-run stability.
+- `DistinctionSelfReference/RSIFeasibility.lean` — concrete guarded-RSI realization proving the full first-layer condition set is feasible-inclusion-minimal.
 - `DistinctionSelfReference/InformationOrder.lean` — deterministic refinement preorder and no-new-distinction theorem.
 - `DistinctionSelfReference/MarkovGarbling.lean` — Markov post-processing order with Bayes-risk, risk-increase, and KL data-processing bridges.
 - `DistinctionSelfReference/InformationFutureBridge.lean` — bridge from representation refinement to future indistinguishability.
