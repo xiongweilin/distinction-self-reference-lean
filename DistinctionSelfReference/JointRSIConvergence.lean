@@ -40,6 +40,7 @@ theorem shifted_retained_converges
   rcases hreq with ⟨N, hN⟩
   refine ⟨N, ?_⟩
   intro n hn
+  change retained (n + lag) = target
   rw [htrack n]
   exact hN n hn
 
