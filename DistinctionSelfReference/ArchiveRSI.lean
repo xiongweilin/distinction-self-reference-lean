@@ -1,6 +1,7 @@
 import Mathlib.Order.WellQuasiOrder
 import Mathlib.Data.Set.Finite.Lattice
 import Mathlib.Data.Fintype.Order
+import Mathlib.Order.Preorder.Finite
 
 namespace DistinctionSelfReference
 namespace ArchiveRSI
@@ -243,6 +244,37 @@ theorem paretoFrontier_subset
   exact hx.1
 
 /--
+A frontier is dominance-complete for an archive when it lies inside the archive
+and every archived point is weakly dominated by some frontier point.
+-/
+def DominanceComplete
+    {Version : Type u}
+    [Preorder Version]
+    (frontier archive : Archive Version) : Prop :=
+  frontier ⊆ archive ∧
+  ∀ x, x ∈ archive → ∃ y, y ∈ frontier ∧ x ≤ y
+
+/--
+For every finite archive, the undominated Pareto frontier is a complete
+dominance summary of the whole archive.
+-/
+theorem finite_paretoFrontier_dominanceComplete
+    {Version : Type u}
+    [Preorder Version]
+    (archive : Archive Version)
+    (hfinite : archive.Finite) :
+    DominanceComplete (ParetoFrontier archive) archive := by
+  constructor
+  · exact paretoFrontier_subset archive
+  · intro x hx
+    rcases hfinite.exists_le_maximal hx with ⟨y, hxy, hymax⟩
+    refine ⟨y, ?_, hxy⟩
+    constructor
+    · exact hymax.1
+    · intro z hz hyz
+      exact hyz.not_le (hymax.2 hz hyz.le)
+
+/--
 One frontier strictly dominates another when every old frontier point is
 strictly improved by some new frontier point.
 -/
@@ -314,6 +346,22 @@ theorem frontier_antichain :
   exact IsAntichain.singleton
 
 /--
+Each changing singleton frontier still summarizes the complete retained archive
+by dominance.
+-/
+theorem frontier_dominance_complete (n : Nat) :
+    DominanceComplete (frontier n) (retained n) := by
+  rw [frontier_eq_singleton]
+  constructor
+  · intro x hx
+    have hxeq : x = n := by simpa using hx
+    subst x
+    simp [retained]
+  · intro x hx
+    refine ⟨n, by simp, ?_⟩
+    exact hx
+
+/--
 The frontier is genuinely non-monotone: the old maximal point is removed when
 the next strictly better point appears.
 -/
@@ -354,11 +402,13 @@ singleton forever.
 theorem wqo_allows_perpetual_frontier_replacement :
     MonotoneArchive retained ∧
     AntichainArchive frontier ∧
+    (∀ n, DominanceComplete (frontier n) (retained n)) ∧
     (∀ n, frontier n ≠ frontier (n + 1)) ∧
     (∀ n, StrictFrontierProgress (frontier n) (frontier (n + 1))) := by
   exact ⟨
     retained_monotone,
     frontier_antichain,
+    frontier_dominance_complete,
     frontier_changes_each_step,
     frontier_strict_progress_each_step⟩
 
