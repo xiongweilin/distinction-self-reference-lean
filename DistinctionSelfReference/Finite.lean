@@ -21,18 +21,17 @@ theorem even_fintype_card_of_noBoundary
     (hfree : ∀ x, ¬ D.IsBoundary x) :
     Even (Fintype.card α) := by
   rw [← ZMod.natCast_eq_zero_iff_even]
-  have hsum : (∑ _x : α, (1 : ZMod 2)) = 0 := by
-    apply Finset.sum_ninvolution (s := Finset.univ)
+  have hsum : (∑ _x : α, (1 : ZMod 2)) = 0 :=
+    Finset.sum_ninvolution (s := Finset.univ)
       (f := fun _ : α => (1 : ZMod 2)) D.cross
-    · intro x
-      norm_num
-    · intro x _
-      simpa [IsBoundary] using hfree x
-    · intro x
-      simp
-    · intro x
-      exact D.involutive x
-  simpa using hsum
+      (fun _ => by
+        change ((2 : ℕ) : ZMod 2) = 0
+        simp)
+      (fun x _ => by
+        simpa [IsBoundary] using hfree x)
+      (fun _ => by simp)
+      D.involutive
+  simpa only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, mul_one] using hsum
 
 /--
 Finite-type version stated with Nat.card, avoiding a chosen Fintype in the API.
