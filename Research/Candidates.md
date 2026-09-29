@@ -177,9 +177,11 @@ Interpretation: finite representation can be studied as quotienting histories by
 
 Add an observed transition system.
 
-Status: **PROVED HERE** in `Bisimulation`. The one-step matching operator is monotone; bisimilarity is defined as its greatest fixed point. Bisimilar states have equal observations and can match successor transitions. A coinduction theorem states that every post-fixed candidate relation is contained in bisimilarity.
+Status: **PROVED HERE** in `Bisimulation` and `LabeledBisimulation`. The one-step matching operators are monotone; bisimilarity is defined as their greatest fixed point, with coinduction principles.
 
-Interpretation: identity across change can be modeled as the greatest behaviorally self-maintaining relation rather than as primitive literal equality.
+The first cross-framework bridge is also **PROVED HERE** in `FutureBisimulation`: on the canonical residual DFA, two histories are future-indistinguishable exactly when their residual states are label-preserving bisimilar.
+
+Interpretation: identity across change can be modeled as the greatest behaviorally self-maintaining relation rather than primitive literal equality, and in the canonical future-behavior model this notion coincides exactly with future indistinguishability.
 
 ### P6.3 — viability under action
 
@@ -187,22 +189,23 @@ Add executable actions and a safe/acceptable state predicate.
 
 Status: **PROVED HERE** in `Viability`. The safe-predecessor operator is monotone; its greatest fixed point is the viability kernel. Every viable state is safe and admits an action whose successor remains viable. Any post-fixed controlled-invariant set is contained in the kernel.
 
-Interpretation: `possible`, `reachable`, and sustainably `controllable` should not be collapsed. This branch begins with the weakest infinite-horizon controlled-invariance notion.
+`Recovery` adds finite action plans and proves `viable ⊆ recoverable-to-viability`; irrecoverable states are necessarily outside the viability kernel. The converse is deliberately not assumed.
+
+Interpretation: `possible`, `reachable`, sustainably `viable`, and finitely `recoverable` should not be collapsed. Recovery is a strictly additional structural question.
 
 ### P6.4 — local/global obstruction
 
 Add a family of local constraints on possible global states.
 
-Status: **PROVED HERE** in `LocalGlobal`. Global satisfiability implies local satisfiability, but an explicit two-constraint Boolean model proves the converse false.
+Status: **PROVED HERE** in `LocalGlobal`. Global satisfiability implies local and pairwise satisfiability. A two-constraint Boolean model shows local satisfiability alone does not compose; a three-constraint Boolean model is pairwise jointly satisfiable while all three constraints have no common global witness.
 
-Interpretation: local sufficiency cannot compose by assumption alone. Compatibility/gluing and later recoverability must be added as separate conditions if they are to support composition.
+Interpretation: even pairwise compatibility is insufficient for global composition. A genuine gluing condition must control higher-order compatibility, not merely each component or pair.
 
 Next targets for this layer:
 
-1. strengthen local/global from separate satisfiability to pairwise compatibility and construct a higher-order obstruction;
-2. add recoverability to viability and distinguish viable, recoverable, and irreversible regions;
-3. connect finite future-distinction quotients to observed-transition bisimulation;
-4. only after those bridges are stable, add information-order / Blackwell-style comparison.
+1. formulate an explicit gluing condition that is sufficient for global composition and prove its necessity/sufficiency in a minimal finite model;
+2. construct a model separating recoverable-but-nonviable states from viable states, proving the inclusion can be strict;
+3. add information-order / Blackwell-style comparison only after these condition dependencies are stable.
 
 ## Meta-framework target
 
