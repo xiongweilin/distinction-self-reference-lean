@@ -103,7 +103,7 @@ theorem revoke_preserves_other
     new ∈ revokeTrust trusted old := by
   refine ⟨hnew, ?_⟩
   intro h
-  exact hne (by simpa using h)
+  exact hne (Set.mem_singleton_iff.mp h)
 
 namespace Example
 
