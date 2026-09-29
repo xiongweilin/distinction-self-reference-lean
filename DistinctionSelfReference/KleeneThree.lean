@@ -55,6 +55,14 @@ theorem deMorgan_conj (a b : Truth) :
     neg (conj a b) = disj (neg a) (neg b) := by
   cases a <;> cases b <;> rfl
 
+/--
+Excluded middle holds exactly on the determined truth values.
+The unknown value is therefore the unique obstruction to x ∨ ¬x = true.
+-/
+theorem excludedMiddle_iff_determined (x : Truth) :
+    disj x (neg x) = .true_ ↔ x ≠ .unknown := by
+  cases x <;> simp [disj, neg]
+
 /-- Embed ordinary Boolean truth values into the determined K3 values. -/
 def ofBool : Bool → Truth
   | false => .false_
