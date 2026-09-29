@@ -159,6 +159,51 @@ Status: **ESTABLISHED EXTERNAL**, already formalized in Mathlib as Nat.Partrec.C
 
 Next target: identify the weakest representation/evaluation conditions needed to connect the generic re-entry interface to program-code self-reference while keeping behavioral equality distinct from literal code equality.
 
+## Layer 6: condition-added actor frameworks
+
+These branches are the first direct formalizations motivated by the condition sequence in the `guide` repository.
+
+### P6.1 — future distinguishability / finite representation
+
+Add histories, continuation tests, and an acceptance predicate.
+
+Status: **PROVED HERE** in `FutureDistinction`. Two histories are identified exactly when every future continuation yields the same answer. The canonical state is the left quotient, and Mathlib's Myhill–Nerode theorem gives:
+
+`regular ↔ finitely many future-distinction states`.
+
+Interpretation: finite representation can be studied as quotienting histories by distinctions that can still matter to future behavior.
+
+### P6.2 — persistent identity by bisimulation
+
+Add an observed transition system.
+
+Status: **PROVED HERE** in `Bisimulation`. The one-step matching operator is monotone; bisimilarity is defined as its greatest fixed point. Bisimilar states have equal observations and can match successor transitions. A coinduction theorem states that every post-fixed candidate relation is contained in bisimilarity.
+
+Interpretation: identity across change can be modeled as the greatest behaviorally self-maintaining relation rather than as primitive literal equality.
+
+### P6.3 — viability under action
+
+Add executable actions and a safe/acceptable state predicate.
+
+Status: **PROVED HERE** in `Viability`. The safe-predecessor operator is monotone; its greatest fixed point is the viability kernel. Every viable state is safe and admits an action whose successor remains viable. Any post-fixed controlled-invariant set is contained in the kernel.
+
+Interpretation: `possible`, `reachable`, and sustainably `controllable` should not be collapsed. This branch begins with the weakest infinite-horizon controlled-invariance notion.
+
+### P6.4 — local/global obstruction
+
+Add a family of local constraints on possible global states.
+
+Status: **PROVED HERE** in `LocalGlobal`. Global satisfiability implies local satisfiability, but an explicit two-constraint Boolean model proves the converse false.
+
+Interpretation: local sufficiency cannot compose by assumption alone. Compatibility/gluing and later recoverability must be added as separate conditions if they are to support composition.
+
+Next targets for this layer:
+
+1. strengthen local/global from separate satisfiability to pairwise compatibility and construct a higher-order obstruction;
+2. add recoverability to viability and distinguish viable, recoverable, and irreversible regions;
+3. connect finite future-distinction quotients to observed-transition bisimulation;
+4. only after those bridges are stable, add information-order / Blackwell-style comparison.
+
 ## Meta-framework target
 
 Let a framework be represented by:
