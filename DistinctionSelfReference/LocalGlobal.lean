@@ -107,17 +107,31 @@ theorem triangleBool_pairwiseSatisfiable :
       | requireX => exact (hij rfl).elim
       | requireY => exact ⟨(true, true), rfl, rfl⟩
       | requireDifferent =>
-          exact ⟨(true, false), rfl, by decide⟩
+          refine ⟨(true, false), rfl, ?_⟩
+          change true ≠ false
+          intro h
+          cases h
   | requireY =>
       cases j with
       | requireX => exact ⟨(true, true), rfl, rfl⟩
       | requireY => exact (hij rfl).elim
       | requireDifferent =>
-          exact ⟨(false, true), rfl, by decide⟩
+          refine ⟨(false, true), rfl, ?_⟩
+          change false ≠ true
+          intro h
+          cases h
   | requireDifferent =>
       cases j with
-      | requireX => exact ⟨(true, false), by simp, rfl⟩
-      | requireY => exact ⟨(false, true), by simp, rfl⟩
+      | requireX =>
+          refine ⟨(true, false), ?_, rfl⟩
+          change true ≠ false
+          intro h
+          cases h
+      | requireY =>
+          refine ⟨(false, true), ?_, rfl⟩
+          change false ≠ true
+          intro h
+          cases h
       | requireDifferent => exact (hij rfl).elim
 
 theorem triangleBool_not_globallySatisfiable :
