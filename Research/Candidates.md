@@ -241,10 +241,32 @@ If a history summary factors through the canonical residual-language representat
 
 Interpretation: finite/future representation and information order are no longer parallel branches; post-processing gives a formal monotonicity relation between them.
 
+### P6.9 — information loss / control-capability bridge
+
+Add a deterministic state abstraction between controlled systems sharing the same action type. Keep three conditions separate:
+
+- transition commutation;
+- safety preservation;
+- safety reflection.
+
+Status: **PROVED HERE** in `ControlAbstraction`.
+
+Results:
+
+- transition commutation + safety preservation maps concrete viability into abstract viability;
+- the same conditions map concrete recoverability into abstract recoverability;
+- transition commutation + safety reflection reflects abstract viability back to each concrete state in the fiber;
+- the same reflection condition reflects recoverability;
+- with both preservation and reflection, viability and recoverability are exact iff under the abstraction.
+
+A two-state concrete system (good/bad) collapsed to one abstract state proves the failure mode: the collapse commutes with dynamics and preserves safety forward, but does not reflect safety. The abstract state is viable and recoverable while the concrete bad state is neither. Thus information loss can create false-positive capability judgments when safety distinctions are erased.
+
+Interpretation: information coarsening is not by itself fatal. The exact missing condition is semantic: whether the abstraction preserves and/or reflects the safety predicate relevant to the capability.
+
 Next targets for this layer:
 
-1. determine which weaker-than-cover or partial-overlap hypotheses still suffice for gluing;
-2. formulate observation abstractions of controlled systems and test when information loss preserves or destroys viability/recoverability;
+1. weaken exact transition commutation to forward/backward simulation separately and test which directions of viability/recovery survive;
+2. determine which weaker-than-cover or partial-overlap hypotheses still suffice for gluing;
 3. investigate the converse direction of the Markov-garbling decision order only after the required regularity assumptions are explicit.
 
 ## Meta-framework target
