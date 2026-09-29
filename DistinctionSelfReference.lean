@@ -25,5 +25,6 @@ import DistinctionSelfReference.SafetyInformation
 import DistinctionSelfReference.ControlAblation
 import DistinctionSelfReference.OrderTheoretic
 import DistinctionSelfReference.Representational
+import DistinctionSelfReference.RepresentationalObstruction
 import DistinctionSelfReference.Computability
 import DistinctionSelfReference.MetaFramework
