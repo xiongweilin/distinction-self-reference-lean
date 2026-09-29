@@ -40,9 +40,9 @@ This general theorem unifies the two-state and three-state experiments: every st
 
 A finite fixed-point-free involution acts on a carrier of even cardinality.
 
-Status: **TARGET**.
+Status: **PROVED HERE** as `InvolutiveDistinction.even_fintype_card_of_noBoundary` and `even_natCard_of_noBoundary`.
 
-Potential significance: a purely structural restriction follows from crossing + absence of boundary states.
+The proof pairs crossing partners in `ZMod 2`, making the global parity constraint a direct consequence of the local two-cycle structure.
 
 ## Layer 1A: static re-entry
 
@@ -111,15 +111,17 @@ Potential experiment: determine exactly which weaker order/completeness assumpti
 
 Formalize enough of Spencer-Brown's primary algebra to prove an explicit equivalence with a standard presentation of classical propositional logic.
 
-Status: **ESTABLISHED EXTERNAL** as a mathematical result due to Schwartz; **TARGET** in Lean.
+Status: **PARTIAL HERE**. `PrimaryBoolean.Form` now provides blank, juxtaposition, crossing, and variables; under the OR convention it translates bijectively at the raw-syntax level to a conventional `{false, OR, NOT}` expression language, and both translations preserve Boolean valuation semantics.
+
+The **full target remains open**: quotient by / derive the intended primary-algebra equations and prove Schwartz's stronger derivability-preserving equivalence, not merely a syntax/semantics correspondence.
 
 ### P3.2 — Varela / Kleene three-valued bridge
 
 Formalize Varela's self-reference calculus and prove the isomorphic translation to an axiomatization of Kleene's three-valued logic of partial recursion.
 
-Status: **ESTABLISHED EXTERNAL** as a mathematical result due to Schwartz; **TARGET** in Lean.
+Status: **PARTIAL HERE**. `KleeneThree` now formalizes the Strong Kleene truth values, negation, conjunction, disjunction, Boolean embedding, De Morgan laws, and an explicit equivalence between the repository's three-state crossing carrier and K3 truth values. Under this equivalence, crossing is exactly K3 negation and the boundary state is exactly the unique unknown/undefined fixed point.
 
-This is a higher-value target than merely adding more ad hoc truth values, because success would connect the distinction/re-entry syntax to an independently understood logical semantics.
+The **full target remains open**: formalize Varela's syntax/initials and prove the Schwartz translation preserves and reflects derivability.
 
 ## Layer 4: representational / diagonal self-reference
 
