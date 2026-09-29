@@ -9,8 +9,6 @@ open LocalGlobal
 
 universe u v
 
-namespace ConstraintFamily
-
 variable {Index : Type u} {Global : Type v}
 
 /--
@@ -29,9 +27,12 @@ theorem globallySatisfiable_of_locallySatisfiable_of_nested
     [Fintype Index] [Nonempty Index] [LinearOrder Index]
     (C : ConstraintFamily Index Global)
     (hlocal : C.LocallySatisfiable)
-    (hnested : C.Nested) :
+    (hnested : Nested C) :
     C.GloballySatisfiable := by
-  let m : Index := Finset.univ.max' Finset.univ_nonempty
+  let i0 : Index := Classical.choice (inferInstance : Nonempty Index)
+  have huniv : (Finset.univ : Finset Index).Nonempty :=
+    ⟨i0, Finset.mem_univ i0⟩
+  let m : Index := Finset.univ.max' huniv
   rcases hlocal m with ⟨g, hgm⟩
   refine ⟨g, ?_⟩
   intro i
@@ -45,12 +46,10 @@ theorem pairwise_redundant_under_nesting
     [Fintype Index] [Nonempty Index] [LinearOrder Index]
     (C : ConstraintFamily Index Global)
     (hlocal : C.LocallySatisfiable)
-    (hnested : C.Nested) :
+    (hnested : Nested C) :
     C.PairwiseSatisfiable := by
   exact C.pairwiseSatisfiable_of_globallySatisfiable
-    (C.globallySatisfiable_of_locallySatisfiable_of_nested hlocal hnested)
-
-end ConstraintFamily
+    (globallySatisfiable_of_locallySatisfiable_of_nested C hlocal hnested)
 
 /--
 A concrete nested Boolean-indexed family.
@@ -69,14 +68,14 @@ theorem nestedBool_local :
   | true => exact ⟨true, rfl⟩
 
 theorem nestedBool_nested :
-    nestedBool.Nested := by
+    Nested nestedBool := by
   intro i j hij g hj
   cases i <;> cases j <;> simp_all [nestedBool]
 
 theorem nestedBool_global :
     nestedBool.GloballySatisfiable :=
-  nestedBool.globallySatisfiable_of_locallySatisfiable_of_nested
-    nestedBool_local nestedBool_nested
+  globallySatisfiable_of_locallySatisfiable_of_nested
+    nestedBool nestedBool_local nestedBool_nested
 
 end NestedGluing
 end DistinctionSelfReference
