@@ -74,9 +74,9 @@ theorem fixedPoint_implies_profile_plateau
     (v : CapVersion Capability Payload)
     (h : ModifierFixedPoint M v) :
     Plateau v.profile (M.propose v).profile := by
-  rw [h]
+  simpa [Plateau] using (congrArg CapVersion.profile h).symm
 
-/--
+/-
 A capability plateau need not be a full version fixed point: payload may change
 while the capability profile remains identical.
 -/
