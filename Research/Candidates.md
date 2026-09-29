@@ -557,6 +557,37 @@ Important limits:
 
 The maintained next directions are recorded in the README after every completed phase.
 
+### P6.23 — self-certification barrier, changing evaluators, branching archives, and partial Lawvere
+
+Move the RSI program from fixed evaluator / externally grounded verifier / linear-chain assumptions into four deeper self-referential regimes.
+
+Status: **FIRST FORMAL LAYER PROVED HERE; META-LOGIC UPSTREAM INTEGRATION PARTIAL**.
+
+Results:
+
+- `SelfCertificationBarrier` separates internal certification from semantic soundness and proves a finite countermodel where every verifier self-certifies while one verifier is semantically unsound;
+- a predecessor certification chain propagates soundness only after an independent sound root is supplied;
+- an abstract Löb interface proves the exact reflection collapse used by the RSI layer: if internal reflection `Prov(φ) → φ` is provable under Löb's rule, then `φ` itself is provable; therefore an unprovable target blocks its internal reflection principle;
+- `Research/FoundationBridge.md` identifies the concrete upstream theorems in `FormalizedFormalLogic/Foundation`: Gödel I/II, Löb, and Tarski. Direct import is deferred because Foundation currently pins Lean/Mathlib 4.34 while this repository pins Lean 4.35.0-rc3;
+- `ChangingEvaluator` proves a local-to-global theorem: if every time-local improvement edge embeds into one transitive global relation, every finite prefix endpoint globally improves over the start;
+- a common numerical potential gives a stronger stepwise coherence witness;
+- arbitrary time-varying evaluators can rationalize any trajectory locally, and a two-state recurrent trajectory proves that local improvement alone does not admit an irreflexive transitive global extension;
+- `ArchiveRSI` proves that a selected branch can recur with period two and remain on a constant branch score while the retained archive grows strictly at every step;
+- Mathlib's WQO machinery is connected to archive theory: every antichain/Pareto-style frontier is finite under `WellQuasiOrderedLE`, while WQO by itself does not assert eventual archive stabilization;
+- `PartialLawvere` gives an exact partiality threshold: partial diagonal representation plus defined self-application forces a fixed point;
+- if the endomap is fixed-point-free, every partial diagonal witness must be undefined on its own code;
+- a nowhere-defined evaluator shows that partial diagonal representation alone is insufficient.
+
+Interpretation: the current frontier is no longer one monotone RSI chain. The load-bearing questions are now whether evaluation changes coherently, whether certification has a non-circular semantic anchor, whether progress is branch-local or archive-global, and whether self-application is sufficiently defined to trigger a diagonal fixed point.
+
+Important limits:
+
+1. the Löb result is currently abstract at the RSI interface; direct Foundation instantiation awaits compatible Lean/Mathlib pins;
+2. the evaluator theorem is sufficient but not yet a necessary-and-sufficient characterization;
+3. the archive module proves separation results and a WQO frontier bridge, but not yet a full Pareto-archive stabilization theorem;
+4. partial Lawvere currently uses `Option` partiality, not typed guarded modalities or effects;
+5. resource/callability conditions are intentionally secondary feasibility constraints in this phase.
+
 ## Meta-framework target
 
 Let a framework be represented by:
