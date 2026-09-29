@@ -263,9 +263,26 @@ A two-state concrete system (good/bad) collapsed to one abstract state proves th
 
 Interpretation: information coarsening is not by itself fatal. The exact missing condition is semantic: whether the abstraction preserves and/or reflects the safety predicate relevant to the capability.
 
+### P6.10 — directional control simulation
+
+Drop the requirement that concrete and abstract systems share the same action type or commute exactly action-by-action. Keep only directional existential step matching.
+
+Status: **PROVED HERE** in `ControlSimulation`.
+
+Results:
+
+- forward simulation + safety preservation preserves viability;
+- backward simulation + safety reflection reflects viability;
+- any finite concrete action plan can be matched by some abstract plan under forward simulation;
+- any finite abstract plan can be matched by some concrete plan under backward simulation;
+- therefore the same directional conditions preserve / reflect recoverability;
+- every exact `ControlAbstraction.Hom` induces both directional simulations as a special case.
+
+Interpretation: exact transition commutation was stronger than necessary. For the capabilities studied here, the minimal transition-side condition is directional matching aligned with the desired implication direction.
+
 Next targets for this layer:
 
-1. weaken exact transition commutation to forward/backward simulation separately and test which directions of viability/recovery survive;
+1. separate safety preservation/reflection further into observation-level predicates and identify when they can be inferred from information refinement itself;
 2. determine which weaker-than-cover or partial-overlap hypotheses still suffice for gluing;
 3. investigate the converse direction of the Markov-garbling decision order only after the required regularity assumptions are explicit.
 
