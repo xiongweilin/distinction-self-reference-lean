@@ -17,6 +17,8 @@ structure InvolutiveDistinction (α : Type u) where
 
 namespace InvolutiveDistinction
 
+variable {α : Type u}
+
 /-- A state is a boundary/self-dual state when crossing leaves it unchanged. -/
 def IsBoundary (D : InvolutiveDistinction α) (x : α) : Prop :=
   D.cross x = x
@@ -42,6 +44,8 @@ structure ReentrySystem (α : Type u) where
   step : α → α
 
 namespace ReentrySystem
+
+variable {α : Type u}
 
 def IsStaticSelfReference (S : ReentrySystem α) (x : α) : Prop :=
   Function.IsFixedPt S.step x
