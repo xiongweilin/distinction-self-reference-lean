@@ -47,8 +47,7 @@ def branch (n : Nat) : Version :=
 
 theorem branchBit_two_step (n : Nat) :
     branchBit (n + 2) = branchBit n := by
-  change !(!(branchBit n)) = branchBit n
-  cases branchBit n <;> rfl
+  simp [branchBit]
 
 theorem branch_recurrence (n : Nat) :
     branch (n + 2) = branch n := by
