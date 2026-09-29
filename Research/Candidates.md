@@ -209,11 +209,43 @@ Status: **PROVED HERE** in `NestedGluing`. Local satisfiability then implies glo
 
 Interpretation: this is the first positive composition theorem. It identifies one explicit extra condition that closes the gap exposed by the local and pairwise counterexamples, without assuming a global witness directly.
 
+### P6.6 — overlap-compatible gluing
+
+Replace total nesting by explicit local scopes. Require:
+
+- every variable is covered by at least one patch;
+- local patches agree on every actual overlap.
+
+Status: **PROVED HERE** in `OverlapGluing`. A global assignment is constructed by choosing, for each variable, any covering patch; overlap compatibility proves that the chosen value extends every local patch.
+
+A concrete Boolean patch family is also proved globally glueable while its induced constraint family is **not nested**.
+
+Interpretation: nestedness was sufficient but unnecessarily strong. The essential structure is not pairwise satisfiability of opaque constraints, but agreement of local data on identified overlaps.
+
+### P6.7 — information refinement and garbling
+
+Add an information-order axis.
+
+Status: **PROVED HERE** at two levels.
+
+- `InformationOrder.Refines`: a coarse deterministic representation factors through a finer representation. Post-processing preserves equality, equivalently it cannot create distinctions. A Bool example proves strict information loss.
+- `MarkovGarbling.GarblesTo`: an experiment is obtained from another by Markov-kernel post-processing. Reusing Mathlib data-processing theorems, garbling cannot lower Bayes risk, cannot increase risk-based information, and cannot increase KL divergence.
+
+This is Blackwell-adjacent but deliberately only proves the post-processing/data-processing direction, not a full Blackwell converse theorem.
+
+### P6.8 — information / future-distinction bridge
+
+Status: **PROVED HERE** in `InformationFutureBridge`.
+
+If a history summary factors through the canonical residual-language representation, then FutureEq histories receive the same summary. Conversely, if such a coarse summary distinguishes two histories, the canonical future representation already distinguished them.
+
+Interpretation: finite/future representation and information order are no longer parallel branches; post-processing gives a formal monotonicity relation between them.
+
 Next targets for this layer:
 
-1. weaken total nesting toward a genuine overlap/gluing condition and locate the minimum sufficient compatibility structure;
-2. add information-order / Blackwell-style comparison as another condition axis;
-3. compare whether information refinement preserves future distinction, viability, and gluing capabilities.
+1. determine which weaker-than-cover or partial-overlap hypotheses still suffice for gluing;
+2. formulate observation abstractions of controlled systems and test when information loss preserves or destroys viability/recoverability;
+3. investigate the converse direction of the Markov-garbling decision order only after the required regularity assumptions are explicit.
 
 ## Meta-framework target
 
