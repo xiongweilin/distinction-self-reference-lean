@@ -28,8 +28,9 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Bisimulation | observed transition system | persistent identity-as-behavior is a greatest fixed point with a coinduction principle |
 | Labelled bisimulation bridge | canonical residual DFA + label preservation | future indistinguishability is exactly canonical labelled bisimilarity |
 | Viability | actions + safe-state predicate | sustainable action region is the greatest fixed point of the safe-predecessor operator |
-| Recovery | finite action plans + viability kernel | viable states are recoverable; irrecoverable states cannot be viable |
+| Recovery | finite action plans + viability kernel | viable states are recoverable; a two-state model proves recoverable need not imply viable |
 | Local/global | family of local constraints | even pairwise joint satisfiability need not imply a global witness |
+| Nested gluing | finite nonempty linear order + nested constraints | local satisfiability already implies one global witness |
 | Computability | program codes + evaluator + computability | Rogers fixed point and Kleene's second recursion theorem |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
@@ -50,7 +51,9 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/FutureBisimulation.lean` — exact bridge between future equivalence and canonical labelled bisimilarity.
 - `DistinctionSelfReference/Viability.lean` — controlled viability kernel as a greatest fixed point.
 - `DistinctionSelfReference/Recovery.lean` — finite-plan recoverability back to the viability kernel.
+- `DistinctionSelfReference/RecoverySeparation.lean` — minimal model proving recoverable does not imply viable.
 - `DistinctionSelfReference/LocalGlobal.lean` — local and pairwise-compatible counterexamples to global composition.
+- `DistinctionSelfReference/NestedGluing.lean` — positive finite gluing theorem for nested constraint families.
 - `DistinctionSelfReference/OrderTheoretic.lean` — Mathlib / Knaster-Tarski bridge.
 - `DistinctionSelfReference/Representational.lean` — Mathlib's type-level Lawvere fixed-point bridge.
 - `DistinctionSelfReference/Computability.lean` — Mathlib's Rogers/Kleene computability fixed-point bridge.
