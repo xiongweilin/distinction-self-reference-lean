@@ -4,7 +4,7 @@ import Mathlib.Probability.Decision.Risk.RiskIncrease
 namespace DistinctionSelfReference
 namespace MarkovGarbling
 
-open MeasureTheory ProbabilityTheory
+open MeasureTheory ProbabilityTheory InformationTheory
 open scoped ENNReal ProbabilityTheory
 
 universe u v w z
