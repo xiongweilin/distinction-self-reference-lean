@@ -78,19 +78,19 @@ theorem observation_sufficient
 def trajectory
     (S : System World Obs Boundary)
     (initial : Boundary)
-    (reality : ℕ → World) : ℕ → Boundary
+    (reality : Nat → World) : Nat → Boundary
   | 0 => initial
   | n + 1 => S.update (trajectory S initial reality n) (reality n)
 
 @[simp] theorem trajectory_zero
     (S : System World Obs Boundary)
-    (initial : Boundary) (reality : ℕ → World) :
+    (initial : Boundary) (reality : Nat → World) :
     S.trajectory initial reality 0 = initial :=
   rfl
 
 @[simp] theorem trajectory_succ
     (S : System World Obs Boundary)
-    (initial : Boundary) (reality : ℕ → World) (n : ℕ) :
+    (initial : Boundary) (reality : Nat → World) (n : Nat) :
     S.trajectory initial reality (n + 1) =
       S.update (S.trajectory initial reality n) (reality n) :=
   rfl
@@ -105,8 +105,8 @@ theorem trajectory_tracks_reality
     (hsuccess : S.RevisionSucceeds)
     (hstable : S.RejectsFalseAlarm)
     (initial : Boundary)
-    (reality : ℕ → World)
-    (n : ℕ) :
+    (reality : Nat → World)
+    (n : Nat) :
     S.trajectory initial reality (n + 1) = S.required (reality n) := by
   rw [trajectory_succ]
   exact S.exact_update hdetect hsuccess hstable
@@ -122,9 +122,9 @@ theorem tracks_stable_requirement
     (hsuccess : S.RevisionSucceeds)
     (hstable : S.RejectsFalseAlarm)
     (initial : Boundary)
-    (reality : ℕ → World)
+    (reality : Nat → World)
     (target : Boundary)
-    (N : ℕ)
+    (N : Nat)
     (hreq : ∀ n, N ≤ n → S.required (reality n) = target) :
     ∀ n, N ≤ n →
       S.trajectory initial reality (n + 1) = target := by
