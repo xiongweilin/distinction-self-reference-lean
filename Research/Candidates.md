@@ -129,9 +129,9 @@ Add enough internal representation to encode maps and feed representations back 
 
 Suitable point-surjectivity / representability conditions force fixed points for endomorphisms of the represented object.
 
-Status: **ESTABLISHED EXTERNAL**; Lean 4 formalization already exists.
+Status: **ESTABLISHED EXTERNAL**, formalized in Mathlib for types/functions and instantiated here as Representational.surjective_representation_forces_fixed_point.
 
-Target: construct the smallest interface in this repository that can map a distinction/re-entry system into the hypotheses of a Lawvere-style theorem.
+Next target: construct the smallest translation from a distinction/re-entry system into the representability hypotheses, rather than assuming the evaluator externally.
 
 ## Layer 5: computability self-reference
 
@@ -145,9 +145,9 @@ Add:
 
 Computable transformations of program descriptions have extensional fixed points.
 
-Status: **ESTABLISHED EXTERNAL**.
+Status: **ESTABLISHED EXTERNAL**, already formalized in Mathlib as Nat.Partrec.Code.fixed_point and fixed_point₂, and instantiated here in DistinctionSelfReference.Computability.
 
-Target: keep code-level self-reference distinct from literal equality of states.
+Next target: identify the weakest representation/evaluation conditions needed to connect the generic re-entry interface to program-code self-reference while keeping behavioral equality distinct from literal code equality.
 
 ## Meta-framework target
 
