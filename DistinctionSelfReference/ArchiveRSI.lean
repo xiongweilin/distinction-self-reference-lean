@@ -226,5 +226,143 @@ theorem wqo_monotone_antichain_archive_eventually_stabilizes
     exact Set.mem_iUnion.mpr ⟨n, hx⟩
   · exact hmonotone hn
 
+/-- The undominated maximal elements of an archive. -/
+def ParetoFrontier
+    {Version : Type u}
+    [Preorder Version]
+    (archive : Archive Version) :
+    Archive Version :=
+  {x | x ∈ archive ∧ ∀ y, y ∈ archive → ¬ x < y}
+
+theorem paretoFrontier_subset
+    {Version : Type u}
+    [Preorder Version]
+    (archive : Archive Version) :
+    ParetoFrontier archive ⊆ archive := by
+  intro x hx
+  exact hx.1
+
+/--
+One frontier strictly dominates another when every old frontier point is
+strictly improved by some new frontier point.
+-/
+def StrictFrontierProgress
+    {Version : Type u}
+    [Preorder Version]
+    (old new : Archive Version) : Prop :=
+  ∀ x, x ∈ old → ∃ y, y ∈ new ∧ x < y
+
+namespace FrontierReplacementExample
+
+/--
+The retained archive contains every natural-number version seen so far.
+This archive is monotone and strictly grows forever.
+-/
+def retained (n : Nat) : Archive Nat :=
+  {k | k ≤ n}
+
+theorem retained_monotone :
+    MonotoneArchive retained := by
+  intro n k hk
+  change k ≤ n at hk
+  change k ≤ n + 1
+  omega
+
+theorem retained_strict_each_step (n : Nat) :
+    StrictArchiveGrowth (retained n) (retained (n + 1)) := by
+  constructor
+  · exact retained_monotone n
+  · intro hback
+    have hnew : n + 1 ∈ retained (n + 1) := by
+      simp [retained]
+    have hold := hback hnew
+    change n + 1 ≤ n at hold
+    omega
+
+def frontier (n : Nat) : Archive Nat :=
+  ParetoFrontier (retained n)
+
+/--
+At every finite stage the unique Pareto-maximal retained version is the newest
+one.
+-/
+theorem frontier_eq_singleton (n : Nat) :
+    frontier n = {n} := by
+  ext x
+  constructor
+  · intro hx
+    rcases hx with ⟨hxn, hmax⟩
+    have hnot : ¬ x < n := hmax n (by simp [retained])
+    have hxeq : x = n := by
+      omega
+    simpa [hxeq]
+  · intro hx
+    have hxeq : x = n := by
+      simpa using hx
+    subst x
+    constructor
+    · simp [retained]
+    · intro y hy
+      change y ≤ n at hy
+      omega
+
+/-- Every recomputed frontier is a singleton antichain. -/
+theorem frontier_antichain :
+    AntichainArchive frontier := by
+  intro n
+  rw [frontier_eq_singleton]
+  exact IsAntichain.singleton
+
+/--
+The frontier is genuinely non-monotone: the old maximal point is removed when
+the next strictly better point appears.
+-/
+theorem frontier_not_subset_next (n : Nat) :
+    ¬ frontier n ⊆ frontier (n + 1) := by
+  rw [frontier_eq_singleton, frontier_eq_singleton]
+  intro h
+  have hn : n ∈ ({n} : Set Nat) := by simp
+  have hmem := h hn
+  simp at hmem
+
+theorem frontier_changes_each_step (n : Nat) :
+    frontier n ≠ frontier (n + 1) := by
+  intro heq
+  exact frontier_not_subset_next n (heq.subset)
+
+/--
+Although the frontier set never stabilizes, each new frontier strictly
+dominates the preceding one.
+-/
+theorem frontier_strict_progress_each_step (n : Nat) :
+    StrictFrontierProgress (frontier n) (frontier (n + 1)) := by
+  intro x hx
+  rw [frontier_eq_singleton] at hx
+  have hxeq : x = n := by
+    simpa using hx
+  subst x
+  refine ⟨n + 1, ?_, by omega⟩
+  rw [frontier_eq_singleton]
+  simp
+
+/--
+WQO does not force stabilization of a recomputed Pareto frontier.
+Even over Nat, the retained archive grows monotonically, every frontier is a
+finite antichain, and the frontier can be replaced by a strictly dominating
+singleton forever.
+-/
+theorem wqo_allows_perpetual_frontier_replacement :
+    MonotoneArchive retained ∧
+    AntichainArchive frontier ∧
+    (∀ n, frontier n ≠ frontier (n + 1)) ∧
+    (∀ n, StrictFrontierProgress (frontier n) (frontier (n + 1))) := by
+  exact ⟨
+    retained_monotone,
+    frontier_antichain,
+    frontier_changes_each_step,
+    frontier_strict_progress_each_step⟩
+
+end FrontierReplacementExample
+
 end ArchiveRSI
 end DistinctionSelfReference
