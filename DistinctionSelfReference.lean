@@ -8,7 +8,10 @@ import DistinctionSelfReference.KleeneThree
 import DistinctionSelfReference.LogicBridge
 import DistinctionSelfReference.FutureDistinction
 import DistinctionSelfReference.Bisimulation
+import DistinctionSelfReference.LabeledBisimulation
+import DistinctionSelfReference.FutureBisimulation
 import DistinctionSelfReference.Viability
+import DistinctionSelfReference.Recovery
 import DistinctionSelfReference.LocalGlobal
 import DistinctionSelfReference.OrderTheoretic
 import DistinctionSelfReference.Representational
