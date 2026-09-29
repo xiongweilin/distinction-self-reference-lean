@@ -24,6 +24,10 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Boolean → K3 bridge | interpret primary-shaped forms in K3 | K3 conservatively extends Boolean valuations; `a ∨ ¬a` is true exactly when `a` is determined |
 | Order-theoretic | complete lattice + monotone endomap | least and greatest fixed points exist by Knaster-Tarski |
 | Representational | a surjective internal evaluator | every endomap of the represented result type has a fixed point (type-level Lawvere bridge) |
+| Future distinction | histories + continuation tests | histories are equivalent exactly when all future continuations agree; finite quotient iff regular by Myhill–Nerode |
+| Bisimulation | observed transition system | persistent identity-as-behavior is a greatest fixed point with a coinduction principle |
+| Viability | actions + safe-state predicate | sustainable action region is the greatest fixed point of the safe-predecessor operator |
+| Local/global | family of local constraints | local satisfiability alone does not imply a single globally satisfying state |
 | Computability | program codes + evaluator + computability | Rogers fixed point and Kleene's second recursion theorem |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
@@ -38,6 +42,10 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/PrimaryBoolean.lean` — Boolean semantic core for primary-shaped forms.
 - `DistinctionSelfReference/KleeneThree.lean` — Strong Kleene three-valued semantics and three-state crossing bridge.
 - `DistinctionSelfReference/LogicBridge.lean` — conservative Boolean-to-K3 interpretation and the exact excluded-middle boundary.
+- `DistinctionSelfReference/FutureDistinction.lean` — future-indistinguishability and the Myhill–Nerode bridge.
+- `DistinctionSelfReference/Bisimulation.lean` — persistent behavioral identity as a greatest fixed point.
+- `DistinctionSelfReference/Viability.lean` — controlled viability kernel as a greatest fixed point.
+- `DistinctionSelfReference/LocalGlobal.lean` — minimal counterexample showing local satisfiability need not compose globally.
 - `DistinctionSelfReference/OrderTheoretic.lean` — Mathlib / Knaster-Tarski bridge.
 - `DistinctionSelfReference/Representational.lean` — Mathlib's type-level Lawvere fixed-point bridge.
 - `DistinctionSelfReference/Computability.lean` — Mathlib's Rogers/Kleene computability fixed-point bridge.
