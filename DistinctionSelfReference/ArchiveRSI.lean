@@ -135,5 +135,48 @@ theorem wqo_has_comparable_pair
     ∃ i j, i < j ∧ versions i ≤ versions j :=
   wellQuasiOrdered_le versions
 
+/-- Every archive stage is a Pareto-style antichain. -/
+def AntichainArchive
+    {Version : Type u}
+    [Preorder Version]
+    (archive : Nat → Archive Version) : Prop :=
+  ∀ n, IsAntichain (· ≤ ·) (archive n)
+
+/--
+A WQO forbids an antichain archive from being both monotone and strictly
+growing at every single step forever.
+-/
+theorem wqo_forbids_strict_antichain_growth_every_step
+    {Version : Type u}
+    [Preorder Version]
+    [WellQuasiOrderedLE Version]
+    (archive : Nat → Archive Version)
+    (hmono : MonotoneArchive archive)
+    (hanti : AntichainArchive archive) :
+    ¬ ∀ n, StrictArchiveGrowth (archive n) (archive (n + 1)) := by
+  intro hstrict
+  have hmonotone : Monotone archive :=
+    monotone_nat_of_le_succ fun n => (hstrict n).1
+  have hex :
+      ∀ n, ∃ x,
+        x ∈ archive (n + 1) ∧
+        x ∉ archive n := by
+    intro n
+    exact Set.not_subset.mp (hstrict n).2
+  choose fresh hnew hnotOld using hex
+  rcases wellQuasiOrdered_le fresh with ⟨i, j, hij, hijle⟩
+  have hi_j : fresh i ∈ archive j :=
+    hmonotone (Nat.succ_le_of_lt hij) (hnew i)
+  have hi_succj : fresh i ∈ archive (j + 1) :=
+    hmonotone (Nat.le_succ j) hi_j
+  have hne : fresh i ≠ fresh j := by
+    intro heq
+    apply hnotOld j
+    rw [← heq]
+    exact hi_j
+  have heq :=
+    (hanti (j + 1)).eq hi_succj (hnew j) hijle
+  exact hne heq
+
 end ArchiveRSI
 end DistinctionSelfReference
