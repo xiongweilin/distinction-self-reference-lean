@@ -6,6 +6,9 @@ import DistinctionSelfReference.ThreeState
 import DistinctionSelfReference.PrimaryBoolean
 import DistinctionSelfReference.KleeneThree
 import DistinctionSelfReference.LogicBridge
+import DistinctionSelfReference.FutureDistinction
+import DistinctionSelfReference.Bisimulation
+import DistinctionSelfReference.Viability
 import DistinctionSelfReference.OrderTheoretic
 import DistinctionSelfReference.Representational
 import DistinctionSelfReference.Computability
