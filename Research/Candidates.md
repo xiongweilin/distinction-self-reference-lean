@@ -464,6 +464,37 @@ Important limits:
 2. the finite bound is on consecutive strict capability growth, not on arbitrary version changes or capability plateaus;
 3. proof-check budgets are local to proposals; long-run budget dynamics remain open.
 
+### P6.20 — recurrent-version diagnostics, sustainable callability, kernel migration, and joint convergence
+
+Continue the guarded-RSI program along the five maintained README directions.
+
+Status: **PROVED HERE** in `FullVersionDiagnostics`, `IndefiniteCallability`, `TrustedKernelMigration`, `JointRSIConvergence`, `NextRSIDependencyGraph`, `NextRSIFeasibility`, and `NextRSIConflict`.
+
+Results:
+
+- a non-degrading full-version orbit that returns to its starting version is a capability plateau throughout the recurrent segment;
+- therefore no strict capability growth can occur inside such a recurrent segment;
+- a concrete payload-toggle model gives a genuine two-cycle with constant capability profile, proving recurrence is strictly weaker than a modifier fixed point;
+- uniformly bounded checking witnesses plus budgets that cover the bound imply callability for every upgrade in an infinite proposal stream;
+- the eventual analogue also holds after a finite startup phase;
+- a concrete stream can remain kernel-certified at every step yet fail even eventual callability when verification cost permanently exceeds available budget;
+- a predecessor-checked kernel-migration protocol propagates an explicit trust invariant from the initial checker through every migrated checker version;
+- when trust implies proposal-kernel soundness, every migrated proposal checker remains sound for the target invariant;
+- fixed finite-lag reality tracking transports eventual requirement convergence to eventual convergence in the lag-shifted retained-boundary sequence;
+- capability-profile convergence, kernel-version convergence, and reality-boundary convergence compose into joint three-axis stabilization;
+- the four next-phase condition sets are each inclusion-minimal in `NextRSIDependencyGraph` and have concrete joint semantic realizations in `NextRSIFeasibility`, upgrading them to **feasible-inclusion-minimal**;
+- `NextRSIConflict` proves a new semantic incompatibility edge: pointwise capability non-degradation + full-version recurrence + strict first-step capability growth cannot be jointly realized.
+
+Interpretation: version identity, capability progress, practical callability, checker trust, and reality alignment are now formally separated. A self-modifying process may keep changing versions without improving capabilities; may keep producing valid certificates without being executable under resource limits; and may migrate its checker safely only when trust transfer itself is explicitly justified.
+
+Important limits:
+
+1. reality delay is currently fixed rather than variable or reordered;
+2. budgets are exogenous streams rather than resources changed by the upgrade process itself;
+3. predecessor-checked migration preserves an abstract trust invariant but does not yet model revocation/compromise recovery or nontrivial trust-domain expansion;
+4. finite capability bounds do not address infinite capability orders;
+5. the meta-framework still lacks the M5 invariant-core construction across incomparable feasible-minimal RSI frameworks.
+
 The maintained next directions are recorded in the README after every completed phase.
 
 ## Meta-framework target
@@ -500,7 +531,7 @@ Condition sets also need semantic compatibility, not only derivability.
 
 Status: **GENERIC MACHINERY + FIRST INSTANCE PROVED HERE**.
 
-`MetaFramework.ConditionSemantics` defines realizations, joint satisfaction, compatibility, and incompatibility; compatibility is downward closed and incompatibility upward closed. `RepresentationConflict` instantiates this layer and proves that fixed-point-free endomaps and universal surjective representation cannot be jointly realized.
+`MetaFramework.ConditionSemantics` defines realizations, joint satisfaction, compatibility, and incompatibility; compatibility is downward closed and incompatibility upward closed. `RepresentationConflict` instantiates this layer and proves that fixed-point-free endomaps and universal surjective representation cannot be jointly realized. `NextRSIConflict` adds a second, RSI-specific incompatibility: under pointwise non-degradation, a recurrent full-version cycle cannot contain strict first-step capability growth.
 
 ### M4 — feasible minimal sufficiency
 
@@ -508,7 +539,7 @@ A condition set should count as a candidate framework only if it is both capabil
 
 Status: **PROVED HERE / FIRST INSTANCE PROVED HERE**.
 
-`FeasibleFramework` defines `FeasibleSufficient` and `FeasibleInclusionMinimal`. Ordinary inclusion-minimal sufficiency lifts to feasible minimality once joint compatibility is proved. `CorrigibilityAblation` supplies the first concrete instance: mismatch detection + revision success + false-alarm rejection are jointly realizable and feasible-inclusion-minimal for exact correction. `RSIFeasibility` now supplies a larger concrete instance: the full first-layer guarded-RSI requirement set is jointly realizable and feasible-inclusion-minimal for the guarded RSI capability.
+`FeasibleFramework` defines `FeasibleSufficient` and `FeasibleInclusionMinimal`. Ordinary inclusion-minimal sufficiency lifts to feasible minimality once joint compatibility is proved. `CorrigibilityAblation` supplies the first concrete instance: mismatch detection + revision success + false-alarm rejection are jointly realizable and feasible-inclusion-minimal for exact correction. `RSIFeasibility` supplies the first larger guarded-RSI instance. `NextRSIFeasibility` now adds four independently realizable feasible-minimal next-phase frameworks: recurrent plateau diagnostics, indefinite resource-bounded callability, predecessor-checked trusted-kernel migration, and joint trust/capability/reality stabilization.
 
 Interpretation: derivability-minimal but semantically impossible condition sets are now excluded from the search space.
 
