@@ -135,19 +135,31 @@ theorem allFour_minimal_for_allCapabilities :
     cases c with
     | forwardSimulation =>
         have hreq := hafter (t := Capability.preserveViability) (Set.mem_univ _)
-        have hcDiff := hreq (by simp [required])
+        have hcDiff := hreq (a := Condition.forwardSimulation) (by
+          change Condition.forwardSimulation = Condition.forwardSimulation ∨
+            Condition.forwardSimulation = Condition.safetyPreservation
+          exact Or.inl rfl)
         exact hcDiff.2 (by rfl)
     | safetyPreservation =>
         have hreq := hafter (t := Capability.preserveViability) (Set.mem_univ _)
-        have hcDiff := hreq (by simp [required])
+        have hcDiff := hreq (a := Condition.safetyPreservation) (by
+          change Condition.safetyPreservation = Condition.forwardSimulation ∨
+            Condition.safetyPreservation = Condition.safetyPreservation
+          exact Or.inr rfl)
         exact hcDiff.2 (by rfl)
     | backwardSimulation =>
         have hreq := hafter (t := Capability.reflectViability) (Set.mem_univ _)
-        have hcDiff := hreq (by simp [required])
+        have hcDiff := hreq (a := Condition.backwardSimulation) (by
+          change Condition.backwardSimulation = Condition.backwardSimulation ∨
+            Condition.backwardSimulation = Condition.safetyReflection
+          exact Or.inl rfl)
         exact hcDiff.2 (by rfl)
     | safetyReflection =>
         have hreq := hafter (t := Capability.reflectViability) (Set.mem_univ _)
-        have hcDiff := hreq (by simp [required])
+        have hcDiff := hreq (a := Condition.safetyReflection) (by
+          change Condition.safetyReflection = Condition.backwardSimulation ∨
+            Condition.safetyReflection = Condition.safetyReflection
+          exact Or.inr rfl)
         exact hcDiff.2 (by rfl)
 
 end ControlDependencyGraph
