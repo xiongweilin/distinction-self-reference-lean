@@ -70,7 +70,11 @@ theorem nestedBool_local :
 theorem nestedBool_nested :
     Nested nestedBool := by
   intro i j hij g hj
-  cases i <;> cases j <;> simp_all [nestedBool]
+  cases i <;> cases j
+  · exact True.intro
+  · exact True.intro
+  · exact False.elim ((by decide : ¬ (true ≤ false)) hij)
+  · exact hj
 
 theorem nestedBool_global :
     nestedBool.GloballySatisfiable :=
