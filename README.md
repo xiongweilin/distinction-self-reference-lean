@@ -31,6 +31,10 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Recovery | finite action plans + viability kernel | viable states are recoverable; a two-state model proves recoverable need not imply viable |
 | Local/global | family of local constraints | even pairwise joint satisfiability need not imply a global witness |
 | Nested gluing | finite nonempty linear order + nested constraints | local satisfiability already implies one global witness |
+| Overlap gluing | local scopes + cover + agreement on overlaps | compatible local patches construct a global assignment; nesting is not required |
+| Deterministic information order | representation + post-processing factorization | post-processing cannot create new distinctions; strict information loss exists |
+| Markov garbling | experiment + Markov post-processing | Bayes risk cannot improve, risk-based information and KL divergence cannot increase |
+| Information → future bridge | coarse summary factors through residual language | FutureEq histories remain equal under every such summary |
 | Computability | program codes + evaluator + computability | Rogers fixed point and Kleene's second recursion theorem |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
@@ -54,6 +58,10 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/RecoverySeparation.lean` — minimal model proving recoverable does not imply viable.
 - `DistinctionSelfReference/LocalGlobal.lean` — local and pairwise-compatible counterexamples to global composition.
 - `DistinctionSelfReference/NestedGluing.lean` — positive finite gluing theorem for nested constraint families.
+- `DistinctionSelfReference/OverlapGluing.lean` — cover + overlap agreement gluing theorem, with a non-nested example.
+- `DistinctionSelfReference/InformationOrder.lean` — deterministic refinement preorder and no-new-distinction theorem.
+- `DistinctionSelfReference/MarkovGarbling.lean` — Markov post-processing order with Bayes-risk, risk-increase, and KL data-processing bridges.
+- `DistinctionSelfReference/InformationFutureBridge.lean` — bridge from representation refinement to future indistinguishability.
 - `DistinctionSelfReference/OrderTheoretic.lean` — Mathlib / Knaster-Tarski bridge.
 - `DistinctionSelfReference/Representational.lean` — Mathlib's type-level Lawvere fixed-point bridge.
 - `DistinctionSelfReference/Computability.lean` — Mathlib's Rogers/Kleene computability fixed-point bridge.
