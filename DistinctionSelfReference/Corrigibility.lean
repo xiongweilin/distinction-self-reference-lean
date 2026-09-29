@@ -105,6 +105,7 @@ theorem continuous_correction_on_mismatch
         K.revision.revise (K.revision.observe world) := by
     unfold Reopening.System.applied Reopening.System.applyObservation
     rw [hdetect world hmismatch]
+    simp
   constructor
   · exact hcorrect
   · rw [happlied]
