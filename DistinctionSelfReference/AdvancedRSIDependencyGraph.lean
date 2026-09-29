@@ -19,6 +19,10 @@ inductive Condition
   | exactRealityCorrection
   | requirementConvergence
   | capabilityConvergence
+  | explicitProofObject
+  | trustedKernelSoundness
+  | proofChecking
+  | proofCheckCostModel
   deriving DecidableEq, Repr
 
 inductive Capability
@@ -27,6 +31,9 @@ inductive Capability
   | boundedCallableUpgrade
   | realityConvergence
   | jointLongRunStability
+  | proofCheckedVerifierExpansion
+  | finiteStrictGrowthBound
+  | proofBoundedCallableExpansion
   deriving DecidableEq, Repr
 
 def required : Capability → Set Condition
@@ -42,6 +49,14 @@ def required : Capability → Set Condition
   | .jointLongRunStability =>
       { .exactRealityCorrection, .requirementConvergence,
         .capabilityConvergence }
+  | .proofCheckedVerifierExpansion =>
+      { .oldVerifierSoundness, .explicitProofObject,
+        .trustedKernelSoundness, .proofChecking }
+  | .finiteStrictGrowthBound =>
+      { .capabilityOrder, .strictImprovement, .finiteCapabilityUniverse }
+  | .proofBoundedCallableExpansion =>
+      { .explicitProofObject, .trustedKernelSoundness, .proofChecking,
+        .proofCheckCostModel, .sufficientBudget }
 
 def graph : FrameworkGraph Condition Capability where
   derives conditions cap := required cap ⊆ conditions
@@ -79,6 +94,24 @@ theorem jointLongRunStability_minimal :
       (required Capability.jointLongRunStability)
       {Capability.jointLongRunStability} :=
   required_minimal Capability.jointLongRunStability
+
+theorem proofCheckedExpansion_minimal :
+    graph.InclusionMinimal
+      (required Capability.proofCheckedVerifierExpansion)
+      {Capability.proofCheckedVerifierExpansion} :=
+  required_minimal Capability.proofCheckedVerifierExpansion
+
+theorem finiteStrictGrowthBound_minimal :
+    graph.InclusionMinimal
+      (required Capability.finiteStrictGrowthBound)
+      {Capability.finiteStrictGrowthBound} :=
+  required_minimal Capability.finiteStrictGrowthBound
+
+theorem proofBoundedCallableExpansion_minimal :
+    graph.InclusionMinimal
+      (required Capability.proofBoundedCallableExpansion)
+      {Capability.proofBoundedCallableExpansion} :=
+  required_minimal Capability.proofBoundedCallableExpansion
 
 end AdvancedRSIDependencyGraph
 end DistinctionSelfReference
