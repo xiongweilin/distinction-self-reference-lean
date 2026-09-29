@@ -1,4 +1,3 @@
-import Mathlib.Data.Bool.Basic
 import Mathlib.Data.Finset.Max
 import DistinctionSelfReference.LocalGlobal
 
@@ -36,11 +35,11 @@ theorem globallySatisfiable_of_locallySatisfiable_of_nested
   rcases hlocal m with ⟨g, hgm⟩
   refine ⟨g, ?_⟩
   intro i
-  apply hnested (Finset.le_max' Finset.univ i (Finset.mem_univ i)) g hgm
+  exact hnested (Finset.le_max' Finset.univ i (Finset.mem_univ i)) g hgm
 
 /--
-Under the same nesting condition, pairwise compatibility is not needed:
-individual local satisfiability already suffices.
+Under nesting, pairwise compatibility becomes redundant: local
+satisfiability already yields one common global witness.
 -/
 theorem pairwise_redundant_under_nesting
     [Fintype Index] [Nonempty Index] [LinearOrder Index]
@@ -50,36 +49,6 @@ theorem pairwise_redundant_under_nesting
     C.PairwiseSatisfiable := by
   exact C.pairwiseSatisfiable_of_globallySatisfiable
     (globallySatisfiable_of_locallySatisfiable_of_nested C hlocal hnested)
-
-/--
-A concrete nested Boolean-indexed family.
-false is the weak constraint; true is the stronger constraint.
--/
-def nestedBool : ConstraintFamily Bool Bool where
-  holds
-    | false, _ => True
-    | true, b => b = true
-
-theorem nestedBool_local :
-    nestedBool.LocallySatisfiable := by
-  intro i
-  cases i with
-  | false => exact ⟨false, True.intro⟩
-  | true => exact ⟨true, rfl⟩
-
-theorem nestedBool_nested :
-    Nested nestedBool := by
-  intro i j hij g hj
-  cases i <;> cases j
-  · exact True.intro
-  · exact True.intro
-  · exact False.elim ((by decide : ¬ (true ≤ false)) hij)
-  · exact hj
-
-theorem nestedBool_global :
-    nestedBool.GloballySatisfiable :=
-  globallySatisfiable_of_locallySatisfiable_of_nested
-    nestedBool nestedBool_local nestedBool_nested
 
 end NestedGluing
 end DistinctionSelfReference
