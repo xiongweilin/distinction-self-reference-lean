@@ -367,9 +367,28 @@ Local observation sufficiency, variable cover, and agreement on overlaps constru
 
 Interpretation: local epistemic sufficiency, compatibility/gluing, and operational recoverability remain separate conditions; together they support a stronger conditional composition claim.
 
+### P6.16 — corrigibility / reopening
+
+Add a retained commitment boundary, a reality-dependent required boundary, an observation-driven reopen gate, and a revision policy.
+
+Status: **PROVED HERE** in `Reopening`, `Corrigibility`, `CorrigibilityDependencyGraph`, and `CorrigibilityAblation`.
+
+Results:
+
+- mismatch detection + revision success correct every actual mismatch;
+- adding false-alarm rejection yields exact correction in every world;
+- exact correction implies the current observation is locally sufficient for the required commitment;
+- adding required-boundary recoverability yields finite operational recovery after correction;
+- adding bisimulation continuity yields correction while preserving a selected behavioral identity criterion;
+- explicit Boolean countermodels show detection, revision success, and false-alarm rejection cannot simply be dropped;
+- separate countermodels show correct revision alone need not imply recoverability or continuity;
+- the dependency graph gives inclusion-minimal condition sets for mismatch correction, exact correction, recovery after mismatch, and continuous correction.
+
+Interpretation: corrigibility is not one primitive property. It decomposes into distinguishable conditions whose necessity can be tested independently, and it connects epistemic sufficiency, operational recovery, and self-continuity without collapsing them.
+
 Next targets for this layer:
 
-1. formalize corrigibility/reopening as reality-side mismatch that can revise a retained boundary;
+1. strengthen reopening from one-shot correction to iterated revision / repeated mismatch;
 2. determine which weaker-than-cover or partial-overlap hypotheses still suffice for composition;
 3. add bounded-resource/finitude conditions beyond finite representational quotients.
 
@@ -409,7 +428,17 @@ Status: **GENERIC MACHINERY + FIRST INSTANCE PROVED HERE**.
 
 `MetaFramework.ConditionSemantics` defines realizations, joint satisfaction, compatibility, and incompatibility; compatibility is downward closed and incompatibility upward closed. `RepresentationConflict` instantiates this layer and proves that fixed-point-free endomaps and universal surjective representation cannot be jointly realized.
 
-### M4 — invariant core
+### M4 — feasible minimal sufficiency
+
+A condition set should count as a candidate framework only if it is both capability-sufficient and jointly realizable.
+
+Status: **PROVED HERE / FIRST INSTANCE PROVED HERE**.
+
+`FeasibleFramework` defines `FeasibleSufficient` and `FeasibleInclusionMinimal`. Ordinary inclusion-minimal sufficiency lifts to feasible minimality once joint compatibility is proved. `CorrigibilityAblation` supplies the first concrete instance: mismatch detection + revision success + false-alarm rejection are jointly realizable and feasible-inclusion-minimal for exact correction.
+
+Interpretation: derivability-minimal but semantically impossible condition sets are now excluded from the search space.
+
+### M5 — invariant core
 
 If several incomparable minimal sufficient frameworks exist, extract the structure preserved by translations between all of them.
 
