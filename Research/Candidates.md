@@ -141,7 +141,17 @@ Suitable point-surjectivity / representability conditions force fixed points for
 
 Status: **ESTABLISHED EXTERNAL**, formalized in Mathlib for types/functions and instantiated here as Representational.surjective_representation_forces_fixed_point.
 
-Next target: construct the smallest translation from a distinction/re-entry system into the representability hypotheses, rather than assuming the evaluator externally.
+### P4.2 — fixed-point-free obstruction to universal representation
+
+If the represented result type admits a fixed-point-free endomap, then no Lawvere-style surjective evaluator `α → (α → β)` can exist.
+
+Status: **PROVED HERE** in `RepresentationalObstruction.fixedPointFree_forbids_surjective_representation`.
+
+The two-state crossing is an immediate instance: because `TwoState.cross` has no fixed point, no type can provide a surjective evaluator into all `TwoState.Side`-valued self-functions.
+
+Interpretation: representability is not merely another stronger assumption that can always be added. It can be structurally incompatible with a fixed-point-free distinction on the represented result type. The meta-framework therefore needs incompatibility edges in addition to implication edges.
+
+Next target: weaken full point-surjectivity toward partial / typed / guarded representation conditions that can coexist with nontrivial distinctions.
 
 ## Layer 5: computability self-reference
 
@@ -331,13 +341,19 @@ The eventual target is not necessarily one linear strongest theory. It is a part
 
 For each capability T_i and assumption C_j, test whether T_i remains derivable after removing C_j.
 
-Status: **CONJECTURAL PROGRAM**.
+Status: **FORMALIZED / PARTLY INSTANTIATED**.
+
+`MetaFramework.FrameworkGraph` now represents a monotone condition→capability relation. It defines `AblationMinimal` and `InclusionMinimal`, and proves that under monotonicity the practical one-condition ablation test is equivalent to full inclusion minimality.
+
+`ControlAblation` provides the first concrete family of independent condition-removal countermodels.
 
 ### M2 — minimal sufficient frameworks
 
 For a target capability set T, identify all minimal assumption sets C such that C proves T.
 
-Status: **CONJECTURAL PROGRAM**.
+Status: **GENERIC MACHINERY PROVED HERE; CONCRETE ENUMERATION ONGOING**.
+
+`MetaFramework` formalizes sufficient target sets, inclusion-minimal sufficient condition sets, capability dominance, and capability equivalence. The next step is to instantiate this graph with the concrete condition/capability results already proved in Layers 0–6.
 
 ### M3 — invariant core
 
