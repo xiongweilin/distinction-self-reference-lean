@@ -130,6 +130,20 @@ theorem recoverable_of_map_recoverable_of_safeReflecting
   rw [h.run_commute]
   exact hplan
 
+/--
+When safety is both preserved and reflected, recoverability is exact under
+the abstraction as well.
+-/
+theorem recoverable_iff_map_recoverable
+    (h : Hom C A)
+    (hpres : h.SafePreserving)
+    (hrefl : h.SafeReflecting)
+    (s : Concrete) :
+    Recoverable C s ↔ Recoverable A (h.map s) := by
+  constructor
+  · exact h.map_recoverable_of_safePreserving hpres
+  · exact h.recoverable_of_map_recoverable_of_safeReflecting hrefl
+
 end Hom
 
 /-- A concrete two-state system whose bad state can never become safe. -/
