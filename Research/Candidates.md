@@ -386,11 +386,35 @@ Results:
 
 Interpretation: corrigibility is not one primitive property. It decomposes into distinguishable conditions whose necessity can be tested independently, and it connects epistemic sufficiency, operational recovery, and self-continuity without collapsing them.
 
+### P6.17 — guarded recursive self-improvement scaffold
+
+Add explicit system versions, capability profiles, self-modification proposals, verifiers, invariants, verifier migration, and repeated reality-facing revision.
+
+Status: **PROVED HERE** in `CapabilityOrder`, `SelfModification`, `VerifiedUpgrade`, `IteratedReopening`, `VerifierMigration`, `GuardedRSI`, `RSIDependencyGraph`, and `RSIAblation`.
+
+Results:
+
+- capability profiles form a partial order by set inclusion;
+- non-degrading accepted self-modification steps produce monotone capability chains;
+- verifier soundness makes accepted modification preserve a specified invariant;
+- iterated reopening tracks each newly observed reality requirement, and tracks a stabilized requirement thereafter;
+- verifier refinement transports soundness from an old trusted verifier to a migrated verifier without requiring the new verifier to certify its own soundness;
+- a migration chain therefore inherits initial verifier soundness at every stage;
+- `GuardedRSI.Loop` composes verifier migration, verified self-modification, capability monotonicity, invariant preservation, and reality tracking into one scaffold;
+- countermodels show that acceptance without verifier soundness can violate invariants, self-modification without non-degradation can lose capabilities, unconstrained verifier migration can lose soundness, and revision without mismatch detection can fail reality correction;
+- `RSIDependencyGraph` gives an inclusion-minimal condition set for the first guarded RSI capability.
+
+Interpretation: the current formalization supports **guarded** self-improvement, not unrestricted recursive self-improvement. Capability growth, invariant preservation, verifier trust, and reality correction remain separate axes and are combined only under explicit conditions.
+
+Important limit: current verifier migration is conservative refinement — the new verifier may accept no proposal that the old verifier rejected. This proves trust preservation but does not yet justify safe expansion of the verifier's acceptance domain.
+
 Next targets for this layer:
 
-1. strengthen reopening from one-shot correction to iterated revision / repeated mismatch;
-2. determine which weaker-than-cover or partial-overlap hypotheses still suffice for composition;
-3. add bounded-resource/finitude conditions beyond finite representational quotients.
+1. formalize certified verifier expansion using an external/older proof object rather than self-trust;
+2. distinguish strict capability improvement from mere non-degradation and study plateaus/cycles/fixed points;
+3. connect resource bounds and finite verification cost to which improvements are callable;
+4. compare long-run reality convergence with long-run capability convergence;
+5. determine which weaker-than-cover or partial-overlap hypotheses still suffice for composition.
 
 ## Meta-framework target
 
