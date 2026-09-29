@@ -43,15 +43,15 @@ theorem recurrence_strictGrowth_incompatible :
         Condition.strictFirstCapabilityGrowth } := by
   rintro ⟨r, hr⟩
   have hnon : ∀ x, x.profile ≤ (r.modifier.propose x).profile :=
-    hr (by simp)
+    hr (c := Condition.pointwiseNonDegradation) (by simp)
   have hrec : FullVersionDiagnostics.Recurrent r.modifier r.start :=
-    hr (by simp)
+    hr (c := Condition.fullVersionRecurrence) (by simp)
   have hstrict : CapabilityDynamics.StrictGrowth
       r.start.profile (r.modifier.propose r.start).profile :=
-    hr (by simp)
+    hr (c := Condition.strictFirstCapabilityGrowth) (by simp)
   rcases hrec with ⟨k, hk, hcycle⟩
   have hfirst : 0 + 1 ≤ k := by
-    simpa using hk
+    exact Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hk)
   have hno := FullVersionDiagnostics.no_strict_growth_inside_recurrence
     r.modifier r.start hnon hcycle hfirst
   apply hno
