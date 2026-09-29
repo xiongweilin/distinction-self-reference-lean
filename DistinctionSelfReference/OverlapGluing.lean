@@ -15,7 +15,7 @@ The local function is total for convenience; values outside the scope are ignore
 -/
 structure PatchFamily (Index : Type u) (Var : Type v) (Value : Type w) where
   scope : Index → Set Var
-  local : Index → Var → Value
+  assign : Index → Var → Value
 
 namespace PatchFamily
 
@@ -28,12 +28,12 @@ def Covers (P : PatchFamily Index Var Value) : Prop :=
 /-- Local patches agree wherever their scopes overlap. -/
 def Compatible (P : PatchFamily Index Var Value) : Prop :=
   ∀ i j x, x ∈ P.scope i → x ∈ P.scope j →
-    P.local i x = P.local j x
+    P.assign i x = P.assign j x
 
 /-- Each patch induces a constraint on a possible global assignment. -/
 def asConstraints (P : PatchFamily Index Var Value) :
     ConstraintFamily Index (Var → Value) where
-  holds i g := ∀ x, x ∈ P.scope i → g x = P.local i x
+  holds i g := ∀ x, x ∈ P.scope i → g x = P.assign i x
 
 /--
 Cover + pairwise agreement on actual overlaps is sufficient for a global
@@ -46,7 +46,7 @@ theorem globallySatisfiable_of_covers_of_compatible
     P.asConstraints.GloballySatisfiable := by
   classical
   choose pick hpick using hcover
-  let g : Var → Value := fun x => P.local (pick x) x
+  let g : Var → Value := fun x => P.assign (pick x) x
   refine ⟨g, ?_⟩
   intro i x hx
   exact hcompat (pick x) i x (hpick x) hx
@@ -67,7 +67,7 @@ other controls the true coordinate.
 -/
 def independentBool : PatchFamily Bool Bool Bool where
   scope i x := x = i
-  local i _ := i
+  assign i _ := i
 
 theorem independentBool_covers :
     independentBool.Covers := by
