@@ -51,7 +51,8 @@ def conj (a b : Form Var) : Form Var :=
 
 @[simp] theorem eval_conj (ρ : Var → Bool) (a b : Form Var) :
     eval ρ (conj a b) = (eval ρ a && eval ρ b) := by
-  cases h₁ : eval ρ a <;> cases h₂ : eval ρ b <;> rfl
+  cases h₁ : eval ρ a <;> cases h₂ : eval ρ b <;>
+    simp [conj, eval, h₁, h₂]
 
 /-- Primary-arithmetic calling law, at the level of Boolean semantics. -/
 theorem calling : SemEq
@@ -69,13 +70,13 @@ theorem crossing : SemEq
 theorem double_cross (a : Form Var) :
     SemEq (.cross (.cross a)) a := by
   intro ρ
-  cases eval ρ a <;> rfl
+  cases h : eval ρ a <;> simp [eval, h]
 
 /-- A form juxtaposed with its crossing is always marked/true. -/
 theorem position (a : Form Var) :
     ∀ ρ, eval ρ (.concat a (.cross a)) = true := by
   intro ρ
-  cases eval ρ a <;> rfl
+  cases h : eval ρ a <;> simp [eval, h]
 
 end Form
 
@@ -122,13 +123,13 @@ def ofBoolExpr : BoolExpr Var → Form Var
 
 @[simp] theorem ofBoolExpr_toBoolExpr (a : Form Var) :
     ofBoolExpr (toBoolExpr a) = a := by
-  induction a <;> simp [toBoolExpr, ofBoolExpr, *]
+  induction a <;> simp_all [toBoolExpr, ofBoolExpr]
 
 @[simp] theorem toBoolExpr_ofBoolExpr (a : BoolExpr Var) :
     toBoolExpr (ofBoolExpr a) = a := by
-  induction a <;> simp [toBoolExpr, ofBoolExpr, *]
+  induction a <;> simp_all [toBoolExpr, ofBoolExpr]
 
-/-- The two raw syntaxes are isomorphic for the {false, OR, NOT} basis. -/
+/-- The two raw syntaxes are isomorphic for the false/OR/NOT basis. -/
 def syntaxEquiv : Form Var ≃ BoolExpr Var where
   toFun := toBoolExpr
   invFun := ofBoolExpr
@@ -138,12 +139,12 @@ def syntaxEquiv : Form Var ≃ BoolExpr Var where
 /-- Translation to conventional Boolean syntax preserves valuation semantics. -/
 theorem eval_toBoolExpr (ρ : Var → Bool) (a : Form Var) :
     BoolExpr.eval ρ (toBoolExpr a) = eval ρ a := by
-  induction a <;> simp [toBoolExpr, BoolExpr.eval, eval, *]
+  induction a <;> simp_all [toBoolExpr, BoolExpr.eval, eval]
 
 /-- Translation from conventional Boolean syntax preserves valuation semantics. -/
 theorem eval_ofBoolExpr (ρ : Var → Bool) (a : BoolExpr Var) :
     eval ρ (ofBoolExpr a) = BoolExpr.eval ρ a := by
-  induction a <;> simp [ofBoolExpr, BoolExpr.eval, eval, *]
+  induction a <;> simp_all [ofBoolExpr, BoolExpr.eval, eval]
 
 end Form
 end PrimaryBoolean
