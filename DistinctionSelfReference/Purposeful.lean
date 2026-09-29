@@ -41,7 +41,7 @@ stricter acceptable set remains viable under a weaker one.
 theorem kernel_mono_purpose
     (D : Dynamics State Action)
     {P Q : Purpose State}
-    (hPQ : D.PurposeRefines P Q) :
+    (hPQ : PurposeRefines P Q) :
     (D.withPurpose P).kernel ⊆ (D.withPurpose Q).kernel := by
   let X : Set State := (D.withPurpose P).kernel
   have hpost : X ⊆ (D.withPurpose Q).viabilityStep X := by
@@ -67,7 +67,7 @@ theorem run_withPurpose_eq
 theorem recoverable_mono_purpose
     (D : Dynamics State Action)
     {P Q : Purpose State}
-    (hPQ : D.PurposeRefines P Q)
+    (hPQ : PurposeRefines P Q)
     {s : State}
     (hs : Recoverable (D.withPurpose P) s) :
     Recoverable (D.withPurpose Q) s := by
