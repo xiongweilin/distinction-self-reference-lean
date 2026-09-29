@@ -76,5 +76,6 @@ import DistinctionSelfReference.RepresentationalObstruction
 import DistinctionSelfReference.RepresentationConflict
 import DistinctionSelfReference.WeakRepresentation
 import DistinctionSelfReference.PartialLawvere
+import DistinctionSelfReference.GuardedLawvere
 import DistinctionSelfReference.Computability
 import DistinctionSelfReference.MetaFramework
