@@ -569,23 +569,24 @@ Results:
 - a predecessor certification chain propagates soundness only after an independent sound root is supplied;
 - an abstract Löb interface proves the exact reflection collapse used by the RSI layer: if internal reflection `Prov(φ) → φ` is provable under Löb's rule, then `φ` itself is provable; therefore an unprovable target blocks its internal reflection principle;
 - `Research/FoundationBridge.md` identifies the concrete upstream theorems in `FormalizedFormalLogic/Foundation`: Gödel I/II, Löb, and Tarski. Direct import is deferred because Foundation currently pins Lean/Mathlib 4.34 while this repository pins Lean 4.35.0-rc3;
-- `ChangingEvaluator` proves a local-to-global theorem: if every time-local improvement edge embeds into one transitive global relation, every finite prefix endpoint globally improves over the start;
-- a common numerical potential gives a stronger stepwise coherence witness;
-- arbitrary time-varying evaluators can rationalize any trajectory locally, and a two-state recurrent trajectory proves that local improvement alone does not admit an irreflexive transitive global extension;
+- `ChangingEvaluator` now gives an exact boundary: an irreflexive transitive global evaluator extending every local evaluator exists iff the transitive closure of the union of local improvement edges is acyclic;
+- the earlier local-to-global theorem is recovered as the sufficient direction, while a common numerical potential remains a stronger coherence witness;
+- arbitrary time-varying evaluators can rationalize any trajectory locally, and a two-state recurrent trajectory witnesses failure of the acyclicity criterion;
 - `ArchiveRSI` proves that a selected branch can recur with period two and remain on a constant branch score while the retained archive grows strictly at every step;
-- Mathlib's WQO machinery is connected to archive theory: every antichain/Pareto-style frontier is finite under `WellQuasiOrderedLE`, while WQO by itself does not assert eventual archive stabilization;
-- `PartialLawvere` gives an exact partiality threshold: partial diagonal representation plus defined self-application forces a fixed point;
-- if the endomap is fixed-point-free, every partial diagonal witness must be undefined on its own code;
-- a nowhere-defined evaluator shows that partial diagonal representation alone is insufficient.
+- Mathlib's WQO machinery is connected to archive theory: every antichain/Pareto-style frontier is finite under `WellQuasiOrderedLE`;
+- stronger result: every **monotone** sequence of antichain archives over a WQO is eventually constant, so retained Pareto frontiers cannot grow forever; the remaining open case is non-monotone frontier replacement where dominated versions may be removed;
+- `PartialLawvere` gives an exact Option-valued partiality threshold: partial diagonal representation plus defined self-application forces a fixed point;
+- `GuardedLawvere` abstracts this away from `Option`: a diagonal witness plus an open self-application guard forces a fixed point, while fixed-point-free maps force that guard closed;
+- total self-application is therefore incompatible with guarded representation of a fixed-point-free map, while a fully closed guard gives the matching countermodel.
 
 Interpretation: the current frontier is no longer one monotone RSI chain. The load-bearing questions are now whether evaluation changes coherently, whether certification has a non-circular semantic anchor, whether progress is branch-local or archive-global, and whether self-application is sufficiently defined to trigger a diagonal fixed point.
 
 Important limits:
 
 1. the Löb result is currently abstract at the RSI interface; direct Foundation instantiation awaits compatible Lean/Mathlib pins;
-2. the evaluator theorem is sufficient but not yet a necessary-and-sufficient characterization;
-3. the archive module proves separation results and a WQO frontier bridge, but not yet a full Pareto-archive stabilization theorem;
-4. partial Lawvere currently uses `Option` partiality, not typed guarded modalities or effects;
+2. evaluator **existence** is now characterized exactly by acyclicity of the local-edge union, but stronger notions such as common-potential representability or evaluator morphisms are not yet characterized;
+3. monotone antichain archives now have a full WQO stabilization theorem, but realistic Pareto frontiers that delete dominated versions are non-monotone and remain open;
+4. Lawvere partiality is now abstracted to an explicit guard predicate, but typed guarded/later modalities and effects remain open;
 5. resource/callability conditions are intentionally secondary feasibility constraints in this phase.
 
 ## Meta-framework target
