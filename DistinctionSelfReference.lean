@@ -12,7 +12,9 @@ import DistinctionSelfReference.LabeledBisimulation
 import DistinctionSelfReference.FutureBisimulation
 import DistinctionSelfReference.Viability
 import DistinctionSelfReference.Recovery
+import DistinctionSelfReference.RecoverySeparation
 import DistinctionSelfReference.LocalGlobal
+import DistinctionSelfReference.NestedGluing
 import DistinctionSelfReference.OrderTheoretic
 import DistinctionSelfReference.Representational
 import DistinctionSelfReference.Computability
