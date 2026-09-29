@@ -33,7 +33,7 @@ theorem greatest_static_self_reference
   constructor
   · exact f.isFixedPt_gfp
   · intro x hx
-    exact f.fixed_le_gfp hx
+    exact f.isGreatest_gfp.2 hx
 
 end OrderTheoretic
 end DistinctionSelfReference
