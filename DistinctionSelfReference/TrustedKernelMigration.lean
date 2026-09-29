@@ -81,7 +81,7 @@ def protocol : Protocol Bool Bool where
     intro _ _ _ _ _
     trivial
   trustedKernelSound := by
-    intro _ _ _ _
+    intro _ _ _ _ _
     trivial
 
 def versions (n : Nat) : Bool :=
