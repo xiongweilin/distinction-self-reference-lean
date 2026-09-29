@@ -29,9 +29,8 @@ theorem sameFuture_postfixed
   rcases p with ⟨s, t⟩
   change s.val = t.val at hp
   refine ⟨?_, ?_, ?_⟩
-  · change s ∈ L.toDFA.accept ↔ t ∈ L.toDFA.accept
-    simpa only [Language.mem_accept_toDFA] using
-      Set.mem_congr (congrArg (fun K : Language α => K) hp)
+  · change ([] : List α) ∈ s.val ↔ ([] : List α) ∈ t.val
+    rw [hp]
   · intro a s' hs'
     change L.toDFA.step s a = s' at hs'
     subst s'
