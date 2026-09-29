@@ -58,7 +58,7 @@ theorem fixedPointFree_forces_undefined_selfApplication
     eval a a = none := by
   cases hself : eval a a with
   | none =>
-      exact hself
+      rfl
   | some value =>
       exfalso
       have hfix :=
