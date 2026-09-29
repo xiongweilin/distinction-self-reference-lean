@@ -36,14 +36,14 @@ theorem lawvere_pair_incompatible
        Condition.universalSurjectiveRepresentation} := by
   rintro ⟨s, hs⟩
   have hfree : ∀ x, s.step x ≠ x :=
-    hs (by
+    hs (c := Condition.fixedPointFreeEndomap) (by
       change Condition.fixedPointFreeEndomap =
         Condition.fixedPointFreeEndomap ∨
         Condition.fixedPointFreeEndomap =
           Condition.universalSurjectiveRepresentation
       exact Or.inl rfl)
   have hsurj : Function.Surjective s.eval :=
-    hs (by
+    hs (c := Condition.universalSurjectiveRepresentation) (by
       change Condition.universalSurjectiveRepresentation =
         Condition.fixedPointFreeEndomap ∨
         Condition.universalSurjectiveRepresentation =
