@@ -25,8 +25,8 @@ theorem even_fintype_card_of_noBoundary
     Finset.sum_ninvolution (s := Finset.univ)
       (f := fun _ : α => (1 : ZMod 2)) D.cross
       (fun _ => by
-        change ((2 : ℕ) : ZMod 2) = 0
-        simp)
+        rw [← Nat.cast_add]
+        exact ZMod.natCast_self 2)
       (fun x _ => by
         simpa [IsBoundary] using hfree x)
       (fun _ => by simp)
