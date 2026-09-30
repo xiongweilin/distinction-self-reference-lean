@@ -195,6 +195,64 @@ theorem validated_anchor_signal_does_not_prevent_proxy_regression :
     anchor_insufficient_for_external_goal,
     external_goal_regresses_on_first_step⟩
 
+/--
+A long-run hidden proxy cycle: the finite visible anchor remains constantly
+false while the hidden external goal alternates forever.
+-/
+def cyclingTrajectory : Nat → World :=
+  fun n => (false, n % 2 = 0)
+
+theorem cycling_anchor_constant :
+    ∀ n, anchor (cyclingTrajectory n) = false := by
+  intro n
+  rfl
+
+theorem cycling_local_improvement_every_step :
+    LocalImprovement evaluators
+      (fun n => anchor (cyclingTrajectory n)) := by
+  intro n
+  rw [cycling_anchor_constant, cycling_anchor_constant]
+  cases n with
+  | zero =>
+      simp [evaluators, evaluator₀]
+  | succ n =>
+      simp [evaluators, evaluator₁]
+
+theorem cycling_goal_alternates :
+    ∀ k,
+      externalGoal (cyclingTrajectory (2 * k)) = 1 ∧
+      externalGoal (cyclingTrajectory (2 * k + 1)) = 0 := by
+  intro k
+  constructor
+  · simp [cyclingTrajectory, externalGoal]
+  · simp [cyclingTrajectory, externalGoal]
+
+theorem cycling_has_infinitely_many_regressions :
+    ∀ k,
+      externalGoal (cyclingTrajectory (2 * k + 1)) <
+        externalGoal (cyclingTrajectory (2 * k)) := by
+  intro k
+  rw [(cycling_goal_alternates k).1, (cycling_goal_alternates k).2]
+  decide
+
+/--
+Finite anchor validation can therefore coexist not merely with one mistaken
+step but with unboundedly many true-goal regressions.
+-/
+theorem validated_finite_anchor_allows_perpetual_proxy_cycle :
+    (∀ n, AnchorValidated (evaluators n)) ∧
+    LocalImprovement evaluators
+      (fun n => anchor (cyclingTrajectory n)) ∧
+    (¬ Sufficient anchor externalGoal) ∧
+    (∀ k,
+      externalGoal (cyclingTrajectory (2 * k + 1)) <
+        externalGoal (cyclingTrajectory (2 * k))) := by
+  exact ⟨
+    every_evaluator_validated,
+    cycling_local_improvement_every_step,
+    anchor_insufficient_for_external_goal,
+    cycling_has_infinitely_many_regressions⟩
+
 end ProxyDriftExample
 
 end EvaluatorGrounding
