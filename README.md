@@ -75,7 +75,7 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Evaluator grounding | fixed external goal + anchor + changing evaluator | sufficient anchor + semantic evaluator soundness + local improvement imply global goal improvement; insufficient finite anchors permit one-step and perpetual proxy regression |
 | Evaluator provenance | versioned evaluator evidence + anchor evidence | history is retained while current qualification is selectively invalidated; full or goal-relevant preservation permits justified migration |
 | Dynamic anchor grounding | delayed/reordered finite anchor observations | eventual freshness iff all eventually stable grounded Boolean judgments remain eventually aligned |
-| Dependency-aware provenance | evidence dependency graph + versioned qualification | stale evaluator premises invalidate dependent conclusions transitively while independent anchor-supported evidence survives |
+| Dependency-aware provenance | evidence dependency graph + versioned qualification | stale evaluator premises invalidate dependent conclusions transitively; stronger preservation policies monotonically restore evidence while independent anchor-supported conclusions survive |
 | Branch/archive RSI | recurrent selected branch + retained archive | branch recurrence and branch-score plateau can coexist with strict archive growth; WQO makes antichain frontiers finite but does not itself imply archive stabilization |
 | Partial Lawvere | Option-valued evaluator + diagonal representation | a represented partial diagonal forces a fixed point exactly when self-application is defined; fixed-point-free steps force the representing self-application to be undefined |
 
@@ -150,7 +150,7 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/EvaluatorGrounding.lean` — semantic grounding through sufficient anchors, global external-goal improvement, finite-anchor regression, and a perpetual hidden proxy cycle.
 - `DistinctionSelfReference/EvaluatorProvenance.lean` — evaluator-version provenance, selective current-evidence invalidation, exact/full preservation, and weaker goal-relevant evidence migration.
 - `DistinctionSelfReference/DynamicAnchorGrounding.lean` — exact eventual-freshness criterion for delayed/reordered grounded Boolean judgments, plus stale-schedule counterexamples.
-- `DistinctionSelfReference/EvidenceDependency.lean` — dependency-aware current evidence, transitive stale-premise invalidation, and selective survival of anchor-supported conclusions.
+- `DistinctionSelfReference/EvidenceDependency.lean` — dependency-aware current evidence, transitive stale-premise invalidation, selective survival of anchor-supported conclusions, and monotone revalidation under stronger preservation bridges.
 - `DistinctionSelfReference/ArchiveRSI.lean` — branch/archive separation, WQO stabilization for monotone antichains, dominance-complete Pareto frontiers, perpetual replacement under WQO, and the `WellFoundedGT` obstruction.
 - `DistinctionSelfReference/PartialLawvere.lean` — partial diagonal representation and the defined-self-application threshold for Lawvere fixed points.
 - `DistinctionSelfReference/GuardedLawvere.lean` — guard-separated diagonal representation; open self-application forces a fixed point and fixed-point-free maps force the self guard closed.
@@ -208,13 +208,13 @@ This section is updated at the end of every completed construction phase.
 
 Current priorities, in order:
 
-1. **Noisy / stochastic anchor sufficiency** — deterministic static sufficiency is exact, least sufficient anchors are characterized, and delayed/reordered access now has an exact temporal boundary: eventual freshness iff every eventually stable grounded Boolean judgment is preserved. Next replace exact scheduled samples by noisy channels / probabilistic observations and characterize approximate or decision-sufficient grounding using the existing Markov-garbling and information-order machinery.
+1. **Noisy / stochastic anchor sufficiency** — deterministic static sufficiency is exact, least sufficient anchors are characterized, and delayed/reordered access has an exact temporal boundary: eventual freshness iff every eventually stable grounded Boolean judgment is preserved. Next replace exact samples by noisy channels / probabilistic observations and characterize approximate or decision-sufficient grounding via the existing Markov-garbling and information-order machinery.
 
-2. **Recovery of grounding under recurring disambiguation** — permanent freshness is stronger than some realistic observation regimes. Next ask when occasional sufficiently informative anchor observations are enough to rule out persistent proxy drift, recover correct evaluator qualification, or guarantee eventual re-alignment after ambiguous intervals.
+2. **Recurring disambiguation weaker than eventual freshness** — eventual freshness is necessary for preserving *all* eventually stable grounded Boolean judgments, but narrower tasks may recover from ambiguous periods with only occasional sufficiently informative observations. Next characterize task-relative schedules that exclude persistent proxy drift without requiring universal freshness.
 
-3. **Dependency-aware evidence migration** — stale evaluator premises now invalidate every transitively dependent conclusion while independent reality/anchor-supported evidence survives. Next add mixed-source dependency DAGs, explicit proof objects, timestamps, and recovery/revalidation so previously stale conclusions can become current again after fresh evidence or a justified evaluator bridge.
+3. **Dependency-aware revalidation and provenance morphisms** — stale evaluator premises invalidate dependent conclusions, while extending the preservation policy monotonically restores current evidence and can revalidate previously stale conclusions without rewriting history. Next add explicit proof/dependency DAGs, timestamps, bridge certificates, and partial revalidation so only conclusions supported by repaired premises recover.
 
-4. **Goal-relevant evaluator morphisms** — edge-level goal-relevant preservation is known to be strictly weaker than full evaluator preservation. Next package this as structure-preserving evaluator morphisms and connect them to provenance transport, confidence/calibration, and selected decision regions.
+4. **Goal-relevant evaluator morphisms** — edge-level goal-relevant preservation is strictly weaker than full evaluator preservation. Next package this as a general evaluator morphism preserving selected semantic regions, decision boundaries, or calibration, and connect it directly to evidence transport.
 
 5. **Deferred deeper frontiers** — direct Foundation/Löb integration still waits for compatible Lean/Mathlib pins. Non-monotone archive criteria and typed/modal/effectful guarded Lawvere remain valid later targets, with resources/callability treated as feasibility constraints.
 
