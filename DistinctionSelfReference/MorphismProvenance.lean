@@ -227,6 +227,51 @@ theorem composed_morphism_preserves_improving_edge :
 
 end CompositionExample
 
+
+namespace DependencyTransportExample
+
+open EvidenceDependency.SelectiveCascadeExample
+
+def evaluators :
+    EvidenceDependency.SelectiveCascadeExample.Version →
+      Evaluator Unit
+  | .old => ⟨fun _ _ => False⟩
+  | .current => ⟨fun _ _ => True⟩
+
+def goal (_ : Unit) : Nat := 0
+
+theorem preserves_old_to_current :
+    PreservesJudgments evaluators .old .current := by
+  intro _ _ hold
+  exact False.elim hold
+
+def bridge :
+    VersionBridge evaluators goal .old .current :=
+  VersionBridge.ofPreservesJudgments
+    evaluators goal preserves_old_to_current
+
+/--
+The PR #3 selective-cascade example becomes dependency-current again when the
+old→current evaluator migration is accompanied by an explicit morphism
+certificate.
+-/
+theorem explicit_bridge_restores_existing_dependency_chain :
+    DependencyCurrent
+      (BridgePolicy evaluators goal)
+      .current
+      EvidenceDependency.SelectiveCascadeExample.dependsOn
+      EvidenceDependency.SelectiveCascadeExample.derived := by
+  apply bridge_transports_dependency_evidence
+    evaluators goal bridge
+    EvidenceDependency.SelectiveCascadeExample.dependsOn
+    EvidenceDependency.SelectiveCascadeExample.derived
+  · trivial
+  · intro dependency hpath
+    rw [EvidenceDependency.SelectiveCascadeExample.derived_dependency_path_ends_at_oldJudgment hpath]
+    exact Or.inl rfl
+
+end DependencyTransportExample
+
 namespace InvalidBridgeExample
 
 open EvaluatorProvenance.GoalRelevantPreservationExample
