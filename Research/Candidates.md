@@ -780,9 +780,12 @@ The generic layer provides:
 - preservation of individual conditions, whole condition-set satisfaction,
   semantic compatibility, and derivability;
 - identity and composition;
+- `FrameworkEquivalence` as mutually inverse certified morphisms, with identity, symmetry, and composition;
+- bijectivity of equivalence condition/capability maps and automatic derivation reflection;
 - transport of sufficiency and feasible sufficiency;
+- dominance invariance under genuine framework equivalence;
 - explicit `ReflectsDerivation` as the extra condition needed for dominance
-  preservation;
+  preservation by a general one-way morphism;
 - a countermodel showing one-way derivation preservation plus surjective
   capability mapping is not enough to preserve target dominance;
 - transport of capability equivalence under preservation + reflection +
@@ -876,4 +879,4 @@ Status: **GENERAL MORPHISM LAYER PROVED HERE; FIRST RSI CORE LIFT COMPLETE**.
 
 `FullRSIInvariantCore` extends this comparison to six RSI roles — self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability — and proves that two distinct condition languages each cover all six after translation.
 
-`FrameworkMorphism` now provides this structure: condition/capability/realization maps, derivation and satisfaction preservation, identity/composition, compatibility transport, reflection criteria, and morphism-induced invariant cores. `RSIFrameworkMorphisms` proves that the previous six-role core is recovered from certified morphism images. Remaining work is artifact stabilization and broader instantiation, not the absence of a morphism abstraction.
+`FrameworkMorphism` now provides this structure: condition/capability/realization maps, derivation and satisfaction preservation, identity/composition, compatibility transport, reflection criteria, first-class framework equivalence with dominance invariance, and morphism-induced invariant cores. `RSIFrameworkMorphisms` proves that the previous six-role core is recovered from certified morphism images. Remaining work is artifact stabilization and broader instantiation, not the absence of a morphism abstraction.
