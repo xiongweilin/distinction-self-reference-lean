@@ -63,6 +63,9 @@ jobs:
       - name: Resolve dependencies and create manifest
         run: lake update
 
+      - name: Restore Mathlib cache for sandboxed replay
+        run: lake exe cache get
+
       - name: Kernel replay
         run: lake check
 
