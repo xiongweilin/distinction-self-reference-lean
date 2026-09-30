@@ -499,6 +499,12 @@ theorem reflectsDerivation
       refine ⟨e.toMorphism.mapCondition condition,
         ⟨condition, hsource, rfl⟩, ?_⟩
       exact e.leftCondition condition
+  change
+    F.graph.derives
+      (e.invMorphism.mapCondition ''
+        (e.toMorphism.mapCondition '' conditions))
+      (e.invMorphism.mapCapability
+        (e.toMorphism.mapCapability capability)) at hback
   rw [himage, e.leftCapability capability] at hback
   exact hback
 
