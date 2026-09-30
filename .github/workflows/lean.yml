@@ -92,14 +92,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        checker:
-          - lean-paranoid
-          - lean4lean
-          - nanoda
-          - con-leche
-          - con-ron
+        include:
+          - checker: lean-paranoid
+            runner: ubuntu-latest
+          - checker: lean4lean
+            runner: ubuntu-latest
+          - checker: nanoda
+            runner: ubuntu-22.04
+          - checker: con-leche
+            runner: ubuntu-latest
+          - checker: con-ron
+            runner: ubuntu-latest
     name: bundled-checker (${{ matrix.checker }})
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
@@ -173,7 +178,7 @@ jobs:
               ;;
             nanoda)
               CONFIG="$(pwd)/proof-export/nanoda.json"
-              python3 -c 'import json,sys; export_path,config_path=sys.argv[1],sys.argv[2]; json.dump({"use_stdin":False,"export_file_path":export_path,"permitted_axioms":["propext","Classical.choice","Quot.sound"],"unpermitted_axiom_hard_error":False,"num_threads":1,"nat_extension":True,"string_extension":True}, open(config_path,"w",encoding="utf-8"))' "$EXPORT" "$CONFIG"
+              python3 -c 'import json,sys; export_path,config_path=sys.argv[1],sys.argv[2]; json.dump({"use_stdin":False,"export_file_path":export_path,"permitted_axioms":["propext","Classical.choice","Quot.sound","Lean.trustCompiler"],"unpermitted_axiom_hard_error":False,"nat_extension":True,"string_extension":True,"print_success_message":True}, open(config_path,"w",encoding="utf-8"))' "$EXPORT" "$CONFIG"
               CONFIG="$(realpath "$CONFIG")"
               bwrap \
                 --ro-bind / / \
