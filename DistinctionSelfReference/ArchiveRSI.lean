@@ -2,6 +2,7 @@ import Mathlib.Order.WellQuasiOrder
 import Mathlib.Data.Set.Finite.Lattice
 import Mathlib.Data.Fintype.Order
 import Mathlib.Order.Preorder.Finite
+import Mathlib.Order.OrderIsoNat
 
 namespace DistinctionSelfReference
 namespace ArchiveRSI
@@ -283,6 +284,45 @@ def StrictFrontierProgress
     [Preorder Version]
     (old new : Archive Version) : Prop :=
   ∀ x, x ∈ old → ∃ y, y ∈ new ∧ x < y
+
+/--
+If the capability order has no infinite strict ascending chain, a nonempty
+frontier cannot be strictly dominated by a successor frontier forever.
+-/
+theorem wellFoundedGT_forbids_perpetual_strict_frontier_progress
+    {Version : Type u}
+    [Preorder Version]
+    [WellFoundedGT Version]
+    (frontier : Nat → Archive Version)
+    (h0 : (frontier 0).Nonempty)
+    (hprogress :
+      ∀ n, StrictFrontierProgress (frontier n) (frontier (n + 1))) :
+    False := by
+  classical
+  let first : {x // x ∈ frontier 0} :=
+    ⟨h0.choose, h0.choose_spec⟩
+  let next :
+      ∀ n, {x // x ∈ frontier n} → {y // y ∈ frontier (n + 1)} :=
+    fun n x =>
+      ⟨(hprogress n x.1 x.2).choose,
+        (hprogress n x.1 x.2).choose_spec.1⟩
+  let seq : ∀ n, {x // x ∈ frontier n} :=
+    fun n => Nat.rec first (fun n x => next n x) n
+  have hseq_succ :
+      ∀ n, seq (n + 1) = next n (seq n) := by
+    intro n
+    rfl
+  have hstep :
+      ∀ n, (seq n).1 < (seq (n + 1)).1 := by
+    intro n
+    rw [hseq_succ n]
+    simpa [next] using
+      (hprogress n (seq n).1 (seq n).2).choose_spec.2
+  have hstrict :
+      StrictMono (fun n => (seq n).1) :=
+    strictMono_nat_of_lt_succ hstep
+  exact
+    (not_strictMono_of_wellFoundedGT (fun n => (seq n).1)) hstrict
 
 namespace FrontierReplacementExample
 
