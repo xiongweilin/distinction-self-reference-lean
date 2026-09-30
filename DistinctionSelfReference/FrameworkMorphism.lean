@@ -505,6 +505,12 @@ theorem reflectsDerivation
         (e.toMorphism.mapCondition '' conditions))
       (e.invMorphism.mapCapability
         (e.toMorphism.mapCapability capability)) at hback
+  change
+    F.graph.derives
+      (e.invMorphism.mapCondition ''
+        (e.toMorphism.mapCondition '' conditions))
+      (e.invMorphism.mapCapability
+        (e.toMorphism.mapCapability capability)) at hback
   rw [himage, e.leftCapability capability] at hback
   exact hback
 
