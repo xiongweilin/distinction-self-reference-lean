@@ -661,11 +661,11 @@ that the Bayes risk of the approximate experiment is at most the gold risk plus
   lacked;
 - risk-gap bounds compose additively;
 - all of these lift to a chosen family of decision losses with loss-dependent
-  scale.
+  scale;
+- `UniformBoundedRiskGapAtMost` quantifies the same ε guarantee over every bounded loss on one decision space and inherits zero-error simulation, monotonicity, source-before-garbling preservation, and additive transitivity;
+- `BinaryStrictnessExample` gives a concrete Boolean 0–1-loss experiment where the exact signal has Bayes risk 0 while complete discard has Bayes risk 1, so zero gap fails strictly and unit gap succeeds.
 
-Interpretation: this is deliberately the **risk side** of a Blackwell–Le Cam
-approximation layer, not yet a formal claim that total-variation deficiency and
-the full randomization theorem are present in Lean.
+Interpretation: this is deliberately the **risk side** of a Blackwell–Le Cam approximation layer, not yet a formal claim that total-variation deficiency and the full randomization theorem are present in Lean. The strict binary example shows that the quantitative layer is not vacuous: a genuine Markov garbling can force a positive decision-risk gap.
 
 ### P6.24 — sharp task-family scheduling
 
