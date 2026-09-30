@@ -50,7 +50,7 @@ theorem riskGapAtMost_mono
     (h : RiskGapAtMost C ε loss approx gold prior) :
     RiskGapAtMost C ε' loss approx gold prior := by
   unfold RiskGapAtMost at h ⊢
-  exact h.trans (add_le_add_left (mul_le_mul_left' hε C) _)
+  exact h.trans (add_le_add_left (mul_le_mul_left hε C) _)
 
 theorem exact_simulation_has_zero_gap
     {Theta : Type u} {X : Type v} {Y : Type w} {Decision : Type z}
@@ -124,9 +124,9 @@ theorem riskGapAtMost_trans
     bayesRisk loss A prior
         ≤ bayesRisk loss B prior + C * ε := hAB
     _ ≤ (bayesRisk loss G prior + C * δ) + C * ε :=
-      add_le_add_right hBG _
+      add_le_add hBG le_rfl
     _ = bayesRisk loss G prior + C * (ε + δ) := by
-      simp [mul_add, add_assoc, add_comm, add_left_comm]
+      simp [mul_add, add_assoc, add_comm]
 
 /--
 A task family is a set of losses.  A uniform family bound uses the same
