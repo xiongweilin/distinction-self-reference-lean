@@ -141,8 +141,8 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/RankedCapability.lean` — well-founded rank certificates that exclude open-ended strict capability growth.
 - `DistinctionSelfReference/FullRSIInvariantCore.lean` — six-role full-RSI semantic core across two distinct condition languages.
 - `DistinctionSelfReference/SelfCertificationBarrier.lean` — circular-certification countermodel, semantic transfer with an external anchor, and an abstract Löb reflection barrier.
-- `DistinctionSelfReference/ChangingEvaluator.lean` — exact acyclicity iff for strict transitive global evaluator extensions, plus common-potential and recurrent counterexample results.
-- `DistinctionSelfReference/ArchiveRSI.lean` — branch recurrence versus archive growth, WQO finite-frontier results, and eventual stabilization of monotone antichain archives.
+- `DistinctionSelfReference/ChangingEvaluator.lean` — exact acyclicity iff for strict global extensions; finite-state acyclicity iff Nat common potential; infinite-state counterexample separating the two.
+- `DistinctionSelfReference/ArchiveRSI.lean` — branch/archive separation, WQO stabilization for monotone antichains, dominance-complete Pareto frontiers, perpetual replacement under WQO, and the `WellFoundedGT` obstruction.
 - `DistinctionSelfReference/PartialLawvere.lean` — partial diagonal representation and the defined-self-application threshold for Lawvere fixed points.
 - `DistinctionSelfReference/GuardedLawvere.lean` — guard-separated diagonal representation; open self-application forces a fixed point and fixed-point-free maps force the self guard closed.
 - `Research/FoundationBridge.md` — exact Foundation modules for Gödel I/II, Löb, and Tarski, with current Lean-toolchain integration constraint.
@@ -200,9 +200,9 @@ Current deep-frontier priorities, in order:
 
 1. **Self-modifying verifier without an independent trust anchor** — instantiate the current abstract Löb interface with `FormalizedFormalLogic/Foundation` once the Lean/Mathlib pins align, then characterize exactly which self-certification / verifier-migration interfaces imply an internal reflection principle. Connect those interfaces to Löb, Gödel II, and Tarski rather than treating verifier soundness as an external invariant by default. The key target is an iff-style boundary between circular/vacuous certification and migration justified by a genuinely non-circular grounding.
 
-2. **Changing evaluator beyond existence of a global strict order** — the existence question is now exact: a strict transitive coherent global evaluator exists iff the transitive closure of the union of local improvement edges is acyclic. Next compare this minimal relational criterion with stronger witnesses such as common potentials and coherent evaluator-to-evaluator embeddings.
+2. **Changing evaluator beyond finite potentials** — the existence question is exact, and on finite state spaces acyclicity is now equivalent to a Nat-valued common potential. The equivalence fails on infinite state spaces. Next targets are ordinal/well-founded potentials and genuine evaluator-to-evaluator morphisms.
 
-3. **Archive / branching RSI beyond retained antichains** — WQO now implies every monotone antichain archive eventually stabilizes. Next study realistic Pareto archives that may delete dominated versions, so the frontier set itself is not monotone, and distinguish frontier replacement from genuine archive-level progress.
+3. **Archive / branching RSI beyond simple replacement** — WQO stabilizes monotone antichain archives but does not stabilize recomputed Pareto frontiers: a Nat example gives perpetual dominance-complete singleton replacement. `WellFoundedGT` blocks perpetual strict frontier progress. Next characterize weaker chain conditions that separate harmless frontier replacement, recurrent replacement, and genuine unbounded archive progress.
 
 4. **Typed/modal guarded Lawvere self-reference** — the Option-specific result now has a guard-separated abstraction: represented diagonal self-application forces a fixed point exactly when its self guard is open. Next replace the Boolean guard by typed/later modalities or effectful computation and compare the resulting thresholds.
 
