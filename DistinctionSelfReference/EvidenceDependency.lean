@@ -49,6 +49,66 @@ theorem dependencyCurrentHistory_subset_history
   intro e he
   exact he.1
 
+/-- One preservation policy extends another when every previously justified
+migration remains justified. -/
+def PreservationExtends
+    {Version : Type u}
+    (oldPolicy newPolicy : Version → Version → Prop) : Prop :=
+  ∀ a b, oldPolicy a b → newPolicy a b
+
+theorem currentEvidence_mono_preservation
+    {Version : Type u}
+    {Claim : Type v}
+    {oldPolicy newPolicy : Version → Version → Prop}
+    (hext : PreservationExtends oldPolicy newPolicy)
+    (current : Version)
+    (e : Evidence Version Claim)
+    (hcurrent : CurrentEvidence oldPolicy current e) :
+    CurrentEvidence newPolicy current e := by
+  cases hs : e.source with
+  | anchor =>
+      rw [CurrentEvidence, hs]
+      trivial
+  | evaluator old =>
+      rw [CurrentEvidence, hs] at hcurrent ⊢
+      rcases hcurrent with heq | hpres
+      · exact Or.inl heq
+      · exact Or.inr (hext old current hpres)
+
+theorem dependencyCurrent_mono_preservation
+    {Version : Type u}
+    {Claim : Type v}
+    {oldPolicy newPolicy : Version → Version → Prop}
+    (hext : PreservationExtends oldPolicy newPolicy)
+    (current : Version)
+    (dependsOn :
+      Evidence Version Claim → Evidence Version Claim → Prop)
+    (e : Evidence Version Claim)
+    (hcurrent : DependencyCurrent oldPolicy current dependsOn e) :
+    DependencyCurrent newPolicy current dependsOn e := by
+  constructor
+  · exact currentEvidence_mono_preservation
+      hext current e hcurrent.1
+  · intro d hd
+    exact currentEvidence_mono_preservation
+      hext current d (hcurrent.2 d hd)
+
+theorem dependencyCurrentHistory_mono_preservation
+    {Version : Type u}
+    {Claim : Type v}
+    {oldPolicy newPolicy : Version → Version → Prop}
+    (hext : PreservationExtends oldPolicy newPolicy)
+    (current : Version)
+    (dependsOn :
+      Evidence Version Claim → Evidence Version Claim → Prop)
+    (history : Set (Evidence Version Claim)) :
+    DependencyCurrentHistory oldPolicy current dependsOn history ⊆
+      DependencyCurrentHistory newPolicy current dependsOn history := by
+  intro e he
+  exact ⟨he.1,
+    dependencyCurrent_mono_preservation
+      hext current dependsOn e he.2⟩
+
 /--
 If a direct premise is no longer current after migration, every conclusion
 that depends on it loses dependency-current qualification.
@@ -198,6 +258,69 @@ theorem migration_selectively_cascades :
     ¬ DependencyCurrent preserves .current dependsOn derived ∧
       DependencyCurrent preserves .current dependsOn independent :=
   ⟨derived_invalidated, independent_current⟩
+
+/-- A later bridge can explicitly justify migration of the old evaluator
+evidence without changing historical records. -/
+def repairedPreserves (old new : Version) : Prop :=
+  old = .old ∧ new = .current
+
+theorem preserves_extends_to_repaired :
+    PreservationExtends preserves repairedPreserves := by
+  intro a b hab
+  simp [preserves] at hab
+
+theorem oldJudgment_revalidated :
+    CurrentEvidence repairedPreserves .current oldJudgment := by
+  rw [CurrentEvidence]
+  exact Or.inr ⟨rfl, rfl⟩
+
+theorem reality_revalidated :
+    CurrentEvidence repairedPreserves .current reality := by
+  rw [CurrentEvidence]
+  exact anchor_source_always_current repairedPreserves .current
+
+/--
+Once the evaluator bridge is supplied, the previously stale derived conclusion
+becomes dependency-current again. The independent reality-supported conclusion
+remains current throughout.
+-/
+theorem repaired_bridge_restores_derived :
+    DependencyCurrent repairedPreserves .current dependsOn derived := by
+  constructor
+  · rw [CurrentEvidence]
+    exact anchor_source_always_current repairedPreserves .current
+  · intro d hd
+    induction hd with
+    | single h =>
+        rcases h with h | h
+        · rcases h with ⟨_, rfl⟩
+          exact oldJudgment_revalidated
+        · rcases h with ⟨hbad, _⟩
+          simp [derived, independent] at hbad
+    | tail hpath hlast ih =>
+        rcases hlast with h | h
+        · rcases h with ⟨hbad, _⟩
+          subst_vars
+          simp [dependsOn, derived, independent, reality, oldJudgment] at hpath
+        · rcases h with ⟨hbad, _⟩
+          subst_vars
+          simp [dependsOn, derived, independent, reality, oldJudgment] at hpath
+
+/--
+Revalidation is selective and monotone: adding a justified preservation bridge
+can restore stale conclusions without invalidating conclusions that were
+already current.
+-/
+theorem selective_revalidation :
+    (¬ DependencyCurrent preserves .current dependsOn derived) ∧
+    DependencyCurrent repairedPreserves .current dependsOn derived ∧
+    DependencyCurrent preserves .current dependsOn independent ∧
+    DependencyCurrent repairedPreserves .current dependsOn independent := by
+  refine ⟨derived_invalidated, repaired_bridge_restores_derived,
+    independent_current, ?_⟩
+  exact dependencyCurrent_mono_preservation
+    preserves_extends_to_repaired
+    .current dependsOn independent independent_current
 
 end SelectiveCascadeExample
 
