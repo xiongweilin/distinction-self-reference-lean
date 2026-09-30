@@ -557,6 +557,43 @@ Important limits:
 
 The maintained next directions are recorded in the README after every completed phase.
 
+### P6.23 — self-certification barrier, changing evaluators, branching archives, and partial Lawvere
+
+Move the RSI program from fixed evaluator / externally grounded verifier / linear-chain assumptions into four deeper self-referential regimes.
+
+Status: **FIRST FORMAL LAYER PROVED HERE; META-LOGIC UPSTREAM INTEGRATION PARTIAL**.
+
+Results:
+
+- `SelfCertificationBarrier` separates internal certification from semantic soundness and proves a finite countermodel where every verifier self-certifies while one verifier is semantically unsound;
+- a predecessor certification chain propagates soundness only after an independent sound root is supplied;
+- an abstract Löb interface proves the exact reflection collapse used by the RSI layer: if internal reflection `Prov(φ) → φ` is provable under Löb's rule, then `φ` itself is provable; therefore an unprovable target blocks its internal reflection principle;
+- `Research/FoundationBridge.md` identifies the concrete upstream theorems in `FormalizedFormalLogic/Foundation`: Gödel I/II, Löb, and Tarski. Direct import is deferred because Foundation currently pins Lean/Mathlib 4.34 while this repository pins Lean 4.35.0-rc3;
+- `ChangingEvaluator` now gives an exact boundary: an irreflexive transitive global evaluator extending every local evaluator exists iff the transitive closure of the union of local improvement edges is acyclic;
+- the earlier local-to-global theorem is recovered as the sufficient direction; every Nat-valued common potential implies acyclicity and therefore yields a strict transitive global extension;
+- on finite state spaces the converse also holds: acyclicity is equivalent to existence of a Nat-valued common potential, using reverse cardinality of the strict reachable future as an explicit potential;
+- on infinite state spaces the converse fails: the predecessor relation on Nat is acyclic but admits no Nat-valued common potential, since such a potential would be an infinite strictly decreasing Nat sequence;
+- arbitrary time-varying evaluators can still rationalize any trajectory locally, and a two-state recurrent trajectory witnesses failure of the acyclicity criterion;
+- `ArchiveRSI` proves that a selected branch can recur with period two and remain on a constant branch score while the retained archive grows strictly at every step;
+- Mathlib's WQO machinery is connected to archive theory: every antichain/Pareto-style frontier is finite under `WellQuasiOrderedLE`;
+- stronger result: every **monotone** sequence of antichain archives over a WQO is eventually constant, so retained antichain frontiers cannot grow forever;
+- finite Pareto frontiers are dominance-complete summaries of their archives;
+- WQO alone still permits perpetual **non-monotone frontier replacement**: over Nat, a retained monotone archive can have singleton Pareto frontiers that change every step and each strictly dominates the previous frontier;
+- the missing condition is isolated by a complementary theorem: under `WellFoundedGT`, a nonempty frontier cannot undergo strict frontier progress forever;
+- `PartialLawvere` gives an exact Option-valued partiality threshold: partial diagonal representation plus defined self-application forces a fixed point;
+- `GuardedLawvere` abstracts this away from `Option`: a diagonal witness plus an open self-application guard forces a fixed point, while fixed-point-free maps force that guard closed;
+- total self-application is therefore incompatible with guarded representation of a fixed-point-free map, while a fully closed guard gives the matching countermodel.
+
+Interpretation: the current frontier is no longer one monotone RSI chain. The load-bearing questions are now whether evaluation changes coherently, whether certification has a non-circular semantic anchor, whether progress is branch-local or archive-global, and whether self-application is sufficiently defined to trigger a diagonal fixed point.
+
+Important limits:
+
+1. the Löb result is currently abstract at the RSI interface; direct Foundation instantiation awaits compatible Lean/Mathlib pins;
+2. evaluator **existence** is characterized exactly by acyclicity; Nat common-potential representability is now equivalent to it on finite state spaces but strictly stronger on infinite state spaces, while evaluator morphisms remain open;
+3. the archive boundary is now split cleanly: monotone antichain archives stabilize under WQO, recomputed Pareto frontiers may replace forever under WQO, and `WellFoundedGT` forbids perpetual strict frontier progress; finer replacement/stabilization criteria remain open;
+4. Lawvere partiality is now abstracted to an explicit guard predicate, but typed guarded/later modalities and effects remain open;
+5. resource/callability conditions are intentionally secondary feasibility constraints in this phase.
+
 ## Meta-framework target
 
 Let a framework be represented by:
