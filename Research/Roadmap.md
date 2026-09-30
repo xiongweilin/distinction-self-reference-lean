@@ -68,7 +68,7 @@ Do not weaken the trust boundary merely to make the dependency compile.
 
 ## PR #7 — Grounded Branching & Archive Dynamics
 
-Status: **implemented in code; final synchronized PR-head CI is the merge gate.**
+Status: **merged.**
 
 Goal: combine the archive, changing-evaluator, and grounding lines.
 
@@ -83,6 +83,8 @@ Keep the following distinctions explicit:
 Implemented targets include evaluator migration and evidence validity; explicit separation of archive growth, frontier replacement, evaluator-relative progress, externally grounded progress, and capability novelty; morphism transport of frontier progress; and two sharper stopping criteria: a `WellFoundedGT` capability order under capability-sound evaluators, or a uniformly bounded fixed external goal under goal-sound evaluators. Do not treat archive growth alone as capability progress.
 
 ## PR #8 — Typed / Modal / Computational Self-Reference
+
+Status: **parallel draft PR #8; non-blocking and no new theorem claimed yet.**
 
 Goal: deepen the Lawvere / Kleene branch only where typing, partiality,
 modality, or effects sharpen the self-application threshold.
@@ -99,18 +101,21 @@ produces a genuinely sharper diagonal threshold.
 
 ## PR #9 — Framework Morphisms + guide Core
 
+Status: **implemented in code; core modules pass `lake build`; final synchronized PR-head CI is the merge gate.**
+
 Goal: replace manually supplied role maps by general structure-preserving
 translations between frameworks.
 
-Expected interface:
+Implemented interface:
 
-- condition map;
-- capability map;
-- derivability preservation;
-- compatibility / realizability preservation;
+- condition, capability, and realization maps;
+- derivability and condition-satisfaction preservation;
+- compatibility preservation derived from realization transport;
 - identity and composition;
-- framework equivalence / dominance preservation;
-- invariant cores induced by allowed morphisms.
+- sufficiency and feasible-sufficiency transport;
+- explicit derivation reflection for dominance/equivalence transport;
+- a necessity countermodel showing preservation alone is insufficient;
+- invariant condition cores induced by certified morphism images.
 
 Only the mathematically explicit dependency spine from `xiongweilin/guide`
 should be formalized. In particular:
@@ -119,7 +124,7 @@ should be formalized. In particular:
 - reality must not be represented as an exhaustively enumerable total state;
 - corrigibility remains a separable strengthening branch.
 
-Candidate spine:
+Implemented guide spine (with technical coverage bundled inside local-sufficiency evidence rather than promoted to a new philosophical primitive):
 
 ```
 minimal self-reference
