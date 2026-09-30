@@ -334,11 +334,13 @@ theorem predecessor_acyclic :
     induction hab with
     | single hab =>
         rcases hab with ⟨n, hn⟩
-        change a = b + 1 at hn
+        have hn' : a = b + 1 := by
+          simpa [predecessorEvaluators] using hn
         omega
     | tail _ hbc ih =>
         rcases hbc with ⟨n, hn⟩
-        change _ = _ + 1 at hn
+        have hn' := hn
+        simp [predecessorEvaluators] at hn'
         omega
   exact (lt_irrefl x) (hdecreases hcycle)
 
