@@ -4,8 +4,8 @@ Status labels:
 
 - **PROVED HERE**: checked by Lean in this repository.
 - **ESTABLISHED EXTERNAL**: standard theorem or existing formalization; not newly proved here.
-- **TARGET**: promising next theorem.
-- **CONJECTURAL PROGRAM**: research direction, not a theorem claim.
+- **TARGET**: open or deferred theorem candidate; not part of the frozen v1.0 result set unless promoted by a checked theorem.
+- **CONJECTURAL PROGRAM**: optional post-v1.0 research direction, not a theorem claim.
 
 ## Layer 0: minimal crossing
 
@@ -113,7 +113,7 @@ Formalize enough of Spencer-Brown's primary algebra to prove an explicit equival
 
 Status: **PARTIAL HERE**. `PrimaryBoolean.Form` now provides blank, juxtaposition, crossing, and variables; under the OR convention it translates bijectively at the raw-syntax level to a conventional `{false, OR, NOT}` expression language, and both translations preserve Boolean valuation semantics.
 
-The **full target remains open**: quotient by / derive the intended primary-algebra equations and prove Schwartz's stronger derivability-preserving equivalence, not merely a syntax/semantics correspondence.
+The full quotient/equational theory and Schwartz's stronger derivability-preserving equivalence remain **outside the frozen v1.0 scope**; the repository claims only the raw-syntax/semantic bridge proved here.
 
 ### P3.2 — Varela / Kleene three-valued bridge
 
@@ -121,7 +121,7 @@ Formalize Varela's self-reference calculus and prove the isomorphic translation 
 
 Status: **PARTIAL HERE**. `KleeneThree` now formalizes the Strong Kleene truth values, negation, conjunction, disjunction, Boolean embedding, De Morgan laws, and an explicit equivalence between the repository's three-state crossing carrier and K3 truth values. Under this equivalence, crossing is exactly K3 negation and the boundary state is exactly the unique unknown/undefined fixed point.
 
-The **full target remains open**: formalize Varela's syntax/initials and prove the Schwartz translation preserves and reflects derivability.
+Full Varela syntax/initials and a Schwartz-style derivability-preserving translation remain **outside the frozen v1.0 scope**.
 
 ### P3.3 — conservative Boolean-to-K3 semantic bridge
 
@@ -165,7 +165,7 @@ For a fixed-point-free endomap the corresponding diagonal is therefore unreprese
 
 Interpretation: the relevant incompatibility boundary is sharper than “representation versus distinction.” It is “fixed-point-free dynamics versus representation of the corresponding self-applied diagonal.”
 
-Next target: generalize from total function evaluators to typed / guarded / partial evaluators and compare which diagonal forms remain expressible.
+Partial and explicit-guard generalizations are proved later in P6.23. A further typed/modal/effectful strengthening was explored but deferred beyond v1.0 because it did not establish a sharper self-application threshold.
 
 ## Layer 5: computability self-reference
 
@@ -181,7 +181,7 @@ Computable transformations of program descriptions have extensional fixed points
 
 Status: **ESTABLISHED EXTERNAL**, already formalized in Mathlib as Nat.Partrec.Code.fixed_point and fixed_point₂, and instantiated here in DistinctionSelfReference.Computability.
 
-Next target: identify the weakest representation/evaluation conditions needed to connect the generic re-entry interface to program-code self-reference while keeping behavioral equality distinct from literal code equality.
+A sharper generic bridge from re-entry/representation interfaces to program-code self-reference remains an optional post-v1.0 direction; the frozen repository does not claim it.
 
 ## Layer 6: condition-added actor frameworks
 
@@ -462,7 +462,7 @@ Important limits:
 
 1. kernel soundness is still a trusted semantic obligation; making the checker syntactically small does not prove it sound;
 2. the finite bound is on consecutive strict capability growth, not on arbitrary version changes or capability plateaus;
-3. proof-check budgets are local to proposals; long-run budget dynamics remain open.
+3. at this phase boundary proof-check budgets were local to proposals; long-run and endogenous resource dynamics are addressed later in P6.20–P6.22.
 
 ### P6.20 — recurrent-version diagnostics, sustainable callability, kernel migration, and joint convergence
 
@@ -487,13 +487,13 @@ Results:
 
 Interpretation: version identity, capability progress, practical callability, checker trust, and reality alignment are now formally separated. A self-modifying process may keep changing versions without improving capabilities; may keep producing valid certificates without being executable under resource limits; and may migrate its checker safely only when trust transfer itself is explicitly justified.
 
-Important limits:
+Limits at this phase boundary, all addressed by later frozen phases:
 
-1. reality delay is currently fixed rather than variable or reordered;
-2. budgets are exogenous streams rather than resources changed by the upgrade process itself;
-3. predecessor-checked migration preserves an abstract trust invariant but does not yet model revocation/compromise recovery or nontrivial trust-domain expansion;
-4. finite capability bounds do not address infinite capability orders;
-5. the meta-framework still lacks the M5 invariant-core construction across incomparable feasible-minimal RSI frameworks.
+1. variable/reordered delay is addressed in P6.21 and characterized sharply in P6.22;
+2. endogenous resources are added in P6.21 and recast as a viability kernel in P6.22;
+3. compromise-aware delegation appears in P6.21 and threshold trust in P6.22;
+4. infinite capability orders appear in P6.21 and well-founded-rank obstructions in P6.22;
+5. invariant-core construction begins in P6.21, expands in P6.22, and is later lifted to certified framework morphisms in P6.29.
 
 ### P6.21 — variable-delay reality, endogenous resources, trust delegation, infinite capability order, and first M5 core
 
@@ -518,13 +518,13 @@ Results:
 
 Interpretation: reality alignment, practical execution, trust transfer, and capability growth each need their own long-run structural condition. The first invariant-core result also shows that M5 should compare frameworks after semantic translation rather than by literal intersection of their syntax-level assumptions.
 
-Important limits:
+Limits at this phase boundary and later closures:
 
-1. eventual freshness is currently proved sufficient but not yet characterized as necessary for all eventually stable reality processes;
-2. the endogenous-resource theorem gives a clean sufficient self-sustaining condition, not yet the full resource viability kernel;
-3. dual trust delegation has not yet been generalized to threshold/quorum compromise tolerance or fully ablated;
-4. infinite capability growth is separated from the finite case, but general well-founded ranks / chain-condition classifications remain open;
-5. the M5 instance currently extracts only the trust/soundness-transfer core, not the full RSI core spanning capability, invariant, reality, and resource roles.
+1. universal eventual freshness is characterized exactly for stable Boolean requirements in P6.22;
+2. the resource viability kernel is supplied in P6.22;
+3. threshold/quorum compromise tolerance receives a clean sufficient bound and counterexample in P6.22; a full Byzantine theory remains outside v1.0;
+4. well-founded-rank obstructions are supplied in P6.22, while rank-completeness classifications remain outside v1.0;
+5. the six-role RSI core is supplied in P6.22 and later recovered from certified morphism images in P6.29.
 
 ### P6.22 — exact scheduling, resource viability, threshold trust, ranked growth, and full RSI core
 
@@ -553,9 +553,9 @@ Important limits:
 2. resource viability currently models resource state only, not coupled capability/resource co-evolution;
 3. threshold trust proves one clean sufficient fault bound but does not yet give a full Byzantine/quorum characterization or ablation family;
 4. well-founded rank is proved sufficient to exclude open-ended growth, but rank completeness from the chain condition remains open;
-5. the full RSI core is still produced by explicit role maps rather than a general formal notion of framework morphism.
+5. at this phase boundary the full RSI core was still produced by explicit role maps; this limitation is closed later by the certified framework-morphism layer in P6.29.
 
-The maintained next directions are recorded in the README after every completed phase.
+The finite convergence plan and freeze boundary are recorded in `Research/Roadmap.md`.
 
 ### P6.23 — self-certification barrier, changing evaluators, branching archives, and partial Lawvere
 
@@ -589,9 +589,9 @@ Interpretation: the current frontier is no longer one monotone RSI chain. The lo
 Important limits:
 
 1. the Löb result is currently abstract at the RSI interface; direct Foundation instantiation awaits compatible Lean/Mathlib pins;
-2. evaluator **existence** is characterized exactly by acyclicity; Nat common-potential representability is now equivalent to it on finite state spaces but strictly stronger on infinite state spaces, while evaluator morphisms remain open;
-3. the archive boundary is now split cleanly: monotone antichain archives stabilize under WQO, recomputed Pareto frontiers may replace forever under WQO, and `WellFoundedGT` forbids perpetual strict frontier progress; finer replacement/stabilization criteria remain open;
-4. Lawvere partiality is now abstracted to an explicit guard predicate, but typed guarded/later modalities and effects remain open;
+2. evaluator **existence** is characterized exactly by acyclicity; Nat common-potential representability is equivalent to it on finite state spaces but strictly stronger on infinite state spaces. Evaluator migration is later packaged by certified morphisms in P6.27; stronger infinite-state rank classifications remain outside v1.0;
+3. the archive boundary is split cleanly: monotone antichain archives stabilize under WQO, recomputed Pareto frontiers may replace forever under WQO, and `WellFoundedGT` forbids perpetual strict frontier progress. Grounded/capability progress distinctions are developed later in P6.28; a complete non-monotone replacement classification remains outside v1.0;
+4. Lawvere partiality is abstracted to an explicit guard predicate. Typed/modal/effectful refinements are deferred beyond v1.0 because the draft phase did not establish a sharper self-application threshold;
 5. resource/callability conditions are intentionally secondary feasibility constraints in this phase.
 
 ### P6.24 — evaluator grounding under finite, delayed, noisy, and versioned evidence
@@ -634,15 +634,15 @@ and
 
 `universal temporal freshness ≠ adequacy for one fixed task`.
 
-Important limits:
+Limits at this phase boundary and later closures:
 
-1. stochastic grounding currently captures the exact zero-Bayes-risk boundary; quantitative approximate sufficiency, regret, calibration, and noisy recovery remain open;
-2. task-relative scheduling has a strict separation example but not yet a full characterization for arbitrary task families;
-3. dependency provenance still uses an abstract dependency relation rather than explicit proof terms, timestamps, confidence, or cryptographic attestations, but evaluator migration now carries explicit typed bridge certificates;
-4. the edge-level preservation limitation is closed by `EvaluatorMorphism`; repository-wide framework morphisms remain open for PR #9;
-5. external goals are still represented mainly by Nat/Bool decisions rather than general ordered/vector/risk-sensitive objectives.
+1. exact zero-Bayes-risk grounding is extended by the quantitative risk-gap layer in P6.25; calibration and noisy-recovery theories remain outside v1.0;
+2. the arbitrary stable-task-family scheduling criterion is supplied later in P6.26;
+3. evaluator migration receives explicit typed bridge certificates and dependency transport in P6.27; proof terms, timestamps, confidence, and cryptographic attestations remain outside v1.0;
+4. repository-wide framework morphisms are supplied later in P6.29;
+5. external goals remain represented mainly by Nat/Bool decisions rather than a general ordered/vector/risk-sensitive objective theory.
 
-### P6.23 — quantitative decision-relative grounding
+### P6.25 — quantitative decision-relative grounding
 
 Move the exact stochastic grounding boundary into an epsilon-risk layer.
 
@@ -667,7 +667,7 @@ that the Bayes risk of the approximate experiment is at most the gold risk plus
 
 Interpretation: this is deliberately the **risk side** of a Blackwell–Le Cam approximation layer, not yet a formal claim that total-variation deficiency and the full randomization theorem are present in Lean. The strict binary example shows that the quantitative layer is not vacuous: a genuine Markov garbling can force a positive decision-risk gap.
 
-### P6.24 — sharp task-family scheduling
+### P6.26 — sharp task-family scheduling
 
 Replace single-task adequacy by a chosen family of already-stable Boolean
 tasks.
@@ -684,7 +684,7 @@ while failing eventual freshness.
 Interpretation: the source-schedule condition is genuinely task-family relative;
 universal freshness is recovered only at the universal task family.
 
-### P6.25 — evaluator morphisms and proof-carrying provenance
+### P6.27 — evaluator morphisms and proof-carrying provenance
 
 Replace evaluator-preservation edges by explicit compositional structure.
 
@@ -706,13 +706,12 @@ The formal layer now provides:
 
 Interpretation: selective erasure is now structural rather than an ad hoc policy. Anchor evidence remains independent of evaluator migration; evaluator-dependent evidence migrates only when an explicit preservation certificate exists; dependency-qualified conclusions migrate only when their required provenance chain is covered.
 
-### P6.26 — grounded archive dynamics and progress-layer separation
+### P6.28 — grounded archive dynamics and progress-layer separation
 
 Combine archive growth, frontier dynamics, evaluator migration, and external
 grounding without identifying them.
 
-Status: **PROVED HERE / PHASE INTEGRATION COMPLETE IN CODE** in
-`GroundedArchiveDynamics`; final PR-head CI remains the merge gate.
+Status: **PROVED HERE / PHASE COMPLETE** in `GroundedArchiveDynamics`.
 
 The formal layer distinguishes:
 
@@ -765,7 +764,7 @@ grounded objective progress, and capability novelty are different mathematical
 questions. Archive cardinality growth alone is not evidence of RSI capability
 growth.
 
-### P6.27 — framework morphisms and guide dependency core
+### P6.29 — framework morphisms and guide dependency core
 
 Replace raw cross-framework role maps by explicit compositional translations
 that preserve both derivability and semantic satisfiability.
@@ -844,7 +843,7 @@ Status: **FORMALIZED / PARTLY INSTANTIATED**.
 
 For a target capability set T, identify all minimal assumption sets C such that C proves T.
 
-Status: **GENERIC MACHINERY PROVED HERE; CONCRETE ENUMERATION ONGOING**.
+Status: **GENERIC MACHINERY PROVED HERE; SELECTED CONCRETE INSTANCES PROVED**. Exhaustive enumeration is outside the v1.0 scope.
 
 `MetaFramework` formalizes sufficient target sets, inclusion-minimal sufficient condition sets, capability dominance, and capability equivalence. `ControlDependencyGraph` now gives the first concrete instantiation: the forward-simulation/safety-preservation pair is inclusion-minimal for forward viability and recovery preservation; the backward-simulation/safety-reflection pair is inclusion-minimal for reflection; all four conditions are minimal for all four directional capabilities.
 
@@ -852,7 +851,7 @@ Status: **GENERIC MACHINERY PROVED HERE; CONCRETE ENUMERATION ONGOING**.
 
 Condition sets also need semantic compatibility, not only derivability.
 
-Status: **GENERIC MACHINERY + FIRST INSTANCE PROVED HERE**.
+Status: **GENERIC MACHINERY + MULTIPLE INSTANCES PROVED HERE**.
 
 `MetaFramework.ConditionSemantics` defines realizations, joint satisfaction, compatibility, and incompatibility; compatibility is downward closed and incompatibility upward closed. `RepresentationConflict` instantiates this layer and proves that fixed-point-free endomaps and universal surjective representation cannot be jointly realized. `NextRSIConflict` adds a second, RSI-specific incompatibility: under pointwise non-degradation, a recurrent full-version cycle cannot contain strict first-step capability growth.
 
@@ -860,7 +859,7 @@ Status: **GENERIC MACHINERY + FIRST INSTANCE PROVED HERE**.
 
 A condition set should count as a candidate framework only if it is both capability-sufficient and jointly realizable.
 
-Status: **PROVED HERE / FIRST INSTANCE PROVED HERE**.
+Status: **PROVED HERE / MULTIPLE CONCRETE INSTANCES**.
 
 `FeasibleFramework` defines `FeasibleSufficient` and `FeasibleInclusionMinimal`. Ordinary inclusion-minimal sufficiency lifts to feasible minimality once joint compatibility is proved. `CorrigibilityAblation` supplies the first concrete instance: mismatch detection + revision success + false-alarm rejection are jointly realizable and feasible-inclusion-minimal for exact correction. `RSIFeasibility` supplies the first larger guarded-RSI instance. `NextRSIFeasibility` now adds four independently realizable feasible-minimal next-phase frameworks: recurrent plateau diagnostics, indefinite resource-bounded callability, predecessor-checked trusted-kernel migration, and joint trust/capability/reality stabilization.
 
@@ -876,4 +875,4 @@ Status: **GENERAL MORPHISM LAYER PROVED HERE; FIRST RSI CORE LIFT COMPLETE**.
 
 `FullRSIInvariantCore` extends this comparison to six RSI roles — self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability — and proves that two distinct condition languages each cover all six after translation.
 
-`FrameworkMorphism` now provides this structure: condition/capability/realization maps, derivation and satisfaction preservation, identity/composition, compatibility transport, reflection criteria, and morphism-induced invariant cores. `RSIFrameworkMorphisms` proves that the previous six-role core is recovered from certified morphism images. Remaining work is artifact stabilization and broader instantiation, not the absence of a morphism abstraction.
+`FrameworkMorphism` now provides this structure: condition/capability/realization maps, derivation and satisfaction preservation, identity/composition, compatibility transport, reflection criteria, and morphism-induced invariant cores. `RSIFrameworkMorphisms` proves that the previous six-role core is recovered from certified morphism images. Remaining mandatory work is artifact stabilization for v1.0; broader instantiation is optional future work outside the frozen scope.

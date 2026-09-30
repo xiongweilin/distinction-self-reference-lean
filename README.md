@@ -1,6 +1,6 @@
 # Distinction / Self-Reference in Lean
 
-A small formal research project for studying which additional conditions turn a minimal distinction-and-reentry system into progressively stronger forms of self-reference.
+A formal research project for studying which additional conditions turn a minimal distinction-and-reentry system into progressively stronger forms of self-reference.
 
 The project deliberately separates:
 
@@ -27,7 +27,6 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Representational obstruction | fixed-point-free endomap on the result type | universal surjective self-representation is impossible; instantiated by the two-state crossing |
 | Weak representation | represent only the endomap-specific Lawvere diagonal | one represented diagonal already forces a fixed point; partial families can coexist when that diagonal is excluded |
 | Semantic incompatibility | conditions interpreted on common realizations | fixed-point-free endomap and universal surjective representation form an explicit incompatible pair |
-| Weak representation | represent only the endomap-specific diagonal function / selected family | the diagonal condition alone forces a fixed point; partial families can coexist with two-state crossing when the forbidden diagonal is absent |
 | Future distinction | histories + continuation tests | histories are equivalent exactly when all future continuations agree; finite quotient iff regular by Myhill–Nerode |
 | Bisimulation | observed transition system | persistent identity-as-behavior is a greatest fixed point with a coinduction principle |
 | Labelled bisimulation bridge | canonical residual DFA + label preservation | future indistinguishability is exactly canonical labelled bisimilarity |
@@ -41,9 +40,6 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Local sufficiency | observation + required commitment | sufficiency is factorization through the observation and is equivalent to absence of an ambiguity witness |
 | Compositional sufficiency | locally sufficient observations + cover + overlap compatibility | local commitments glue into a global commitment decodable from combined observations |
 | Conditional composition | compositional sufficiency + finite recoverability | constructs a global commitment witness together with a recovery plan back to viability |
-| Local sufficiency | observation + commitment requirement | sufficiency is factorization of the required commitment through the current observation; ambiguity certifies insufficiency |
-| Compositional sufficiency | local sufficiency + cover + overlap agreement | combined observations determine one global commitment extending every local requirement |
-| Conditional composition | compositional sufficiency + recoverability | constructs a global commitment together with a finite recovery path to viability |
 | Deterministic information order | representation + post-processing factorization | post-processing cannot create new distinctions; strict information loss exists |
 | Markov garbling | experiment + Markov post-processing | Bayes risk cannot improve, risk-based information and KL divergence cannot increase |
 | Information → future bridge | coarse summary factors through residual language | FutureEq histories remain equal under every such summary |
@@ -53,7 +49,6 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Control condition ablation | remove one simulation/safety condition at a time | each of forward simulation, safety preservation, backward simulation, and safety reflection has an independent counterexample when omitted |
 | Concrete control dependency graph | four control conditions + four directional capabilities | forward/backward condition pairs are inclusion-minimal; all four are minimal for all four capabilities |
 | Meta-framework | monotone condition→capability graph + condition semantics | ablation minimality = inclusion minimality; compatibility/incompatibility, dominance, and capability equivalence are formalized |
-| Concrete control dependency graph | four directional simulation/safety conditions | the proved two-condition pairs are inclusion-minimal for their viability/recovery capabilities |
 | Computability | program codes + evaluator + computability | Rogers fixed point and Kleene's second recursion theorem |
 | Full-version recurrence diagnostics | non-degrading self-modifier + complete version identity | recurrent version segments are capability plateaus; payload/version cycles need not be modifier fixed points |
 | Indefinite proof-bounded callability | proposal stream + proof costs + time-indexed budgets | uniform bounded witnesses and covering budgets imply callability forever; certification alone need not imply eventual callability |
@@ -80,6 +75,13 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Dependency-aware provenance | evidence dependency graph + versioned qualification | stale evaluator premises invalidate dependent conclusions transitively; stronger preservation policies monotonically restore evidence while independent anchor-supported conclusions survive |
 | Branch/archive RSI | recurrent selected branch + retained archive | branch recurrence and branch-score plateau can coexist with strict archive growth; WQO makes antichain frontiers finite but does not itself imply archive stabilization |
 | Partial Lawvere | Option-valued evaluator + diagonal representation | a represented partial diagonal forces a fixed point exactly when self-application is defined; fixed-point-free steps force the representing self-application to be undefined |
+| Guarded Lawvere | explicit self-application guard + represented diagonal | an open self guard forces a fixed point; fixed-point-free steps force the self guard closed |
+| Quantitative grounding | decision experiment + reference experiment + loss-scaled risk gap | exact grounding is the zero-gap case; risk-gap guarantees are monotone, compositional, and cannot be created by garbling |
+| Task-family scheduling | stable task family + source schedule | family preservation has an exact criterion; universal stable Boolean tasks recover eventual freshness |
+| Evaluator morphisms | evaluator/state map + proof-carrying preservation certificate | judgment/goal preservation composes and transports qualified evidence and dependencies across evaluator migration |
+| Grounded archive dynamics | archive/frontier + evaluator + external goal + capability order | archive growth, frontier replacement, evaluator progress, grounded goal progress, and capability novelty are formally separated |
+| Framework morphisms | condition/capability/realization maps + preservation laws | sufficiency and compatibility transport compositionally; reflection/equivalence control stronger invariants; certified images define invariant cores |
+| guide dependency core | explicit guide dependency spine only | minimal self-reference, continuity, agency, effective finitude, purpose, local sufficiency, and corrigibility boundaries are formalized without collapsing reality to a finite state space |
 
 This is intentionally a branching ladder: static, dynamic, order-theoretic, diagonal, and computability forms of self-reference should not be identified without a proof relating them.
 
@@ -101,17 +103,13 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/Recovery.lean` — finite-plan recoverability back to the viability kernel.
 - `DistinctionSelfReference/RecoverySeparation.lean` — minimal model proving recoverable does not imply viable.
 - `DistinctionSelfReference/Purposeful.lean` — minimal action-relevant direction, purpose-relative viability/recovery monotonicity, and same-dynamics/different-purpose separation.
-- `DistinctionSelfReference/Purposeful.lean` — action-relevant acceptable-state direction; purpose refinement is monotone for viability/recovery.
 - `DistinctionSelfReference/LocalGlobal.lean` — local and pairwise-compatible counterexamples to global composition.
 - `DistinctionSelfReference/NestedGluing.lean` — positive finite gluing theorem for nested constraint families.
 - `DistinctionSelfReference/OverlapGluing.lean` — cover + overlap agreement gluing theorem, with a non-nested example.
 - `DistinctionSelfReference/LocalSufficiency.lean` — observation-relative commitment sufficiency and ambiguity witnesses.
 - `DistinctionSelfReference/CompositionalSufficiency.lean` — composition of locally sufficient commitments under cover and overlap agreement.
 - `DistinctionSelfReference/ConditionalComposition.lean` — compositional commitment witness augmented with finite recovery to viability.
-- `DistinctionSelfReference/LocalSufficiency.lean` — observation-relative commitment sufficiency with the exact no-ambiguity iff.
 - `DistinctionSelfReference/AnchorMinimality.lean` — least sufficient anchors, information-equivalence uniqueness, fiber characterization, and finite reachable-range cardinal lower bounds.
-- `DistinctionSelfReference/CompositionalSufficiency.lean` — local sufficiency + overlap gluing constructs a globally decodable commitment.
-- `DistinctionSelfReference/ConditionalComposition.lean` — adds minimum recoverability to produce a conditional composition witness.
 - `DistinctionSelfReference/FeasibleFramework.lean` — combines capability sufficiency with joint semantic realizability.
 - `DistinctionSelfReference/Reopening.lean` — mismatch-triggered reopening, successful revision, false-alarm rejection, and exact correction.
 - `DistinctionSelfReference/Corrigibility.lean` — bridges corrected revision to operational recovery and bisimulation-based self-continuity.
@@ -168,6 +166,9 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/FiniteCapabilityGrowth.lean` — global finite-universe bound on consecutive strict capability-growth steps.
 - `DistinctionSelfReference/InformationOrder.lean` — deterministic refinement preorder and no-new-distinction theorem.
 - `DistinctionSelfReference/MarkovGarbling.lean` — Markov post-processing order with Bayes-risk, risk-increase, and KL data-processing bridges.
+- `DistinctionSelfReference/StochasticAnchorGrounding.lean` — exact decision grounding as zero Bayes risk and its monotonicity under Markov garbling.
+- `DistinctionSelfReference/QuantitativeGrounding.lean` — loss-scaled approximate grounding, risk-gap monotonicity, additive composition, and task-family bounds.
+- `DistinctionSelfReference/QuantitativeGroundingExample.lean` — strict Boolean 0–1-loss example separating exact and approximate decision grounding.
 - `DistinctionSelfReference/InformationFutureBridge.lean` — bridge from representation refinement to future indistinguishability.
 - `DistinctionSelfReference/ControlAbstraction.lean` — exact conditions under which state abstraction preserves or reflects viability and recoverability, plus false-positive counterexamples.
 - `DistinctionSelfReference/ControlSimulation.lean` — weaker directional simulations with possibly different action types; forward/backward conditions independently control capability preservation/reflection.
@@ -183,11 +184,13 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/RepresentationalObstruction.lean` — fixed-point-free endomaps forbid Lawvere-style universal surjective representation.
 - `DistinctionSelfReference/WeakRepresentation.lean` — per-endomap diagonal representability, family representation, and a partial two-state representation that coexists with fixed-point-free crossing.
 - `DistinctionSelfReference/RepresentationConflict.lean` — semantic incompatibility instance for fixed-point-free endomaps versus universal representation.
-- `DistinctionSelfReference/RepresentationConflict.lean` — instantiates the Lawvere obstruction as an upward-closed semantic incompatibility edge.
-- `DistinctionSelfReference/WeakRepresentation.lean` — isolates per-endomap diagonal representability and exhibits partial representation compatible with two-state crossing.
 - `DistinctionSelfReference/Computability.lean` — Mathlib's Rogers/Kleene computability fixed-point bridge.
 - `Research/Established.md` — established mathematical results and existing formalizations.
-- `Research/Candidates.md` — proved-here propositions, next targets, and the meta-framework program.
+- `Research/Candidates.md` — proved-here propositions, targets, phase boundaries, and the meta-framework program.
+- `Research/Roadmap.md` — closed convergence plan, deferred gates, and v1.0 dependency order.
+- `Research/CoreTheoremIndex.md` — designated v1.0 public theorem cross-section with assumptions and boundary witnesses.
+- `Research/FreezeChecklist.md` — pre-freeze verification status and stable-toolchain release gates.
+- `DistinctionSelfReference/FreezeAudit.lean` — CI-only theorem-name and axiom audit for the designated v1.0 core; intentionally not imported by the library root.
 
 ## Initial questions
 
@@ -212,32 +215,35 @@ The RSI line has now moved beyond a single monotone-upgrade model into a family 
 
 The current frontier is therefore no longer “can a monotone RSI chain grow?” but **when improvement remains meaningful as the evaluator, verifier, branch structure, and resource state themselves change**.
 
-## Next construction directions
+## Freeze status
 
-The remaining large program is now intentionally finite and phase-gated.
-See `Research/Roadmap.md` for the maintained PR #4 → PR #9 → v1.0 plan.
+The planned convergence phases are content-complete:
 
-PR #4 — **Quantitative Grounding** is merged.
+- PR #4 — **Quantitative Grounding**: merged.
+- PR #5 — **Evaluator Morphisms & Proof-Carrying Provenance**: merged.
+- PR #7 — **Grounded Branching & Archive Dynamics**: merged.
+- PR #9 — **Framework Morphisms + guide Core**: merged.
+- PR #10 — **v1.0 pre-freeze proof hardening**: merged.
 
-It closes four items:
+The repository is therefore **content-complete / pre-v1.0 frozen**. New theory is
+not part of the mandatory v1.0 scope. The remaining release gate is external:
+select and pin a stable Lean 4.35+ / compatible Mathlib toolchain, replay the
+freeze checks on that exact pin, then tag v1.0.
 
-1. quantitative decision-risk gaps as the risk-side Blackwell–Le Cam layer;
-2. monotonicity, composition, and a uniform bounded-loss risk surrogate;
-3. a concrete strict Boolean Bayes-risk degradation example under discard garbling;
-4. exact task-family scheduling criteria with both universal recovery and strict family-relative separation.
+Two research items remain explicitly outside the mandatory freeze:
 
-PR #5 — **Evaluator Morphisms & Proof-Carrying Provenance** is merged. It packages evaluator migration as explicit compositional certificates, transports evidence/dependencies through certified bridges, and proves by countermodel that goal preservation alone is insufficient for judgment transport.
+- issue #6 keeps the concrete Foundation/Löb/Gödel/Tarski integration blocked
+  until the toolchains align without weakening trust assumptions;
+- typed/modal/computational self-reference is deferred beyond v1.0 because the
+  draft did not establish a sharper self-application threshold than the existing
+  partial/guarded Lawvere layer.
 
-PR #7 — **Grounded Branching & Archive Dynamics** is merged. It keeps five notions separate: archive growth, frontier replacement, evaluator-relative progress, externally grounded progress, and novel capability, with explicit bridges and countermodels between them.
-
-PR #8 — **Typed / Modal / Computational Self-Reference** exists as a parallel draft gate only. It does not block v1.0 and currently claims no new theorem unless it sharpens the self-application threshold.
-
-PR #9 — **Framework Morphisms + guide Core** is merged. Cross-framework comparison now uses certified morphisms rather than raw role maps; the guide integration is restricted to its mathematically explicit dependency spine.
-
-PR #10 — **v1.0 pre-freeze proof hardening** is the current mainline gate. It adds comment-aware source auditing, a core theorem/axiom audit, exact proof export, default-kernel replay, and the complete bundled independent-checker set split across sandboxed CI jobs. The final v1.0 tag remains blocked until a stable Lean 4.35+ release is selected and pinned. PR #6 remains blocked on Foundation/toolchain alignment.
+See `Research/Roadmap.md`, `Research/CoreTheoremIndex.md`, and
+`Research/FreezeChecklist.md` for the maintained freeze boundary and release
+criteria.
 
 ## Scope warning
 
 The code in this repository is **not** initially a formalization of all of Spencer-Brown's *Laws of Form* or Varela's calculus. The RSI layer is likewise a guarded structural scaffold, not a claim of open-ended recursive self-improvement. Small models may be inspired by those ideas, but such relationships are stated explicitly and conservatively.
 
-In particular, `InvolutiveDistinction` captures only a crossing-style involution. `PrimaryBoolean.Form` adds a small primary-shaped syntax and Boolean semantics, but it still does not formalize the full quotient/equational theory of Spencer-Brown's primary algebra. Likewise, `KleeneThree` formalizes the Strong Kleene semantic side, and `LogicBridge` only proves a semantic conservative-extension result on determined valuations. The full Varela syntax and Schwartz derivability-preserving isomorphism remain future targets.
+In particular, `InvolutiveDistinction` captures only a crossing-style involution. `PrimaryBoolean.Form` adds a small primary-shaped syntax and Boolean semantics, but it still does not formalize the full quotient/equational theory of Spencer-Brown's primary algebra. Likewise, `KleeneThree` formalizes the Strong Kleene semantic side, and `LogicBridge` only proves a semantic conservative-extension result on determined valuations. The full Varela syntax and Schwartz derivability-preserving isomorphism remain outside the frozen v1.0 scope.
