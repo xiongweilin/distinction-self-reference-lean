@@ -37,7 +37,24 @@ jobs:
       - name: Audit v1.0 core theorem names and axioms
         run: lake env lean DistinctionSelfReference/FreezeAudit.lean
 
-  proof-check:
+      - name: Export checked root module once
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p proof-export
+          lake env leanexport DistinctionSelfReference > proof-export/solution.export
+          test -s proof-export/solution.export
+
+      - name: Upload proof export
+        uses: actions/upload-artifact@v4
+        with:
+          name: proof-export-${{ github.sha }}
+          path: proof-export/solution.export
+          if-no-files-found: error
+          compression-level: 1
+
+  kernel-replay:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -46,6 +63,12 @@ jobs:
         run: |
           curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Download proof export
+        uses: actions/download-artifact@v5
+        with:
+          name: proof-export-${{ github.sha }}
+          path: proof-export
 
       - name: Install restricted Bubblewrap AppArmor profile
         shell: bash
@@ -60,14 +83,38 @@ jobs:
           bwrap --version
           bwrap --unshare-user --uid 0 --gid 0 --ro-bind / / /bin/true
 
-      - name: Resolve dependencies and create manifest
-        run: lake update
+      - name: Kernel replay from exact build export
+        run: lake check --from-export=proof-export/solution.export
 
-      - name: Restore Mathlib cache for sandboxed replay
-        run: lake exe cache get
+  paranoid-replay:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
 
-      - name: Kernel replay
-        run: lake check
+      - name: Install Elan
+        run: |
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
-      - name: Paranoid independent replay
-        run: lake check --paranoid
+      - name: Download proof export
+        uses: actions/download-artifact@v5
+        with:
+          name: proof-export-${{ github.sha }}
+          path: proof-export
+
+      - name: Install restricted Bubblewrap AppArmor profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -q
+          sudo apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
+          profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          test -f "$profile"
+          sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          bwrap --version
+          bwrap --unshare-user --uid 0 --gid 0 --ro-bind / / /bin/true
+
+      - name: Paranoid independent replay from exact build export
+        run: lake check --from-export=proof-export/solution.export --paranoid
