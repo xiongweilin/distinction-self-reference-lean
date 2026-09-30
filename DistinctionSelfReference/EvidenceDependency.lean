@@ -284,27 +284,30 @@ Once the evaluator bridge is supplied, the previously stale derived conclusion
 becomes dependency-current again. The independent reality-supported conclusion
 remains current throughout.
 -/
+theorem derived_dependency_path_ends_at_oldJudgment
+    {d : Evidence Version Claim}
+    (hd : Relation.TransGen dependsOn derived d) :
+    d = oldJudgment := by
+  induction hd with
+  | single h =>
+      rcases h with h | h
+      · exact h.2
+      · exact False.elim (by
+          rcases h with ⟨hbad, _⟩
+          simp [derived, independent] at hbad)
+  | tail hpath hlast ih =>
+      subst_vars
+      exfalso
+      simpa [dependsOn, oldJudgment, derived, independent, reality] using hlast
+
 theorem repaired_bridge_restores_derived :
     DependencyCurrent repairedPreserves .current dependsOn derived := by
   constructor
   · rw [CurrentEvidence]
     exact anchor_source_always_current repairedPreserves .current
   · intro d hd
-    induction hd with
-    | single h =>
-        rcases h with h | h
-        · rcases h with ⟨_, rfl⟩
-          exact oldJudgment_revalidated
-        · rcases h with ⟨hbad, _⟩
-          simp [derived, independent] at hbad
-    | tail hpath hlast ih =>
-        rcases hlast with h | h
-        · rcases h with ⟨hbad, _⟩
-          subst_vars
-          simp [dependsOn, derived, independent, reality, oldJudgment] at hpath
-        · rcases h with ⟨hbad, _⟩
-          subst_vars
-          simp [dependsOn, derived, independent, reality, oldJudgment] at hpath
+    rw [derived_dependency_path_ends_at_oldJudgment hd]
+    exact oldJudgment_revalidated
 
 /--
 Revalidation is selective and monotone: adding a justified preservation bridge
