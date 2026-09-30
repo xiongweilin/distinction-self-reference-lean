@@ -594,6 +594,54 @@ Important limits:
 4. Lawvere partiality is now abstracted to an explicit guard predicate, but typed guarded/later modalities and effects remain open;
 5. resource/callability conditions are intentionally secondary feasibility constraints in this phase.
 
+### P6.24 — evaluator grounding under finite, delayed, noisy, and versioned evidence
+
+Move the changing-evaluator program from internal coherence to semantic grounding against a fixed external goal, then test that grounding under finite observation, delay/reordering, Markov garbling, evaluator migration, and evidence dependencies.
+
+Status: **PHASE COMPLETE / FORMAL LAYER CLOSED** in `LocalSufficiency`, `AnchorMinimality`, `EvaluatorGrounding`, `EvaluatorProvenance`, `DynamicAnchorGrounding`, `TaskRelativeScheduling`, `StochasticAnchorGrounding`, and `EvidenceDependency`.
+
+Results:
+
+- static anchor sufficiency is exact: an anchor is sufficient for a goal-relevant commitment iff no anchor-indistinguishable worlds require different judgments;
+- the required goal-judgment map is a canonical least sufficient anchor; every least sufficient anchor is information-equivalent to it, has the same fibers, and attains the finite reachable-observation cardinality lower bound;
+- fixed external goal + sufficient anchor + evaluator soundness relative to an anchor factorization + local evaluator improvement imply strict improvement of the same external goal over every finite nonempty prefix;
+- a finite insufficient Bool anchor can pass validation indefinitely while the hidden external goal regresses, including a perpetual proxy cycle with infinitely many regressions;
+- evaluator provenance separates immutable history from current qualification; full and goal-relevant preservation are compositional, and goal-relevant preservation is strictly weaker than preserving all old evaluator judgments;
+- delayed/reordered grounding has an exact universal criterion: eventual freshness iff every eventually stable Boolean judgment grounded through a sufficient finite Boolean anchor remains eventually aligned;
+- static sufficiency alone is therefore insufficient under stale access; semantic sufficiency and temporal freshness are distinct conditions;
+- task-relative adequacy is strictly weaker than universal freshness: a schedule permanently sampling source index 1 is not eventually fresh, yet it exactly preserves a specific nonconstant task that has already stabilized by that source index;
+- this separates `preserves all grounded tasks` from `preserves this grounded task`;
+- stochastic/noisy grounding is connected directly to the existing Markov-garbling layer by defining exact decision grounding as Bayes risk zero for a fixed prior/loss;
+- if a garbled experiment has zero Bayes risk, the finer source experiment also has zero Bayes risk: post-processing cannot create exact decision grounding;
+- if the finer experiment already has positive Bayes risk, every garbling retains positive Bayes risk: information loss cannot repair an intrinsically insufficient signal;
+- dependency-aware provenance requires an evidence item and every transitive premise to remain current;
+- stale evaluator-dependent premises invalidate dependent conclusions transitively, while independent reality/anchor-supported conclusions survive;
+- preservation policies are monotone: extending a policy can only preserve or restore current evidence, dependency-qualified conclusions, and current-history views;
+- a concrete old→current bridge revalidates a previously stale evaluator premise and restores its derived conclusion without rewriting history.
+
+Interpretation: meaningful evaluator improvement now has four distinct grounding dimensions:
+(1) **semantic sufficiency** of the anchor for the claimed goal,
+(2) **temporal adequacy** of access to that anchor,
+(3) **decision/information adequacy** under noisy post-processing,
+and (4) **provenance validity** of migrated evidence.
+Failure in any one dimension can make internally coherent evaluator progress fail to track the external goal.
+
+The phase also establishes two strict separations:
+
+`external signal exists ≠ signal is sufficient for the goal`
+
+and
+
+`universal temporal freshness ≠ adequacy for one fixed task`.
+
+Important limits:
+
+1. stochastic grounding currently captures the exact zero-Bayes-risk boundary; quantitative approximate sufficiency, regret, calibration, and noisy recovery remain open;
+2. task-relative scheduling has a strict separation example but not yet a full characterization for arbitrary task families;
+3. dependency provenance uses an abstract dependency relation rather than explicit proof terms, timestamps, confidence, or cryptographic/typed bridge certificates;
+4. goal-relevant preservation remains edge-level rather than a general evaluator morphism;
+5. external goals are still represented mainly by Nat/Bool decisions rather than general ordered/vector/risk-sensitive objectives.
+
 ## Meta-framework target
 
 Let a framework be represented by:
