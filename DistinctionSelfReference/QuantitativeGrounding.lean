@@ -67,6 +67,17 @@ theorem exact_simulation_has_zero_gap
   unfold RiskGapAtMost
   simpa using bayesRisk_mono_of_garblesTo loss approx gold prior hsim
 
+theorem approximatelyGrounded_zero_iff
+    {Theta : Type u} {X : Type v} {Decision : Type z}
+    [MeasurableSpace Theta] [MeasurableSpace X] [MeasurableSpace Decision]
+    (C : ℝ≥0∞)
+    (loss : Theta → Decision → ℝ≥0∞)
+    (P : Kernel Theta X)
+    (prior : Measure Theta) :
+    ApproximatelyGrounded C 0 loss P prior ↔
+      DecisionGrounded loss P prior := by
+  simp [ApproximatelyGrounded, DecisionGrounded]
+
 theorem approximatelyGrounded_of_gap
     {Theta : Type u} {X : Type v} {Y : Type w} {Decision : Type z}
     [MeasurableSpace Theta] [MeasurableSpace X] [MeasurableSpace Y]
@@ -160,6 +171,24 @@ theorem familyGap_mono
     FamilyRiskGapAtMost family C ε' approx gold prior := by
   intro loss hloss
   exact riskGapAtMost_mono hε (h loss hloss)
+
+theorem family_source_inherits_gap_bound_from_garbling
+    {Theta : Type u} {X : Type v} {X' : Type w} {Y : Type z}
+    {Decision : Type*}
+    [MeasurableSpace Theta] [MeasurableSpace X] [MeasurableSpace X']
+    [MeasurableSpace Y] [MeasurableSpace Decision]
+    (family : Set (Theta → Decision → ℝ≥0∞))
+    (C : (Theta → Decision → ℝ≥0∞) → ℝ≥0∞)
+    (ε : ℝ≥0∞)
+    (source : Kernel Theta X) (garbled : Kernel Theta X')
+    (gold : Kernel Theta Y)
+    (prior : Measure Theta)
+    (hgarble : GarblesTo source garbled)
+    (hgap : FamilyRiskGapAtMost family C ε garbled gold prior) :
+    FamilyRiskGapAtMost family C ε source gold prior := by
+  intro loss hloss
+  exact source_inherits_gap_bound_from_garbling
+    (C loss) ε loss source garbled gold prior hgarble (hgap loss hloss)
 
 theorem familyGap_trans
     {Theta : Type u} {X : Type v} {Y : Type w} {Z : Type z}
