@@ -66,7 +66,7 @@ theorem eventuallyFresh_of_preservesStableGroundedBool
   intro required target hstable
   have hsufficient :
       Sufficient (fun n : Nat => n) required :=
-    identity_sufficient required
+    ⟨required, by funext n; rfl⟩
   rcases hpres
       (anchor := fun n : Nat => n)
       (required := required)
@@ -106,7 +106,7 @@ theorem sufficient_anchor_counterexample_of_not_eventuallyFresh
       ¬ EventuallyConstant (fun n => required (S.source n)) target := by
   rcases counterexample_of_not_eventuallyFresh S hnot with
     ⟨required, target, hstable, hfail⟩
-  exact ⟨required, target, identity_sufficient required, hstable, hfail⟩
+  exact ⟨required, target, ⟨required, by funext n; rfl⟩, hstable, hfail⟩
 
 /--
 Bounded staleness is therefore a concrete sufficient condition for preserving
