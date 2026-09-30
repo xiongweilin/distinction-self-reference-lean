@@ -17,6 +17,21 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Reject unfinished or project-local axiom declarations
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' \
+              --include='*.lean' DistinctionSelfReference DistinctionSelfReference.lean; then
+            echo "Found sorry/admit in project Lean sources."
+            exit 1
+          fi
+          if grep -RInE '^[[:space:]]*(axiom|constant)[[:space:]]' \
+              --include='*.lean' DistinctionSelfReference DistinctionSelfReference.lean; then
+            echo "Found project-local axiom/constant declaration."
+            exit 1
+          fi
+
       - name: Install Elan
         run: |
           curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
@@ -30,3 +45,33 @@ jobs:
 
       - name: Build
         run: lake build
+
+      - name: Audit v1.0 core theorem names and axioms
+        run: lake env lean DistinctionSelfReference/FreezeAudit.lean
+
+  proof-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Elan
+        run: |
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Install proof-check sandbox
+        run: |
+          if ! command -v bwrap >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y bubblewrap
+          fi
+          bwrap --version
+
+      - name: Resolve dependencies and create manifest
+        run: lake update
+
+      - name: Kernel replay
+        run: lake check
+
+      - name: Paranoid independent replay
+        run: lake check --paranoid
