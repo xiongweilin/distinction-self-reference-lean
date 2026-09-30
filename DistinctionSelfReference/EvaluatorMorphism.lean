@@ -179,6 +179,16 @@ def comp
     preservesGoal := fun _ => rfl
   }
 
+def toEvaluatorMorphism
+    {Version : Type u} {State : Type v}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    {old new : Version}
+    (bridge : VersionBridge evaluators goal old new) :
+    EvaluatorMorphism (evaluators old) (evaluators new) goal goal where
+  mapState := id
+  certificate := bridge.certificate
+
 theorem preservesJudgments
     {Version : Type u} {State : Type v}
     (evaluators : Version → Evaluator State)
@@ -211,6 +221,15 @@ def HasVersionBridge
     (goal : State → Nat)
     (old new : Version) : Prop :=
   Nonempty (VersionBridge evaluators goal old new)
+
+theorem hasVersionBridge_of_preservesJudgments
+    {Version : Type u} {State : Type v}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    {old new : Version}
+    (h : PreservesJudgments evaluators old new) :
+    HasVersionBridge evaluators goal old new :=
+  ⟨VersionBridge.ofPreservesJudgments evaluators goal h⟩
 
 theorem hasVersionBridge_refl
     {Version : Type u} {State : Type v}
