@@ -207,5 +207,84 @@ theorem familyGap_trans
   exact riskGapAtMost_trans (C loss) ε δ loss A B G prior
     (hAB loss hloss) (hBG loss hloss)
 
+/--
+A Le Cam-inspired uniform risk surrogate over all bounded losses for one
+decision space.
+
+This quantifies over every loss together with any declared bound `C`.
+It is stronger than a hand-picked loss family, but still deliberately stops
+short of identifying the quantity with total-variation Le Cam deficiency.
+-/
+def UniformBoundedRiskGapAtMost
+    {Theta : Type u} {X : Type v} {Y : Type w} {Decision : Type z}
+    [MeasurableSpace Theta] [MeasurableSpace X] [MeasurableSpace Y]
+    [MeasurableSpace Decision]
+    (ε : ℝ≥0∞)
+    (approx : Kernel Theta X) (gold : Kernel Theta Y)
+    (prior : Measure Theta) : Prop :=
+  ∀ (loss : Theta → Decision → ℝ≥0∞) (C : ℝ≥0∞),
+    (∀ θ d, loss θ d ≤ C) →
+      RiskGapAtMost C ε loss approx gold prior
+
+theorem uniformBoundedRiskGap_mono
+    {Theta : Type u} {X : Type v} {Y : Type w} {Decision : Type z}
+    [MeasurableSpace Theta] [MeasurableSpace X] [MeasurableSpace Y]
+    [MeasurableSpace Decision]
+    {ε ε' : ℝ≥0∞}
+    {approx : Kernel Theta X} {gold : Kernel Theta Y}
+    {prior : Measure Theta}
+    (hε : ε ≤ ε')
+    (h : UniformBoundedRiskGapAtMost ε approx gold prior) :
+    UniformBoundedRiskGapAtMost ε' approx gold prior := by
+  intro loss C hC
+  exact riskGapAtMost_mono hε (h loss C hC)
+
+theorem exact_simulation_has_zero_uniformBoundedRiskGap
+    {Theta : Type u} {X : Type v} {Y : Type w} {Decision : Type z}
+    [MeasurableSpace Theta] [MeasurableSpace X] [MeasurableSpace Y]
+    [MeasurableSpace Decision]
+    (approx : Kernel Theta X) (gold : Kernel Theta Y)
+    (prior : Measure Theta)
+    (hsim : GarblesTo approx gold) :
+    UniformBoundedRiskGapAtMost (Decision := Decision) 0 approx gold prior := by
+  intro loss C _
+  exact exact_simulation_has_zero_gap C loss approx gold prior hsim
+
+theorem uniformBoundedRiskGap_source_of_garbling
+    {Theta : Type u} {X : Type v} {X' : Type w} {Y : Type z}
+    {Decision : Type*}
+    [MeasurableSpace Theta] [MeasurableSpace X] [MeasurableSpace X']
+    [MeasurableSpace Y] [MeasurableSpace Decision]
+    (ε : ℝ≥0∞)
+    (source : Kernel Theta X) (garbled : Kernel Theta X')
+    (gold : Kernel Theta Y)
+    (prior : Measure Theta)
+    (hgarble : GarblesTo source garbled)
+    (hgap : UniformBoundedRiskGapAtMost (Decision := Decision)
+      ε garbled gold prior) :
+    UniformBoundedRiskGapAtMost (Decision := Decision)
+      ε source gold prior := by
+  intro loss C hC
+  exact source_inherits_gap_bound_from_garbling
+    C ε loss source garbled gold prior hgarble (hgap loss C hC)
+
+theorem uniformBoundedRiskGap_trans
+    {Theta : Type u} {X : Type v} {Y : Type w} {Z : Type z}
+    {Decision : Type*}
+    [MeasurableSpace Theta] [MeasurableSpace X] [MeasurableSpace Y]
+    [MeasurableSpace Z] [MeasurableSpace Decision]
+    (ε δ : ℝ≥0∞)
+    (A : Kernel Theta X) (B : Kernel Theta Y) (G : Kernel Theta Z)
+    (prior : Measure Theta)
+    (hAB : UniformBoundedRiskGapAtMost (Decision := Decision)
+      ε A B prior)
+    (hBG : UniformBoundedRiskGapAtMost (Decision := Decision)
+      δ B G prior) :
+    UniformBoundedRiskGapAtMost (Decision := Decision)
+      (ε + δ) A G prior := by
+  intro loss C hC
+  exact riskGapAtMost_trans C ε δ loss A B G prior
+    (hAB loss C hC) (hBG loss C hC)
+
 end QuantitativeGrounding
 end DistinctionSelfReference
