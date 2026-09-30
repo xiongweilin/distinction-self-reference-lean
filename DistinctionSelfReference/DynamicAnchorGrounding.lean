@@ -67,13 +67,19 @@ theorem eventuallyFresh_of_preservesStableGroundedBool
   have hsufficient :
       Sufficient (fun n : Nat => n) required :=
     ⟨required, by funext n; rfl⟩
+  have hstable' :
+      EventuallyConstant
+        (fun n => required ((fun k : Nat => k) n)) target := by
+    simpa using hstable
   rcases hpres
+      (World := Nat)
+      (Anchor := Nat)
       (anchor := fun n : Nat => n)
       (required := required)
-      (trajectory := fun n => n)
+      (trajectory := fun n : Nat => n)
       target
       hsufficient
-      hstable with
+      hstable' with
     ⟨post, hfactor, hdelayed⟩
   have hpost : required = post := by
     simpa [Function.comp_def] using hfactor
