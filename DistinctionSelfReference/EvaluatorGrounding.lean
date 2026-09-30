@@ -1,0 +1,186 @@
+import DistinctionSelfReference.LocalSufficiency
+import DistinctionSelfReference.ChangingEvaluator
+
+namespace DistinctionSelfReference
+namespace EvaluatorGrounding
+
+open LocalSufficiency
+open ChangingEvaluator
+
+universe u v
+
+/--
+Evaluator soundness is semantic, not spatial: every evaluator edge must
+increase the fixed external goal after that goal has been factored through
+the anchor.
+-/
+def SoundRelativeToAnchorFactor
+    {World : Type u}
+    {Anchor : Type v}
+    (anchor : World → Anchor)
+    (goal : World → Nat)
+    (evaluators : Nat → Evaluator Anchor) : Prop :=
+  ∀ anchorGoal : Anchor → Nat,
+    goal = anchorGoal ∘ anchor →
+    ∀ n a b,
+      (evaluators n).better a b →
+      anchorGoal a < anchorGoal b
+
+/--
+Baseline grounded-improvement theorem.
+
+If the anchor is sufficient for the external goal, evaluator judgments are
+sound for every valid anchor factorization of that goal, and every local step
+is evaluator-improving, then every finite nonempty trajectory prefix strictly
+improves the same fixed external goal.
+-/
+theorem grounded_local_improvement_implies_global_goal_improvement
+    {World : Type u}
+    {Anchor : Type v}
+    (anchor : World → Anchor)
+    (goal : World → Nat)
+    (evaluators : Nat → Evaluator Anchor)
+    (trajectory : Nat → World)
+    (hsufficient : Sufficient anchor goal)
+    (hsound : SoundRelativeToAnchorFactor anchor goal evaluators)
+    (hlocal :
+      LocalImprovement evaluators (fun n => anchor (trajectory n))) :
+    ∀ n, goal (trajectory 0) < goal (trajectory (n + 1)) := by
+  rcases hsufficient with ⟨anchorGoal, hfactor⟩
+  have hs :
+      ∀ n a b,
+        (evaluators n).better a b →
+        anchorGoal a < anchorGoal b :=
+    hsound anchorGoal hfactor
+  have hstep :
+      ∀ n, goal (trajectory n) < goal (trajectory (n + 1)) := by
+    intro n
+    rw [hfactor]
+    exact hs n _ _ (hlocal n)
+  intro n
+  induction n with
+  | zero =>
+      exact hstep 0
+  | succ n ih =>
+      exact lt_trans ih (hstep (n + 1))
+
+namespace ProxyDriftExample
+
+abbrev World := Bool × Bool
+
+/-- The actor sees only the first bit. -/
+def anchor : World → Bool :=
+  Prod.fst
+
+/-- The external goal depends only on the hidden second bit. -/
+def externalGoal : World → Nat
+  | (_, false) => 0
+  | (_, true) => 1
+
+/-- A coarse anchor-level score used by the validator. -/
+def anchorScore : Bool → Nat
+  | false => 0
+  | true => 1
+
+def evaluator₀ : Evaluator Bool where
+  better a b := a = b
+
+def evaluator₁ : Evaluator Bool where
+  better a b := a = b ∨ (a = false ∧ b = true)
+
+def evaluators : Nat → Evaluator Bool
+  | 0 => evaluator₀
+  | _ + 1 => evaluator₁
+
+/--
+Anchor validation checks only that evaluator-approved moves do not reduce the
+coarse anchor score.
+-/
+def AnchorValidated (evaluator : Evaluator Bool) : Prop :=
+  ∀ a b, evaluator.better a b → anchorScore a ≤ anchorScore b
+
+theorem evaluator₀_validated :
+    AnchorValidated evaluator₀ := by
+  intro a b hab
+  simpa [evaluator₀] using congrArg anchorScore hab
+
+theorem evaluator₁_validated :
+    AnchorValidated evaluator₁ := by
+  intro a b hab
+  rcases hab with hab | ⟨ha, hb⟩
+  · simpa [evaluator₁] using congrArg anchorScore hab
+  · subst a
+    subst b
+    simp [anchorScore]
+
+theorem every_evaluator_validated :
+    ∀ n, AnchorValidated (evaluators n) := by
+  intro n
+  cases n with
+  | zero =>
+      exact evaluator₀_validated
+  | succ n =>
+      exact evaluator₁_validated
+
+/--
+The evaluator really changes: version 1 accepts an anchor move that version 0
+does not.
+-/
+theorem evaluator_migration_changes_judgment :
+    ¬ evaluator₀.better false true ∧
+      evaluator₁.better false true := by
+  constructor <;> simp [evaluator₀, evaluator₁]
+
+/--
+The visible anchor never changes. Reality first regresses on the hidden goal
+and then stays there.
+-/
+def trajectory : Nat → World
+  | 0 => (false, true)
+  | _ + 1 => (false, false)
+
+theorem local_improvement_every_step :
+    LocalImprovement evaluators (fun n => anchor (trajectory n)) := by
+  intro n
+  cases n with
+  | zero =>
+      simp [evaluators, evaluator₀, trajectory, anchor]
+  | succ n =>
+      simp [evaluators, evaluator₁, trajectory, anchor]
+
+theorem anchor_ambiguous_for_external_goal :
+    Ambiguous anchor externalGoal := by
+  refine ⟨(false, true), (false, false), rfl, ?_⟩
+  simp [externalGoal]
+
+theorem anchor_insufficient_for_external_goal :
+    ¬ Sufficient anchor externalGoal :=
+  ambiguous_not_sufficient anchor_ambiguous_for_external_goal
+
+theorem external_goal_regresses_on_first_step :
+    externalGoal (trajectory 1) < externalGoal (trajectory 0) := by
+  simp [trajectory, externalGoal]
+
+/--
+Sharp proxy-drift counterexample.
+
+A finite external signal exists, evaluator migration occurs, every evaluator
+passes anchor-only validation, and every step is locally evaluator-improving;
+nevertheless the true external goal regresses because the anchor is
+insufficient for that goal.
+-/
+theorem validated_anchor_signal_does_not_prevent_proxy_regression :
+    (∀ n, AnchorValidated (evaluators n)) ∧
+    LocalImprovement evaluators (fun n => anchor (trajectory n)) ∧
+    (¬ Sufficient anchor externalGoal) ∧
+    externalGoal (trajectory 1) < externalGoal (trajectory 0) := by
+  exact ⟨
+    every_evaluator_validated,
+    local_improvement_every_step,
+    anchor_insufficient_for_external_goal,
+    external_goal_regresses_on_first_step⟩
+
+end ProxyDriftExample
+
+end EvaluatorGrounding
+end DistinctionSelfReference
