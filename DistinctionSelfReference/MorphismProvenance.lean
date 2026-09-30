@@ -281,6 +281,25 @@ The old/current example preserves every goal-improving judgment but does not
 preserve the whole evaluator relation. Therefore no full identity-state
 VersionBridge certificate can exist.
 -/
+def goalOnlyCandidate :
+    GoalOnlyMorphism
+      (evaluators .old) (evaluators .current) goal goal where
+  mapState := id
+  preservesGoal := fun _ => rfl
+
+/--
+Dropping judgment preservation is unsound: this goal-preserving candidate maps
+an old accepted edge to an edge rejected by the current evaluator.
+-/
+theorem goalOnlyCandidate_fails_judgment_transport :
+    (evaluators .old).better true false ∧
+    ¬ (evaluators .current).better
+      (goalOnlyCandidate.mapState true)
+      (goalOnlyCandidate.mapState false) := by
+  constructor
+  · simp [evaluators]
+  · simp [goalOnlyCandidate, evaluators]
+
 theorem no_full_version_bridge :
     ¬ HasVersionBridge evaluators goal .old .current := by
   rintro ⟨bridge⟩
