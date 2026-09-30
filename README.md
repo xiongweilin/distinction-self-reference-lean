@@ -232,7 +232,7 @@ PR #7 — **Grounded Branching & Archive Dynamics** is merged. It keeps five not
 
 PR #8 — **Typed / Modal / Computational Self-Reference** exists as a parallel draft gate only. It does not block v1.0 and currently claims no new theorem unless it sharpens the self-application threshold.
 
-PR #9 — **Framework Morphisms + guide Core** is implemented on its research branch. Cross-framework comparison now uses certified morphisms rather than raw role maps; the guide integration is restricted to its mathematically explicit dependency spine. PR #6 remains blocked on Foundation/toolchain alignment.
+PR #9 — **Framework Morphisms + guide Core** is implemented on its research branch. Cross-framework comparison now uses certified morphisms rather than raw role maps; genuine framework equivalence is represented by mutually inverse certified morphisms and preserves dominance automatically; the guide integration is restricted to its mathematically explicit dependency spine. PR #6 remains blocked on Foundation/toolchain alignment.
 
 ## Scope warning
 
