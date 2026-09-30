@@ -235,22 +235,17 @@ jobs:
           echo "memory.events:"
           cat /sys/fs/cgroup/memory.events 2>/dev/null || true
 
-          if ! swapon --show | grep -q .; then
-            echo "Enabling 8 GiB swap for the memory-intensive nanoda replay"
-            sudo fallocate -l 8G /swapfile
-            sudo chmod 600 /swapfile
-            sudo mkswap /swapfile
-            if sudo swapon /swapfile; then
-              sudo sysctl vm.swappiness=80 || true
-            else
-              echo "::warning::Runner does not permit swapon; continuing with RAM only"
-              sudo rm -f /swapfile
-            fi
-          fi
+          echo "Adding dedicated 16 GiB swap for nanoda in addition to any runner swap"
+          sudo fallocate -l 16G /swapfile-nanoda
+          sudo chmod 600 /swapfile-nanoda
+          sudo mkswap /swapfile-nanoda
+          sudo swapon /swapfile-nanoda
+          sudo sysctl vm.swappiness=90 || true
 
-          echo "=== resources after swap attempt ==="
+          echo "=== resources after dedicated swap ==="
           free -h
-          swapon --show || true
+          swapon --show
+          df -h /
 
       - name: Replay exact export with nanoda and resource telemetry
         shell: bash
