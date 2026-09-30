@@ -113,7 +113,7 @@ Formalize enough of Spencer-Brown's primary algebra to prove an explicit equival
 
 Status: **PARTIAL HERE**. `PrimaryBoolean.Form` now provides blank, juxtaposition, crossing, and variables; under the OR convention it translates bijectively at the raw-syntax level to a conventional `{false, OR, NOT}` expression language, and both translations preserve Boolean valuation semantics.
 
-The **full target remains open**: quotient by / derive the intended primary-algebra equations and prove Schwartz's stronger derivability-preserving equivalence, not merely a syntax/semantics correspondence.
+The full quotient/equational theory and Schwartz's stronger derivability-preserving equivalence remain **outside the frozen v1.0 scope**; the repository claims only the raw-syntax/semantic bridge proved here.
 
 ### P3.2 — Varela / Kleene three-valued bridge
 
@@ -121,7 +121,7 @@ Formalize Varela's self-reference calculus and prove the isomorphic translation 
 
 Status: **PARTIAL HERE**. `KleeneThree` now formalizes the Strong Kleene truth values, negation, conjunction, disjunction, Boolean embedding, De Morgan laws, and an explicit equivalence between the repository's three-state crossing carrier and K3 truth values. Under this equivalence, crossing is exactly K3 negation and the boundary state is exactly the unique unknown/undefined fixed point.
 
-The **full target remains open**: formalize Varela's syntax/initials and prove the Schwartz translation preserves and reflects derivability.
+Full Varela syntax/initials and a Schwartz-style derivability-preserving translation remain **outside the frozen v1.0 scope**.
 
 ### P3.3 — conservative Boolean-to-K3 semantic bridge
 
@@ -165,7 +165,7 @@ For a fixed-point-free endomap the corresponding diagonal is therefore unreprese
 
 Interpretation: the relevant incompatibility boundary is sharper than “representation versus distinction.” It is “fixed-point-free dynamics versus representation of the corresponding self-applied diagonal.”
 
-Next target: generalize from total function evaluators to typed / guarded / partial evaluators and compare which diagonal forms remain expressible.
+Partial and explicit-guard generalizations are proved later in P6.23. A further typed/modal/effectful strengthening was explored but deferred beyond v1.0 because it did not establish a sharper self-application threshold.
 
 ## Layer 5: computability self-reference
 
@@ -181,7 +181,7 @@ Computable transformations of program descriptions have extensional fixed points
 
 Status: **ESTABLISHED EXTERNAL**, already formalized in Mathlib as Nat.Partrec.Code.fixed_point and fixed_point₂, and instantiated here in DistinctionSelfReference.Computability.
 
-Next target: identify the weakest representation/evaluation conditions needed to connect the generic re-entry interface to program-code self-reference while keeping behavioral equality distinct from literal code equality.
+A sharper generic bridge from re-entry/representation interfaces to program-code self-reference remains an optional post-v1.0 direction; the frozen repository does not claim it.
 
 ## Layer 6: condition-added actor frameworks
 
@@ -462,7 +462,7 @@ Important limits:
 
 1. kernel soundness is still a trusted semantic obligation; making the checker syntactically small does not prove it sound;
 2. the finite bound is on consecutive strict capability growth, not on arbitrary version changes or capability plateaus;
-3. proof-check budgets are local to proposals; long-run budget dynamics remain open.
+3. at this phase boundary proof-check budgets were local to proposals; long-run and endogenous resource dynamics are addressed later in P6.20–P6.22.
 
 ### P6.20 — recurrent-version diagnostics, sustainable callability, kernel migration, and joint convergence
 
@@ -487,13 +487,13 @@ Results:
 
 Interpretation: version identity, capability progress, practical callability, checker trust, and reality alignment are now formally separated. A self-modifying process may keep changing versions without improving capabilities; may keep producing valid certificates without being executable under resource limits; and may migrate its checker safely only when trust transfer itself is explicitly justified.
 
-Important limits:
+Limits at this phase boundary, all addressed by later frozen phases:
 
-1. reality delay is currently fixed rather than variable or reordered;
-2. budgets are exogenous streams rather than resources changed by the upgrade process itself;
-3. predecessor-checked migration preserves an abstract trust invariant but does not yet model revocation/compromise recovery or nontrivial trust-domain expansion;
-4. finite capability bounds do not address infinite capability orders;
-5. the meta-framework still lacks the M5 invariant-core construction across incomparable feasible-minimal RSI frameworks.
+1. variable/reordered delay is addressed in P6.21 and characterized sharply in P6.22;
+2. endogenous resources are added in P6.21 and recast as a viability kernel in P6.22;
+3. compromise-aware delegation appears in P6.21 and threshold trust in P6.22;
+4. infinite capability orders appear in P6.21 and well-founded-rank obstructions in P6.22;
+5. invariant-core construction begins in P6.21, expands in P6.22, and is later lifted to certified framework morphisms in P6.29.
 
 ### P6.21 — variable-delay reality, endogenous resources, trust delegation, infinite capability order, and first M5 core
 
@@ -518,13 +518,13 @@ Results:
 
 Interpretation: reality alignment, practical execution, trust transfer, and capability growth each need their own long-run structural condition. The first invariant-core result also shows that M5 should compare frameworks after semantic translation rather than by literal intersection of their syntax-level assumptions.
 
-Important limits:
+Limits at this phase boundary and later closures:
 
-1. eventual freshness is currently proved sufficient but not yet characterized as necessary for all eventually stable reality processes;
-2. the endogenous-resource theorem gives a clean sufficient self-sustaining condition, not yet the full resource viability kernel;
-3. dual trust delegation has not yet been generalized to threshold/quorum compromise tolerance or fully ablated;
-4. infinite capability growth is separated from the finite case, but general well-founded ranks / chain-condition classifications remain open;
-5. the M5 instance currently extracts only the trust/soundness-transfer core, not the full RSI core spanning capability, invariant, reality, and resource roles.
+1. universal eventual freshness is characterized exactly for stable Boolean requirements in P6.22;
+2. the resource viability kernel is supplied in P6.22;
+3. threshold/quorum compromise tolerance receives a clean sufficient bound and counterexample in P6.22; a full Byzantine theory remains outside v1.0;
+4. well-founded-rank obstructions are supplied in P6.22, while rank-completeness classifications remain outside v1.0;
+5. the six-role RSI core is supplied in P6.22 and later recovered from certified morphism images in P6.29.
 
 ### P6.22 — exact scheduling, resource viability, threshold trust, ranked growth, and full RSI core
 
