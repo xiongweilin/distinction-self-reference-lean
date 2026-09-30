@@ -57,6 +57,22 @@ def comp
 
 end BridgeCertificate
 
+
+/--
+An intentionally weakened candidate that preserves only the external goal and
+does not certify evaluator judgments. It is used for a necessity countermodel;
+it is not the migration structure used by provenance transport.
+-/
+structure GoalOnlyMorphism
+    {SourceState : Type u} {TargetState : Type v}
+    (source : Evaluator SourceState)
+    (target : Evaluator TargetState)
+    (sourceGoal : SourceState → Nat)
+    (targetGoal : TargetState → Nat) : Type (max u v) where
+  mapState : SourceState → TargetState
+  preservesGoal :
+    ∀ s, targetGoal (mapState s) = sourceGoal s
+
 /--
 A morphism consists of an explicit state translation together with a
 checkable preservation certificate.
