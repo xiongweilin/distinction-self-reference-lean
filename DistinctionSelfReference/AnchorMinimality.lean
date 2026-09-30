@@ -49,9 +49,7 @@ def LeastSufficient
     (anchor : World → Anchor)
     (required : World → Choice) : Prop :=
   Sufficient anchor required ∧
-  ∀ {Other : Type z} (other : World → Other),
-    Sufficient other required →
-    Refines other anchor
+  Refines required anchor
 
 /--
 The target commitment itself is a canonical least sufficient anchor.
@@ -60,11 +58,24 @@ theorem required_is_least_sufficient
     {World : Type u}
     {Choice : Type w}
     (required : World → Choice) :
-    LeastSufficient required required := by
-  constructor
-  · exact refines_refl required
-  · intro Other other hs
-    exact hs
+    LeastSufficient required required :=
+  ⟨refines_refl required, refines_refl required⟩
+
+/--
+Every sufficient anchor refines every least sufficient anchor.
+-/
+theorem sufficient_refines_least
+    {World : Type u}
+    {Anchor : Type v}
+    {Choice : Type w}
+    {Other : Type z}
+    {anchor : World → Anchor}
+    {required : World → Choice}
+    {other : World → Other}
+    (hleast : LeastSufficient anchor required)
+    (hs : Sufficient other required) :
+    Refines other anchor :=
+  refines_trans hs hleast.2
 
 /--
 Every sufficient anchor must retain every distinction that the required
@@ -93,15 +104,8 @@ theorem leastSufficient_iff_equivalent_required
     LeastSufficient anchor required ↔
       InfoEquivalent anchor required := by
   constructor
-  · intro hleast
-    constructor
-    · exact hleast.1
-    · exact hleast.2 required (refines_refl required)
-  · rintro ⟨har, hra⟩
-    constructor
-    · exact har
-    · intro Other other hs
-      exact refines_trans hs hra
+  · exact fun hleast => ⟨hleast.1, hleast.2⟩
+  · exact fun h => ⟨h.1, h.2⟩
 
 /--
 Least sufficient anchors are unique up to deterministic information
@@ -119,8 +123,8 @@ theorem leastSufficient_unique_up_to_info
     (hb : LeastSufficient b required) :
     InfoEquivalent a b := by
   constructor
-  · exact hb.2 a ha.1
-  · exact ha.2 b hb.1
+  · exact refines_trans ha.1 hb.2
+  · exact refines_trans hb.1 ha.2
 
 /--
 A sufficient anchor cannot identify two worlds that the target commitment
