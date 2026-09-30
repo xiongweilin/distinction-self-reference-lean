@@ -1,5 +1,7 @@
 # Foundation bridge for self-certification limits
 
+[English](FoundationBridge.md) | [简体中文](./FoundationBridge.zh-CN.md)
+
 The RSI trust layer should not reimplement arithmetic metamathematics.
 
 ## Upstream formalization
