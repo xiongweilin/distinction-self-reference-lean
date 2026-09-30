@@ -6,6 +6,8 @@ dependent phase begins.
 
 ## PR #4 — Quantitative Grounding
 
+Status: **implemented; final merge gate is successful CI on the synchronized PR head.**
+
 Goal: move from exact sufficiency / zero Bayes risk to quantitative,
 decision-relative approximate sufficiency.
 
@@ -29,6 +31,8 @@ Acceptance:
 - post-processing cannot create a risk-gap guarantee;
 - family scheduling has an iff criterion and a strict example;
 - final PR head passes `lake build`.
+
+Implemented additions also include a uniform bounded-loss risk surrogate and a concrete Boolean 0–1-loss strict garbling example.
 
 ## PR #5 — Evaluator Morphisms & Proof-Carrying Provenance
 
