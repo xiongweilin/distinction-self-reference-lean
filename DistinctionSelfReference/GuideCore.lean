@@ -1,6 +1,8 @@
 /-
 Guide dependency spine formalization.
 -/
+import Mathlib.Data.Set.Finite.Basic
+import Mathlib.Algebra.CharZero.Infinite
 import DistinctionSelfReference.MetaFramework
 import DistinctionSelfReference.ConditionalComposition
 import Mathlib.Order.Interval.Set.Infinite
