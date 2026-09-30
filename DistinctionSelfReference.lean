@@ -91,3 +91,5 @@ import DistinctionSelfReference.PartialLawvere
 import DistinctionSelfReference.GuardedLawvere
 import DistinctionSelfReference.Computability
 import DistinctionSelfReference.MetaFramework
+
+import DistinctionSelfReference.GroundedArchiveDynamics
