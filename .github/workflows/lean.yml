@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Reject unfinished or project-local axiom declarations
+        run: python3 .github/scripts/audit_lean_sources.py
+
       - name: Install Elan
         run: |
           curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
@@ -30,3 +33,343 @@ jobs:
 
       - name: Build
         run: lake build
+
+      - name: Audit v1.0 core theorem names and axioms
+        run: lake env lean DistinctionSelfReference/FreezeAudit.lean
+
+      - name: Export checked root module once
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p proof-export
+          lake env leanexport DistinctionSelfReference > proof-export/solution.export
+          test -s proof-export/solution.export
+          echo "full export bytes=$(wc -c < proof-export/solution.export)"
+
+      - name: Export project-constant shards for nanoda
+        shell: bash
+        run: |
+          set -euo pipefail
+          SHARD_COUNT=8
+          SHARD_DIR=proof-export/nanoda-shards
+          mkdir -p "$SHARD_DIR"
+
+          python3 .github/scripts/extract_project_constants.py \
+            proof-export/solution.export \
+            > proof-export/project-constants.txt
+          test -s proof-export/project-constants.txt
+
+          total="$(wc -l < proof-export/project-constants.txt)"
+          echo "project constants=$total"
+          if [ "$total" -lt "$SHARD_COUNT" ]; then
+            echo "Too few project constants for $SHARD_COUNT shards" >&2
+            exit 1
+          fi
+
+          for i in $(seq 0 $((SHARD_COUNT - 1))); do
+            : > "$SHARD_DIR/roots-$i.txt"
+          done
+
+          awk -v n="$SHARD_COUNT" '
+            { file=sprintf("proof-export/nanoda-shards/roots-%d.txt", (NR-1)%n); print >> file }
+          ' proof-export/project-constants.txt
+
+          for i in $(seq 0 $((SHARD_COUNT - 1))); do
+            roots="$SHARD_DIR/roots-$i.txt"
+            export_file="$SHARD_DIR/shard-$i.export"
+            mapfile -t names < "$roots"
+            test "${#names[@]}" -gt 0
+            echo "exporting shard $i roots=${#names[@]}"
+            lake env leanexport DistinctionSelfReference -- "${names[@]}" > "$export_file"
+            test -s "$export_file"
+            echo "shard $i bytes=$(wc -c < "$export_file")"
+          done
+
+          cat "$SHARD_DIR"/roots-*.txt | sort -u > "$SHARD_DIR/all-roots.txt"
+          cmp proof-export/project-constants.txt "$SHARD_DIR/all-roots.txt"
+
+          {
+            echo -e "shard\troots\tbytes"
+            for i in $(seq 0 $((SHARD_COUNT - 1))); do
+              echo -e "$i\t$(wc -l < "$SHARD_DIR/roots-$i.txt")\t$(wc -c < "$SHARD_DIR/shard-$i.export")"
+            done
+          } | tee "$SHARD_DIR/manifest.tsv"
+
+      - name: Upload proof export
+        uses: actions/upload-artifact@v4
+        with:
+          name: proof-export-${{ github.sha }}
+          path: proof-export/solution.export
+          if-no-files-found: error
+          compression-level: 1
+
+      - name: Upload nanoda shard exports
+        uses: actions/upload-artifact@v4
+        with:
+          name: nanoda-shards-${{ github.sha }}
+          path: |
+            proof-export/project-constants.txt
+            proof-export/nanoda-shards/
+          if-no-files-found: error
+          compression-level: 1
+
+  kernel-replay:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Elan
+        run: |
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Download proof export
+        uses: actions/download-artifact@v5
+        with:
+          name: proof-export-${{ github.sha }}
+          path: proof-export
+
+      - name: Install restricted Bubblewrap AppArmor profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -q
+          sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=l \
+            apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
+          profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          if [ -f "$profile" ]; then
+            sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
+            sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          fi
+          bwrap --version
+          bwrap --unshare-user --uid 0 --gid 0 --ro-bind / / /bin/true
+
+      - name: Kernel replay from exact build export
+        run: lake check --from-export=proof-export/solution.export
+
+  bundled-checker:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - checker: lean-paranoid
+            runner: ubuntu-latest
+          - checker: lean4lean
+            runner: ubuntu-latest
+          - checker: con-leche
+            runner: ubuntu-latest
+          - checker: con-ron
+            runner: ubuntu-latest
+    name: bundled-checker (${{ matrix.checker }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Elan and pinned toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/lean" --version
+
+      - name: Download proof export
+        uses: actions/download-artifact@v5
+        with:
+          name: proof-export-${{ github.sha }}
+          path: proof-export
+
+      - name: Install restricted Bubblewrap AppArmor profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -q
+          sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=l \
+            apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
+          profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          if [ -f "$profile" ]; then
+            sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
+            sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          fi
+          bwrap --version
+          bwrap --unshare-user --uid 0 --gid 0 --ro-bind / / /bin/true
+
+      - name: Replay exact export with ${{ matrix.checker }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          SYSROOT="$(dirname "$(dirname "$(elan which lean)")")"
+          EXPORT="$(realpath proof-export/solution.export)"
+          CHECKER="${{ matrix.checker }}"
+
+          sandbox() {
+            bwrap \
+              --ro-bind / / \
+              --tmpfs /home \
+              --tmpfs /root \
+              --tmpfs /run/user \
+              --tmpfs /tmp \
+              --dir /tmp/home \
+              --dev /dev \
+              --proc /proc \
+              --clearenv \
+              --setenv HOME /tmp/home \
+              --setenv LEAN_ABORT_ON_PANIC 1 \
+              --ro-bind "$SYSROOT" "$SYSROOT" \
+              --ro-bind "$EXPORT" "$EXPORT" \
+              --unshare-all \
+              --die-with-parent \
+              --new-session \
+              --chdir /tmp \
+              -- "$@"
+          }
+
+          case "$CHECKER" in
+            lean-paranoid)
+              sandbox "$SYSROOT/bin/leanchecker-paranoid" \
+                --silent --from-export "$EXPORT"
+              ;;
+            lean4lean)
+              sandbox "$SYSROOT/bin/lean4lean" --import "$EXPORT"
+              ;;
+            con-leche)
+              sandbox "$SYSROOT/bin/con-leche" "$EXPORT"
+              ;;
+            con-ron)
+              sandbox "$SYSROOT/bin/con-ron" "$EXPORT"
+              ;;
+            *)
+              echo "Unknown bundled checker: $CHECKER" >&2
+              exit 2
+              ;;
+          esac
+
+  nanoda-shard:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+    name: bundled-checker (nanoda shard ${{ matrix.shard }})
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Elan and pinned toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/lean" --version
+
+      - name: Download nanoda shard exports
+        uses: actions/download-artifact@v5
+        with:
+          name: nanoda-shards-${{ github.sha }}
+          path: proof-export
+
+      - name: Install Bubblewrap and shard diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -q
+          sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=l \
+            apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles time
+
+          profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          if [ -f "$profile" ]; then
+            sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
+            sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          fi
+          bwrap --version
+          bwrap --unshare-user --uid 0 --gid 0 --ro-bind / / /bin/true
+
+          # A shard should fit in RAM, but a modest swap cushion prevents runner
+          # eviction from transient pressure without turning paging into the algorithm.
+          sudo fallocate -l 4G /swapfile-nanoda
+          sudo chmod 600 /swapfile-nanoda
+          sudo mkswap /swapfile-nanoda
+          sudo swapon /swapfile-nanoda || true
+
+          free -h
+          swapon --show || true
+
+      - name: Replay nanoda shard ${{ matrix.shard }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          SYSROOT="$(dirname "$(dirname "$(elan which lean)")")"
+          SHARD="${{ matrix.shard }}"
+          EXPORT="$(realpath "proof-export/nanoda-shards/shard-$SHARD.export")"
+          ROOTS="$(realpath "proof-export/nanoda-shards/roots-$SHARD.txt")"
+          CONFIG="$(pwd)/proof-export/nanoda-shard-$SHARD.json"
+          TIMELOG="$(pwd)/proof-export/nanoda-time-$SHARD.txt"
+          TELEMETRY="$(pwd)/proof-export/nanoda-telemetry-$SHARD.txt"
+
+          test -s "$EXPORT"
+          test -s "$ROOTS"
+          echo "shard=$SHARD roots=$(wc -l < "$ROOTS") bytes=$(wc -c < "$EXPORT")"
+
+          python3 -c 'import json,sys; export_path,config_path=sys.argv[1],sys.argv[2]; json.dump({"use_stdin":False,"export_file_path":export_path,"permitted_axioms":["propext","Classical.choice","Quot.sound","Lean.trustCompiler"],"unpermitted_axiom_hard_error":False,"num_threads":1,"nat_extension":True,"string_extension":True,"print_success_message":True}, open(config_path,"w",encoding="utf-8"))' "$EXPORT" "$CONFIG"
+          CONFIG="$(realpath "$CONFIG")"
+
+          set +e
+          /usr/bin/time -v -o "$TIMELOG" \
+            bwrap \
+              --ro-bind / / \
+              --tmpfs /home \
+              --tmpfs /root \
+              --tmpfs /run/user \
+              --tmpfs /tmp \
+              --dir /tmp/home \
+              --dev /dev \
+              --proc /proc \
+              --clearenv \
+              --setenv HOME /tmp/home \
+              --setenv LEAN_ABORT_ON_PANIC 1 \
+              --ro-bind "$SYSROOT" "$SYSROOT" \
+              --ro-bind "$EXPORT" "$EXPORT" \
+              --ro-bind "$CONFIG" "$CONFIG" \
+              --unshare-all \
+              --die-with-parent \
+              --new-session \
+              --chdir /tmp \
+              -- "$SYSROOT/bin/nanoda_bin" "$CONFIG" &
+          checker_pid=$!
+
+          (
+            while kill -0 "$checker_pid" 2>/dev/null; do
+              echo "=== $(date -u +%FT%TZ) shard=$SHARD ==="
+              free -m
+              ps -eo pid,ppid,rss,vsz,comm --sort=-rss | head -8
+              sleep 30
+            done
+          ) | tee "$TELEMETRY" &
+          monitor_pid=$!
+
+          wait "$checker_pid"
+          rc=$?
+          kill "$monitor_pid" 2>/dev/null || true
+          wait "$monitor_pid" 2>/dev/null || true
+          set -e
+
+          echo "=== nanoda shard $SHARD resource summary ==="
+          cat "$TIMELOG" || true
+          exit "$rc"
+
+      - name: Upload nanoda shard diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nanoda-diagnostics-${{ matrix.shard }}-${{ github.sha }}
+          path: |
+            proof-export/nanoda-time-${{ matrix.shard }}.txt
+            proof-export/nanoda-telemetry-${{ matrix.shard }}.txt
+          if-no-files-found: warn

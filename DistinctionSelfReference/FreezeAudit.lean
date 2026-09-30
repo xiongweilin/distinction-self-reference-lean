@@ -1,0 +1,29 @@
+import DistinctionSelfReference
+
+/-!
+# v1.0 core theorem audit
+
+This file is intentionally not imported by the library root. CI elaborates it
+separately so the selected public theorem names cannot silently disappear.
+
+`#print axioms` also records the kernel-level assumptions used by each selected
+core theorem. The stronger `lake check` jobs are responsible for rejecting
+non-standard axioms across the complete default target.
+-/
+
+#print axioms DistinctionSelfReference.InvolutiveDistinction.boundary_or_twoCycle
+#print axioms DistinctionSelfReference.InvolutiveDistinction.existsBoundary_of_odd_natCard
+#print axioms DistinctionSelfReference.LogicBridge.position_iff_determined
+#print axioms DistinctionSelfReference.FutureDistinction.regular_iff_finite_future_states
+#print axioms DistinctionSelfReference.Bisimulation.System.subset_bisimilar_of_postfixed
+#print axioms DistinctionSelfReference.Viability.ControlledSystem.kernel_fixed
+#print axioms DistinctionSelfReference.LocalSufficiency.sufficient_iff_not_ambiguous
+#print axioms DistinctionSelfReference.ConditionalComposition.witness_has_recovery
+#print axioms DistinctionSelfReference.QuantitativeGrounding.approximatelyGrounded_zero_iff
+#print axioms DistinctionSelfReference.EvaluatorMorphisms.hasVersionBridge_trans
+#print axioms DistinctionSelfReference.GroundedArchiveDynamics.novelCapability_of_groundedFrontierProgress
+#print axioms DistinctionSelfReference.FrameworkMorphisms.FrameworkMorphism.preservesFeasibleSufficient
+#print axioms DistinctionSelfReference.FrameworkMorphisms.FrameworkEquivalence.preservesDominance
+#print axioms DistinctionSelfReference.RSIFrameworkMorphisms.morphismRoleCore_eq_legacy_fullCore
+#print axioms DistinctionSelfReference.GuideCore.effectiveFinitude_does_not_imply_finite_state
+#print axioms DistinctionSelfReference.GuideCore.conditionalComposition_minimal
