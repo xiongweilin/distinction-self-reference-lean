@@ -234,8 +234,8 @@ theorem uniformBoundedRiskGap_mono
     {approx : Kernel Theta X} {gold : Kernel Theta Y}
     {prior : Measure Theta}
     (hε : ε ≤ ε')
-    (h : UniformBoundedRiskGapAtMost ε approx gold prior) :
-    UniformBoundedRiskGapAtMost ε' approx gold prior := by
+    (h : UniformBoundedRiskGapAtMost (Decision := Decision) ε approx gold prior) :
+    UniformBoundedRiskGapAtMost (Decision := Decision) ε' approx gold prior := by
   intro loss C hC
   exact riskGapAtMost_mono hε (h loss C hC)
 
