@@ -273,7 +273,7 @@ theorem finite_paretoFrontier_dominanceComplete
     constructor
     · exact hymax.1
     · intro z hz hyz
-      exact hyz.not_le (hymax.2 hz hyz.le)
+      exact (not_le_of_gt hyz) (hymax.2 hz (le_of_lt hyz))
 
 /--
 One frontier strictly dominates another when every old frontier point is
@@ -365,9 +365,10 @@ theorem frontier_eq_singleton (n : Nat) :
   · intro hx
     rcases hx with ⟨hxn, hmax⟩
     have hnot : ¬ x < n := hmax n (by simp [retained])
-    have hxeq : x = n := by
-      omega
-    simpa [hxeq]
+    change x ≤ n at hxn
+    have hnx : n ≤ x := le_of_not_gt hnot
+    have hxeq : x = n := Nat.le_antisymm hxn hnx
+    simp [hxeq]
   · intro hx
     have hxeq : x = n := by
       simpa using hx
