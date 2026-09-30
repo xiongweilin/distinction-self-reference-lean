@@ -71,8 +71,11 @@ theorem eventuallyFresh_of_preservesStableGroundedBool
   rcases hdelayed with ⟨N, hN⟩
   refine ⟨N, ?_⟩
   intro n hn
-  rw [← hpoint (S.source n)]
-  exact hN n hn
+  change required (S.source n) = target
+  calc
+    required (S.source n) = post (required (S.source n)) :=
+      (hpoint (S.source n)).symm
+    _ = target := hN n hn
 
 /--
 Exact delayed-grounding criterion:
