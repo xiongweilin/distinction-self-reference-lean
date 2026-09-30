@@ -12,6 +12,8 @@ open EvaluatorGrounding
 open EvaluatorProvenance
 open EvidenceDependency
 open CapabilityOrder
+open MorphismProvenance
+open EvaluatorMorphisms
 
 universe u
 
@@ -62,6 +64,142 @@ theorem goalFrontierProgress_of_evaluatorFrontierProgress
   intro x hx
   rcases hprogress x hx with ⟨y, hy, hxy⟩
   exact ⟨y, hy, hsound hxy⟩
+
+/--
+A fixed bounded external objective forbids strict grounded frontier progress at
+every step forever.
+
+This is deliberately stronger and more relevant to grounded archive dynamics
+than bare WQO: the obstruction comes from the fixed external objective itself.
+-/
+theorem boundedGoal_forbids_perpetual_goalFrontierProgress
+    {Version : Type u}
+    (goal : Version → Nat)
+    (frontier : Nat → Archive Version)
+    (B : Nat)
+    (h0 : (frontier 0).Nonempty)
+    (hbound :
+      ∀ n x, x ∈ frontier n → goal x ≤ B)
+    (hprogress :
+      ∀ n,
+        GoalFrontierProgress goal
+          (frontier n) (frontier (n + 1))) :
+    False := by
+  classical
+  let first : {x // x ∈ frontier 0} :=
+    ⟨h0.choose, h0.choose_spec⟩
+  let next :
+      ∀ n, {x // x ∈ frontier n} →
+        {y // y ∈ frontier (n + 1)} :=
+    fun n x =>
+      ⟨(hprogress n x.1 x.2).choose,
+        (hprogress n x.1 x.2).choose_spec.1⟩
+  let seq : ∀ n, {x // x ∈ frontier n} :=
+    fun n => Nat.rec first (fun n x => next n x) n
+  have hseq_succ :
+      ∀ n, seq (n + 1) = next n (seq n) := by
+    intro n
+    rfl
+  have hstep :
+      ∀ n, goal (seq n).1 < goal (seq (n + 1)).1 := by
+    intro n
+    rw [hseq_succ n]
+    simpa [next] using
+      (hprogress n (seq n).1 (seq n).2).choose_spec.2
+  have hstrict : StrictMono (fun n => goal (seq n).1) :=
+    strictMono_nat_of_lt_succ hstep
+  have hlower : B + 1 ≤ goal (seq (B + 1)).1 :=
+    hstrict.id_le (B + 1)
+  have hupper : goal (seq (B + 1)).1 ≤ B :=
+    hbound (B + 1) (seq (B + 1)).1 (seq (B + 1)).2
+  omega
+
+/--
+The same stopping criterion applies to evaluator-relative frontier progress once
+every evaluator version is grounded in the same bounded external goal.
+-/
+theorem boundedGoal_forbids_perpetual_groundedEvaluatorProgress
+    {Version : Type u}
+    (evaluators : Nat → Evaluator Version)
+    (goal : Version → Nat)
+    (frontier : Nat → Archive Version)
+    (B : Nat)
+    (h0 : (frontier 0).Nonempty)
+    (hbound :
+      ∀ n x, x ∈ frontier n → goal x ≤ B)
+    (hsound :
+      ∀ n, GoalSoundEvaluator (evaluators n) goal)
+    (hprogress :
+      ∀ n,
+        EvaluatorFrontierProgress (evaluators n)
+          (frontier n) (frontier (n + 1))) :
+    False := by
+  apply boundedGoal_forbids_perpetual_goalFrontierProgress
+    goal frontier B h0 hbound
+  intro n
+  exact goalFrontierProgress_of_evaluatorFrontierProgress
+    (evaluators n) goal (frontier n) (frontier (n + 1))
+    (hsound n) (hprogress n)
+
+/--
+An explicit version bridge transports an entire historical evidence archive
+into the dependency-current view when it covers every record and every
+transitive dependency of every record.
+-/
+theorem coveredEvidenceArchive_transports_under_bridge
+    {Version : Type u} {State Claim : Type*}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    {old new : Version}
+    (bridge : VersionBridge evaluators goal old new)
+    (dependsOn :
+      Evidence Version Claim → Evidence Version Claim → Prop)
+    (history : Archive (Evidence Version Claim))
+    (hself :
+      ∀ e, e ∈ history →
+        CoveredSource old new e.source)
+    (hdeps :
+      ∀ e, e ∈ history →
+        ∀ dependency,
+          Relation.TransGen dependsOn e dependency →
+          CoveredSource old new dependency.source) :
+    history ⊆
+      DependencyCurrentHistory
+        (BridgePolicy evaluators goal)
+        new dependsOn history := by
+  intro e he
+  exact ⟨he,
+    bridge_transports_dependency_evidence
+      evaluators goal bridge dependsOn e
+      (hself e he) (hdeps e he)⟩
+
+/--
+If a retained historical archive contains unsupported evidence from an old
+evaluator version, then that whole archive cannot be treated as current after
+migration merely because it was retained.
+-/
+theorem retainedArchive_not_all_current_without_bridge
+    {Version : Type u} {State Claim : Type*}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    {old new : Version}
+    (hne : old ≠ new)
+    (hnobridge :
+      ¬ HasVersionBridge evaluators goal old new)
+    (history : Archive (Evidence Version Claim))
+    (e : Evidence Version Claim)
+    (he : e ∈ history)
+    (hsource : e.source = .evaluator old) :
+    ¬ history ⊆
+      CurrentHistory
+        (BridgePolicy evaluators goal)
+        new history := by
+  intro hall
+  have hcurrent := (hall he).2
+  rw [CurrentEvidence, hsource] at hcurrent
+  exact
+    (noBridge_invalidates_old_source
+      evaluators goal hne hnobridge) hcurrent
 
 /-- Capability-order progress becomes externally grounded progress whenever the
 capability order itself is sound for the fixed external goal. -/
