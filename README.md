@@ -232,7 +232,9 @@ PR #7 — **Grounded Branching & Archive Dynamics** is merged. It keeps five not
 
 PR #8 — **Typed / Modal / Computational Self-Reference** exists as a parallel draft gate only. It does not block v1.0 and currently claims no new theorem unless it sharpens the self-application threshold.
 
-PR #9 — **Framework Morphisms + guide Core** is implemented on its research branch. Cross-framework comparison now uses certified morphisms rather than raw role maps; the guide integration is restricted to its mathematically explicit dependency spine. PR #6 remains blocked on Foundation/toolchain alignment.
+PR #9 — **Framework Morphisms + guide Core** is merged. Cross-framework comparison now uses certified morphisms rather than raw role maps; the guide integration is restricted to its mathematically explicit dependency spine.
+
+PR #10 — **v1.0 pre-freeze proof hardening** is the current mainline gate. It adds comment-aware source auditing, a core theorem/axiom audit, exact proof export, default-kernel replay, and the complete bundled independent-checker set split across sandboxed CI jobs. The final v1.0 tag remains blocked until a stable Lean 4.35+ release is selected and pinned. PR #6 remains blocked on Foundation/toolchain alignment.
 
 ## Scope warning
 
