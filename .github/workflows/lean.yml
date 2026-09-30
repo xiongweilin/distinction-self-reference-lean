@@ -54,8 +54,9 @@ jobs:
           SHARD_DIR=proof-export/nanoda-shards
           mkdir -p "$SHARD_DIR"
 
-          lake env lean .github/lean/ListProjectConstants.lean \
-            | sort -u > proof-export/project-constants.txt
+          python3 .github/scripts/extract_project_constants.py \
+            proof-export/solution.export \
+            > proof-export/project-constants.txt
           test -s proof-export/project-constants.txt
 
           total="$(wc -l < proof-export/project-constants.txt)"
