@@ -706,6 +706,65 @@ The formal layer now provides:
 
 Interpretation: selective erasure is now structural rather than an ad hoc policy. Anchor evidence remains independent of evaluator migration; evaluator-dependent evidence migrates only when an explicit preservation certificate exists; dependency-qualified conclusions migrate only when their required provenance chain is covered.
 
+### P6.26 — grounded archive dynamics and progress-layer separation
+
+Combine archive growth, frontier dynamics, evaluator migration, and external
+grounding without identifying them.
+
+Status: **PROVED HERE / PHASE INTEGRATION COMPLETE IN CODE** in
+`GroundedArchiveDynamics`; final PR-head CI remains the merge gate.
+
+The formal layer distinguishes:
+
+1. strict archive/set growth;
+2. Pareto/frontier replacement;
+3. evaluator-relative frontier progress;
+4. progress in one fixed external goal;
+5. genuinely novel capability relative to the old archive.
+
+Strict countermodels show that these notions do not collapse:
+
+- an archive can grow strictly by adding only a dominated point while its
+  Pareto frontier is unchanged and no novel capability appears;
+- a frontier can be replaced in the wrong direction and create no novelty;
+- strict capability-frontier progress can be rejected by an unrelated evaluator;
+- evaluator-relative progress can coexist with regression of the fixed external
+  goal when the evaluator is not grounded;
+- fixed-goal grounded progress can occur without capability novelty when the
+  goal order is misaligned with the capability order;
+- capability novelty can be irrelevant to a fixed external goal;
+- retained historical evidence can coexist with stale evaluator-dependent
+  provenance after migration.
+
+Positive bridges identify the extra assumptions needed to move upward:
+
+- goal-sound evaluators lift evaluator-relative frontier progress to fixed-goal
+  progress;
+- capability-sound evaluators lift evaluator progress to strict capability
+  frontier progress;
+- evaluator morphisms and same-state version bridges transport certified
+  frontier progress;
+- dominance-complete antichain frontiers turn strict capability-frontier
+  progress into genuine capability novelty;
+- if the fixed external goal reflects the capability order, grounded frontier
+  progress can be lifted to capability progress and then to novelty under the
+  complete-antichain assumptions;
+- explicit version bridges transport covered historical evidence and every
+  transitive covered dependency into the current evidence view.
+
+Two independent stopping criteria sharpen the long-run story:
+
+- `WellFoundedGT` on the capability order forbids perpetual strict frontier
+  progress when every evaluator is capability-sound;
+- a single fixed external goal that is uniformly bounded on all frontiers
+  forbids perpetual grounded evaluator progress when every evaluator is
+  goal-sound.
+
+Interpretation: WQO/retained-archive stabilization, frontier replacement,
+grounded objective progress, and capability novelty are different mathematical
+questions. Archive cardinality growth alone is not evidence of RSI capability
+growth.
+
 ## Meta-framework target
 
 Let a framework be represented by:
