@@ -6,7 +6,7 @@ namespace MorphismProvenance
 
 open EvaluatorProvenance
 open EvidenceDependency
-open EvaluatorMorphism
+open EvaluatorMorphisms
 open ChangingEvaluator
 
 universe u v
