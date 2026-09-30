@@ -164,27 +164,30 @@ theorem reality_current :
   rw [CurrentEvidence]
   exact anchor_source_always_current preserves .current
 
+theorem independent_dependency_path_ends_at_reality
+    {d : Evidence Version Claim}
+    (hd : Relation.TransGen dependsOn independent d) :
+    d = reality := by
+  induction hd with
+  | single h =>
+      rcases h with h | h
+      · exact False.elim (by
+          rcases h with ⟨hbad, _⟩
+          simpa [derived, independent] using hbad)
+      · exact h.2
+  | tail hpath hlast ih =>
+      subst_vars
+      exfalso
+      simpa [dependsOn, reality, derived, independent, oldJudgment] using hlast
+
 theorem independent_current :
     DependencyCurrent preserves .current dependsOn independent := by
   apply anchor_dependencies_survive
   · rw [CurrentEvidence]
     exact anchor_source_always_current preserves .current
   · intro d hd
-    induction hd with
-    | single h =>
-        rcases h with h | h
-        · rcases h with ⟨hbad, _⟩
-          simp [derived, independent] at hbad
-        · rcases h with ⟨_, rfl⟩
-          rfl
-    | tail h₁ h₂ ih =>
-        rcases h₂ with h | h
-        · rcases h with ⟨hbad, _⟩
-          subst_vars
-          simp [dependsOn, derived, independent, reality, oldJudgment] at h₁
-        · rcases h with ⟨hbad, _⟩
-          subst_vars
-          simp [dependsOn, derived, independent, reality, oldJudgment] at h₁
+    rw [independent_dependency_path_ends_at_reality hd]
+    rfl
 
 /--
 Selective cascade: migration invalidates the claim whose proof depends on stale
