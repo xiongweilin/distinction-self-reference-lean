@@ -6,7 +6,7 @@ dependent phase begins.
 
 ## PR #4 — Quantitative Grounding
 
-Status: **implemented; final merge gate is successful CI on the synchronized PR head.**
+Status: **merged.**
 
 Goal: move from exact sufficiency / zero Bayes risk to quantitative,
 decision-relative approximate sufficiency.
@@ -36,6 +36,8 @@ Implemented additions also include a uniform bounded-loss risk surrogate and a c
 
 ## PR #5 — Evaluator Morphisms & Proof-Carrying Provenance
 
+Status: **implemented; final merge gate is successful CI on the synchronized PR head.**
+
 Goal: replace edge-by-edge evaluator preservation predicates by a compositional
 structure.
 
@@ -50,9 +52,7 @@ Expected interface:
 - countermodel showing that an invalid morphism can transport an invalid
   conclusion.
 
-The existing RQGM-style selective-erasure pattern should be treated as an
-application: evaluator-dependent evidence is invalidated without a bridge;
-independent anchor evidence survives; certified preserved evidence may migrate.
+The existing RQGM-style selective-erasure pattern is now captured structurally: evaluator-dependent evidence is invalidated without a bridge; independent anchor evidence survives; certified preserved evidence and covered dependency chains migrate. The phase also includes an ablation countermodel showing that preserving the external goal without preserving evaluator judgments is insufficient.
 
 ## PR #6 — Self-Certification / Loeb Boundary
 

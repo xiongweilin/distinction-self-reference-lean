@@ -150,6 +150,8 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/SelfCertificationBarrier.lean` — circular-certification countermodel, semantic transfer with an external anchor, and an abstract Löb reflection barrier.
 - `DistinctionSelfReference/ChangingEvaluator.lean` — exact acyclicity iff for strict global extensions; finite-state acyclicity iff Nat common potential; infinite-state counterexample separating the two.
 - `DistinctionSelfReference/EvaluatorGrounding.lean` — semantic grounding through sufficient anchors, global external-goal improvement, finite-anchor regression, and a perpetual hidden proxy cycle.
+- `DistinctionSelfReference/EvaluatorMorphism.lean` — first-class proof-carrying evaluator morphisms, goal/judgment preservation, identity/composition, and same-state version bridges.
+- `DistinctionSelfReference/MorphismProvenance.lean` — bridge-induced provenance policy, evidence/dependency transport, composed-certificate examples, and morphism ablation countermodels.
 - `DistinctionSelfReference/EvaluatorProvenance.lean` — evaluator-version provenance, selective current-evidence invalidation, exact/full preservation, and weaker goal-relevant evidence migration.
 - `DistinctionSelfReference/DynamicAnchorGrounding.lean` — exact eventual-freshness criterion for delayed/reordered grounded Boolean judgments, plus stale-schedule counterexamples.
 - `DistinctionSelfReference/TaskFamilyScheduling.lean` — exact family-relative schedule criterion, universal-family recovery of eventual freshness, and strict singleton-family separation.
@@ -211,7 +213,7 @@ The current frontier is therefore no longer “can a monotone RSI chain grow?”
 The remaining large program is now intentionally finite and phase-gated.
 See `Research/Roadmap.md` for the maintained PR #4 → PR #9 → v1.0 plan.
 
-PR #4 — **Quantitative Grounding** is now complete on its research branch and awaiting/undergoing merge.
+PR #4 — **Quantitative Grounding** is merged.
 
 It closes four items:
 
@@ -220,7 +222,7 @@ It closes four items:
 3. a concrete strict Boolean Bayes-risk degradation example under discard garbling;
 4. exact task-family scheduling criteria with both universal recovery and strict family-relative separation.
 
-The next mainline phase after merge is **PR #5 — Evaluator Morphisms & Proof-Carrying Provenance**. Evaluator morphisms, grounded archive dynamics, framework morphisms, and the Foundation/Löb integration remain separate later phases.
+PR #5 — **Evaluator Morphisms & Proof-Carrying Provenance** is implemented on its research branch. It packages evaluator migration as explicit compositional certificates, transports evidence/dependencies through certified bridges, and proves by countermodel that goal preservation alone is insufficient for judgment transport. Grounded archive dynamics, framework morphisms, and Foundation/Löb integration remain separate later phases.
 
 ## Scope warning
 
