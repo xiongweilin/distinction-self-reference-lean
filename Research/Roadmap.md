@@ -54,12 +54,12 @@ Expected interface:
 
 The existing RQGM-style selective-erasure pattern is now captured structurally: evaluator-dependent evidence is invalidated without a bridge; independent anchor evidence survives; certified preserved evidence and covered dependency chains migrate. The phase also includes an ablation countermodel showing that preserving the external goal without preserving evaluator judgments is insufficient.
 
-## PR #6 — Self-Certification / Loeb Boundary
+## PR #6 — Self-Certification / Löb Boundary
 
 Status: **blocked by toolchain alignment; tracked as issue #6.**
 
-Goal: replace the current abstract Loeb interface by concrete formal-logic
-instances: reflection, Loeb, Goedel II, and Tarski boundaries.
+Goal: replace the current abstract Löb interface by concrete formal-logic
+instances: reflection, Löb, Gödel II, and Tarski boundaries.
 
 Hard prerequisite: compatible Lean / Mathlib pins with
 `FormalizedFormalLogic/Foundation`.
@@ -84,7 +84,7 @@ Implemented targets include evaluator migration and evidence validity; explicit 
 
 ## PR #8 — Typed / Modal / Computational Self-Reference
 
-Status: **parallel draft PR #8; non-blocking and no new theorem claimed yet.**
+Status: **deferred beyond v1.0; draft closed without merge.**
 
 Goal: deepen the Lawvere / Kleene branch only where typing, partiality,
 modality, or effects sharpen the self-application threshold.
@@ -96,8 +96,9 @@ Promising axes:
 - effectful or partial self-application;
 - bridge to computability / Kleene recursion.
 
-This phase is parallelizable and is not a hard prerequisite for v1.0 unless it
-produces a genuinely sharper diagonal threshold.
+The draft did not establish a genuinely sharper diagonal threshold or a new
+computability bridge, so it is deliberately excluded from the frozen v1.0 scope
+rather than merged for roadmap completeness.
 
 ## PR #9 — Framework Morphisms + guide Core
 
@@ -144,9 +145,11 @@ local sufficiency
 
 ## v1.0 Freeze
 
-Status: **pre-freeze hardening is PR #10; final v1.0 tag remains blocked on a stable Lean 4.35+ toolchain pin.**
+Status: **PR #10 merged; repository content is pre-v1.0 frozen. The final v1.0 tag remains blocked on a stable Lean 4.35+ toolchain pin.**
 
 Goal: turn the research history into a stable proof artifact.
+
+No additional theory PR is mandatory before v1.0. The remaining mandatory work is release-toolchain stabilization and replay.
 
 Target acceptance:
 
@@ -178,7 +181,7 @@ PR #9 framework morphisms / guide core
   |
 v1.0 freeze
 
-PR #8 typed/modal self-reference can proceed independently.
+PR #8 typed/modal self-reference is deferred outside the mandatory v1.0 scope.
 ```
 
 ## External-theory positioning
@@ -188,8 +191,9 @@ PR #8 typed/modal self-reference can proceed independently.
   formalizes the risk-bound side first.
 - Proof-carrying-code ideas motivate explicit, independently checkable bridge
   certificates in PR #5, but the evaluator-morphism API is project-specific.
-- Guarded recursion / later modalities motivate PR #8, but standard guarded
-  fixed-point results alone are not sufficient project contributions.
+- Guarded recursion / later modalities motivated PR #8, but the draft was
+  closed because standard guarded fixed-point results alone were not a sufficient
+  project contribution.
 - Institution morphisms / comorphisms provide an established analogue for PR #9:
   translations between logical systems should preserve an explicit satisfaction
   or derivability structure.
