@@ -75,7 +75,8 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -q
-          sudo apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
+          sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a \
+            apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
           profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
           test -f "$profile"
           sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
@@ -86,16 +87,29 @@ jobs:
       - name: Kernel replay from exact build export
         run: lake check --from-export=proof-export/solution.export
 
-  paranoid-replay:
+  bundled-checker:
     needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        checker:
+          - lean-paranoid
+          - lean4lean
+          - nanoda
+          - con-leche
+          - con-ron
+    name: bundled-checker (${{ matrix.checker }})
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install Elan
+      - name: Install Elan and pinned toolchain
+        shell: bash
         run: |
+          set -euo pipefail
           curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/lean" --version
 
       - name: Download proof export
         uses: actions/download-artifact@v5
@@ -108,7 +122,8 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -q
-          sudo apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
+          sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a \
+            apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
           profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
           test -f "$profile"
           sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
@@ -116,5 +131,91 @@ jobs:
           bwrap --version
           bwrap --unshare-user --uid 0 --gid 0 --ro-bind / / /bin/true
 
-      - name: Paranoid independent replay from exact build export
-        run: lake check --from-export=proof-export/solution.export --paranoid
+      - name: Replay exact export with ${{ matrix.checker }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          SYSROOT="$(dirname "$(dirname "$(elan which lean)")")"
+          EXPORT="$(realpath proof-export/solution.export)"
+          CHECKER="${{ matrix.checker }}"
+
+          sandbox() {
+            bwrap \
+              --ro-bind / / \
+              --tmpfs /home \
+              --tmpfs /root \
+              --tmpfs /run/user \
+              --tmpfs /tmp \
+              --dir /tmp/home \
+              --dev /dev \
+              --proc /proc \
+              --clearenv \
+              --setenv HOME /tmp/home \
+              --setenv LEAN_ABORT_ON_PANIC 1 \
+              --ro-bind "$SYSROOT" "$SYSROOT" \
+              --ro-bind "$EXPORT" "$EXPORT" \
+              --unshare-all \
+              --die-with-parent \
+              --new-session \
+              --chdir /tmp \
+              -- "$@"
+          }
+
+          case "$CHECKER" in
+            lean-paranoid)
+              sandbox "$SYSROOT/bin/leanchecker-paranoid" \
+                --silent --from-export "$EXPORT"
+              ;;
+            lean4lean)
+              sandbox "$SYSROOT/bin/lean4lean" --import "$EXPORT"
+              ;;
+            nanoda)
+              CONFIG="$(pwd)/proof-export/nanoda.json"
+              python3 - "$EXPORT" "$CONFIG" <<'PY'
+import json, sys
+export_path, config_path = sys.argv[1], sys.argv[2]
+with open(config_path, "w", encoding="utf-8") as f:
+    json.dump({
+        "use_stdin": False,
+        "export_file_path": export_path,
+        "permitted_axioms": ["propext", "Classical.choice", "Quot.sound"],
+        "unpermitted_axiom_hard_error": False,
+        "num_threads": 4,
+        "nat_extension": True,
+        "string_extension": True,
+    }, f)
+PY
+              CONFIG="$(realpath "$CONFIG")"
+              bwrap \
+                --ro-bind / / \
+                --tmpfs /home \
+                --tmpfs /root \
+                --tmpfs /run/user \
+                --tmpfs /tmp \
+                --dir /tmp/home \
+                --dev /dev \
+                --proc /proc \
+                --clearenv \
+                --setenv HOME /tmp/home \
+                --setenv LEAN_ABORT_ON_PANIC 1 \
+                --ro-bind "$SYSROOT" "$SYSROOT" \
+                --ro-bind "$EXPORT" "$EXPORT" \
+                --ro-bind "$CONFIG" "$CONFIG" \
+                --unshare-all \
+                --die-with-parent \
+                --new-session \
+                --chdir /tmp \
+                -- "$SYSROOT/bin/nanoda_bin" "$CONFIG"
+              ;;
+            con-leche)
+              sandbox "$SYSROOT/bin/con-leche" "$EXPORT"
+              ;;
+            con-ron)
+              sandbox "$SYSROOT/bin/con-ron" "$EXPORT"
+              ;;
+            *)
+              echo "Unknown bundled checker: $CHECKER" >&2
+              exit 2
+              ;;
+          esac
