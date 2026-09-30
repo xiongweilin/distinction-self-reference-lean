@@ -35,6 +35,27 @@ def GoalFrontierProgress
   ∀ x, x ∈ old →
     ∃ y, y ∈ new ∧ goal x < goal y
 
+/-- An evaluator is capability-sound when every accepted improvement edge
+is a strict edge of the capability preorder. -/
+def CapabilitySoundEvaluator
+    {Version : Type u}
+    [Preorder Version]
+    (evaluator : Evaluator Version) : Prop :=
+  ∀ {a b}, evaluator.better a b → a < b
+
+/-- Capability-sound evaluator progress is genuine strict frontier progress. -/
+theorem strictFrontierProgress_of_evaluatorFrontierProgress
+    {Version : Type u}
+    [Preorder Version]
+    (evaluator : Evaluator Version)
+    (old new : Archive Version)
+    (hsound : CapabilitySoundEvaluator evaluator)
+    (hprogress : EvaluatorFrontierProgress evaluator old new) :
+    StrictFrontierProgress old new := by
+  intro x hx
+  rcases hprogress x hx with ⟨y, hy, hxy⟩
+  exact ⟨y, hy, hsound hxy⟩
+
 /-- An evaluator is directly grounded in one fixed external goal. -/
 def GoalSoundEvaluator
     {Version : Type u}
@@ -139,6 +160,33 @@ theorem goalFrontierProgress_of_evaluatorFrontierProgress
   intro x hx
   rcases hprogress x hx with ⟨y, hy, hxy⟩
   exact ⟨y, hy, hsound hxy⟩
+
+/--
+If the capability order itself has no infinite strict ascending chain, then a
+sequence of nonempty-start frontiers cannot be evaluator-improving at every
+step when every evaluator version is capability-sound.
+-/
+theorem wellFoundedGT_forbids_perpetual_capabilitySoundEvaluatorProgress
+    {Version : Type u}
+    [Preorder Version]
+    [WellFoundedGT Version]
+    (evaluators : Nat → Evaluator Version)
+    (frontier : Nat → Archive Version)
+    (h0 : (frontier 0).Nonempty)
+    (hsound :
+      ∀ n, CapabilitySoundEvaluator (evaluators n))
+    (hprogress :
+      ∀ n,
+        EvaluatorFrontierProgress (evaluators n)
+          (frontier n) (frontier (n + 1))) :
+    False := by
+  apply
+    wellFoundedGT_forbids_perpetual_strict_frontier_progress
+      frontier h0
+  intro n
+  exact strictFrontierProgress_of_evaluatorFrontierProgress
+    (evaluators n) (frontier n) (frontier (n + 1))
+    (hsound n) (hprogress n)
 
 /--
 A fixed bounded external objective forbids strict grounded frontier progress at
