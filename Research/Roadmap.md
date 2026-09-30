@@ -101,7 +101,7 @@ produces a genuinely sharper diagonal threshold.
 
 ## PR #9 — Framework Morphisms + guide Core
 
-Status: **implemented in code; core modules pass `lake build`; final synchronized PR-head CI is the merge gate.**
+Status: **merged.**
 
 Goal: replace manually supplied role maps by general structure-preserving
 translations between frameworks.
@@ -144,6 +144,8 @@ local sufficiency
 
 ## v1.0 Freeze
 
+Status: **pre-freeze hardening is PR #10; final v1.0 tag remains blocked on a stable Lean 4.35+ toolchain pin.**
+
 Goal: turn the research history into a stable proof artifact.
 
 Target acceptance:
@@ -151,7 +153,7 @@ Target acceptance:
 - stable Lean / Mathlib release pins;
 - `lake build`;
 - `lake check`;
-- `lake check --paranoid`;
+- the full `lake check --paranoid` checker set; in GitHub CI this is decomposed across independent jobs over one exact export because hosted runners enforce a shorter per-job lifetime than the combined checker sequence;
 - no `sorry`;
 - no undeclared / unexpected axioms;
 - assumptions indexed for core theorems;
