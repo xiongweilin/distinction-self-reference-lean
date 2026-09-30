@@ -3,6 +3,7 @@ Guide dependency spine formalization.
 -/
 import DistinctionSelfReference.MetaFramework
 import DistinctionSelfReference.ConditionalComposition
+import Mathlib.Order.Interval.Set.Infinite
 
 namespace DistinctionSelfReference
 namespace GuideCore
@@ -94,7 +95,9 @@ theorem required_minimal (capability : Capability) :
     have hrequired := hsufficient
       (t := capability) (by rfl)
     change required capability ⊆ smaller at hrequired
-    exact (Set.not_subset_of_ssubset hsmall) hrequired
+    rw [Set.ssubset_iff_subset_ne] at hsmall
+    exact hsmall.2
+      (Set.Subset.antisymm hsmall.1 hrequired)
 
 theorem minimalSelfReference_minimal :
     graph.InclusionMinimal
@@ -163,7 +166,7 @@ def natBoolCapabilities (_ : Nat) : Set Bool :=
 theorem natBool_effectivelyFinite :
     EffectiveFinitude natBoolCapabilities := by
   intro state
-  exact Set.finite_univ
+  exact Set.toFinite _
 
 theorem nat_state_space_is_infinite :
     Infinite Nat :=
