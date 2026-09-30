@@ -78,6 +78,7 @@ theorem staleAtOne_satisfies_singleton_criterion :
   simp only [singletonFamily, Set.mem_singleton_iff] at ht
   subst t
   exact TaskRelativeScheduling.StrictnessExample.staleAtOne_preserves_oneTransientTask
+    TaskRelativeScheduling.StrictnessExample.oneTransientTask_stable
 
 /--
 For a fixed nontrivial task family, the sharp family criterion can be strictly
