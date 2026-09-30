@@ -149,7 +149,9 @@ def identity
   preservesCondition := fun h => h
   preservesDerivation := by
     intro conditions capability h
-    simpa using h
+    apply F.graph.monotone ?_ h
+    intro condition hcondition
+    exact ⟨condition, hcondition, rfl⟩
 
 def comp
     (m₁₂ : FrameworkMorphism F G)
@@ -165,7 +167,11 @@ def comp
     intro conditions capability h
     have h₁ := m₁₂.preservesDerivation h
     have h₂ := m₂₃.preservesDerivation h₁
-    simpa [Set.image_image, Function.comp_def] using h₂
+    apply H.graph.monotone ?_ h₂
+    intro targetCondition htarget
+    rcases htarget with ⟨middleCondition, hmiddle, rfl⟩
+    rcases hmiddle with ⟨sourceCondition, hsource, rfl⟩
+    exact ⟨sourceCondition, hsource, rfl⟩
 
 @[simp] theorem identity_mapCondition
     (F : Framework C₁ K₁ R₁)
@@ -408,7 +414,9 @@ theorem target_weak_derives_extra :
     targetGraph.derives
       (morphism.mapConditions weak)
       true := by
-  exact Or.inr ⟨rfl, ⟨PUnit.unit, by simp [weak], rfl⟩⟩
+  exact Or.inr ⟨rfl, ⟨PUnit.unit, by
+    change PUnit.unit = PUnit.unit
+    rfl, rfl⟩⟩
 
 theorem target_strong_does_not_derive_extra :
     ¬ targetGraph.derives
