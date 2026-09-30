@@ -169,6 +169,113 @@ theorem judgment_refinement_migrates_source
   exact Or.inr hrefine
 
 /--
+Weaker migration criterion: preserve only those old evaluator judgments that
+are semantically relevant to a fixed external goal.
+-/
+def PreservesGoalRelevantJudgments
+    {Version : Type u}
+    {State : Type v}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    (old new : Version) : Prop :=
+  ∀ a b,
+    (evaluators old).better a b →
+    goal a < goal b →
+    (evaluators new).better a b
+
+theorem preservesGoalRelevantJudgments_refl
+    {Version : Type u}
+    {State : Type v}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    (version : Version) :
+    PreservesGoalRelevantJudgments evaluators goal version version := by
+  intro a b hab _
+  exact hab
+
+theorem preservesGoalRelevantJudgments_trans
+    {Version : Type u}
+    {State : Type v}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    {v₀ v₁ v₂ : Version}
+    (h₀₁ : PreservesGoalRelevantJudgments evaluators goal v₀ v₁)
+    (h₁₂ : PreservesGoalRelevantJudgments evaluators goal v₁ v₂) :
+    PreservesGoalRelevantJudgments evaluators goal v₀ v₂ := by
+  intro a b hab hgoal
+  exact h₁₂ a b (h₀₁ a b hab hgoal) hgoal
+
+theorem full_preservation_implies_goal_relevant_preservation
+    {Version : Type u}
+    {State : Type v}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    {old new : Version}
+    (hfull : PreservesJudgments evaluators old new) :
+    PreservesGoalRelevantJudgments evaluators goal old new := by
+  intro a b hab _
+  exact hfull a b hab
+
+theorem goal_relevant_refinement_migrates_source
+    {Version : Type u}
+    {State : Type v}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    {old current : Version}
+    (hrefine :
+      PreservesGoalRelevantJudgments evaluators goal old current) :
+    CurrentSource
+      (PreservesGoalRelevantJudgments evaluators goal)
+      current
+      (.evaluator old) := by
+  exact Or.inr hrefine
+
+namespace GoalRelevantPreservationExample
+
+inductive Version
+  | old
+  | current
+  deriving DecidableEq, Repr
+
+def goal : Bool → Nat
+  | false => 0
+  | true => 1
+
+/--
+The old evaluator accepts both directions; the current evaluator drops the
+goal-regressing direction and retains only the goal-improving one.
+-/
+def evaluators : Version → Evaluator Bool
+  | .old =>
+      ⟨fun a b => a ≠ b⟩
+  | .current =>
+      ⟨fun a b => a = false ∧ b = true⟩
+
+theorem goal_relevant_preserved :
+    PreservesGoalRelevantJudgments evaluators goal .old .current := by
+  intro a b hab hgoal
+  cases a <;> cases b <;> simp [goal, evaluators] at hab hgoal ⊢
+
+theorem full_preservation_fails :
+    ¬ PreservesJudgments evaluators .old .current := by
+  intro h
+  have hold : (evaluators .old).better true false := by
+    simp [evaluators]
+  have hnew := h true false hold
+  simpa [evaluators] using hnew
+
+/--
+Goal-relevant preservation is strictly weaker than preserving the evaluator's
+entire old judgment relation.
+-/
+theorem goal_relevant_preservation_strictly_weaker :
+    PreservesGoalRelevantJudgments evaluators goal .old .current ∧
+    ¬ PreservesJudgments evaluators .old .current :=
+  ⟨goal_relevant_preserved, full_preservation_fails⟩
+
+end GoalRelevantPreservationExample
+
+/--
 The claim payload itself is not rewritten by evaluator migration. Only the
 qualification predicate changes.
 -/
