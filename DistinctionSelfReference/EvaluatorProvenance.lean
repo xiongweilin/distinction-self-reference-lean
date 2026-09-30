@@ -136,6 +136,26 @@ def PreservesJudgments
     (evaluators old).better a b →
     (evaluators new).better a b
 
+theorem preservesJudgments_refl
+    {Version : Type u}
+    {State : Type v}
+    (evaluators : Version → Evaluator State)
+    (version : Version) :
+    PreservesJudgments evaluators version version := by
+  intro a b hab
+  exact hab
+
+theorem preservesJudgments_trans
+    {Version : Type u}
+    {State : Type v}
+    (evaluators : Version → Evaluator State)
+    {v₀ v₁ v₂ : Version}
+    (h₀₁ : PreservesJudgments evaluators v₀ v₁)
+    (h₁₂ : PreservesJudgments evaluators v₁ v₂) :
+    PreservesJudgments evaluators v₀ v₂ := by
+  intro a b hab
+  exact h₁₂ a b (h₀₁ a b hab)
+
 theorem judgment_refinement_migrates_source
     {Version : Type u}
     {State : Type v}
