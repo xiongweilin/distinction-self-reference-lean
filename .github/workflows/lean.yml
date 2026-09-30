@@ -172,20 +172,7 @@ jobs:
               ;;
             nanoda)
               CONFIG="$(pwd)/proof-export/nanoda.json"
-              python3 - "$EXPORT" "$CONFIG" <<'PY'
-import json, sys
-export_path, config_path = sys.argv[1], sys.argv[2]
-with open(config_path, "w", encoding="utf-8") as f:
-    json.dump({
-        "use_stdin": False,
-        "export_file_path": export_path,
-        "permitted_axioms": ["propext", "Classical.choice", "Quot.sound"],
-        "unpermitted_axiom_hard_error": False,
-        "num_threads": 4,
-        "nat_extension": True,
-        "string_extension": True,
-    }, f)
-PY
+              python3 -c 'import json,sys; export_path,config_path=sys.argv[1],sys.argv[2]; json.dump({"use_stdin":False,"export_file_path":export_path,"permitted_axioms":["propext","Classical.choice","Quot.sound"],"unpermitted_axiom_hard_error":False,"num_threads":4,"nat_extension":True,"string_extension":True}, open(config_path,"w",encoding="utf-8"))' "$EXPORT" "$CONFIG"
               CONFIG="$(realpath "$CONFIG")"
               bwrap \
                 --ro-bind / / \
