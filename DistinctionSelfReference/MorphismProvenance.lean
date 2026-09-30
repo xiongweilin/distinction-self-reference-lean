@@ -156,6 +156,77 @@ theorem anchor_survives_without_bridge
       (.anchor : Source Version) :=
   anchor_source_always_current (BridgePolicy evaluators goal) current
 
+
+namespace CompositionExample
+
+inductive Version
+  | v0
+  | v1
+  | v2
+  deriving DecidableEq, Repr
+
+def goal : Bool → Nat
+  | false => 0
+  | true => 1
+
+def evaluators : Version → Evaluator Bool
+  | .v0 => ⟨fun a b => a = false ∧ b = true⟩
+  | .v1 => ⟨fun a b => (a = false ∧ b = true) ∨ a = b⟩
+  | .v2 => ⟨fun _ _ => True⟩
+
+theorem preserves01 :
+    PreservesJudgments evaluators .v0 .v1 := by
+  intro a b hab
+  exact Or.inl hab
+
+theorem preserves12 :
+    PreservesJudgments evaluators .v1 .v2 := by
+  intro _ _ _
+  trivial
+
+def bridge01 : VersionBridge evaluators goal .v0 .v1 :=
+  VersionBridge.ofPreservesJudgments evaluators goal preserves01
+
+def bridge12 : VersionBridge evaluators goal .v1 .v2 :=
+  VersionBridge.ofPreservesJudgments evaluators goal preserves12
+
+def bridge02 : VersionBridge evaluators goal .v0 .v2 :=
+  VersionBridge.comp evaluators goal bridge01 bridge12
+
+inductive Claim
+  | oldJudgment
+  deriving DecidableEq, Repr
+
+def oldEvidence : Evidence Version Claim :=
+  ⟨.oldJudgment, .evaluator .v0⟩
+
+/--
+Two independently certified migration steps compose into one certificate that
+keeps the original evaluator evidence current at the final version.
+-/
+theorem composed_bridge_revalidates_original_evidence :
+    CurrentEvidence
+      (BridgePolicy evaluators goal)
+      .v2
+      oldEvidence := by
+  exact versionBridge_revalidates_old_evidence
+    evaluators goal bridge02 oldEvidence rfl
+
+/-- The composed version bridge is also a genuine general evaluator morphism. -/
+def composedEvaluatorMorphism :
+    EvaluatorMorphism
+      (evaluators .v0) (evaluators .v2) goal goal :=
+  VersionBridge.toEvaluatorMorphism evaluators goal bridge02
+
+theorem composed_morphism_preserves_improving_edge :
+    (evaluators .v2).better
+      (composedEvaluatorMorphism.mapState false)
+      (composedEvaluatorMorphism.mapState true) := by
+  exact composedEvaluatorMorphism.mapJudgment
+    (by simp [evaluators])
+
+end CompositionExample
+
 namespace InvalidBridgeExample
 
 open EvaluatorProvenance.GoalRelevantPreservationExample
