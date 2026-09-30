@@ -324,6 +324,200 @@ theorem preservesCapabilityEquivalent_of_surjective
 end FrameworkMorphism
 
 /--
+A framework equivalence is a pair of certified framework morphisms whose
+condition, capability, and realization maps are mutual inverses.
+
+The inverse laws are data: equivalence is not inferred merely from the
+existence of translations in both directions.
+-/
+structure FrameworkEquivalence
+    {C₁ : Type u₁} {K₁ : Type v₁} {R₁ : Type w₁}
+    {C₂ : Type u₂} {K₂ : Type v₂} {R₂ : Type w₂}
+    (F : Framework C₁ K₁ R₁)
+    (G : Framework C₂ K₂ R₂) where
+  toMorphism : FrameworkMorphism F G
+  invMorphism : FrameworkMorphism G F
+  leftCondition :
+    ∀ c, invMorphism.mapCondition (toMorphism.mapCondition c) = c
+  rightCondition :
+    ∀ c, toMorphism.mapCondition (invMorphism.mapCondition c) = c
+  leftCapability :
+    ∀ capability,
+      invMorphism.mapCapability
+        (toMorphism.mapCapability capability) = capability
+  rightCapability :
+    ∀ capability,
+      toMorphism.mapCapability
+        (invMorphism.mapCapability capability) = capability
+  leftRealization :
+    ∀ realization,
+      invMorphism.mapRealization
+        (toMorphism.mapRealization realization) = realization
+  rightRealization :
+    ∀ realization,
+      toMorphism.mapRealization
+        (invMorphism.mapRealization realization) = realization
+
+namespace FrameworkEquivalence
+
+variable
+    {C₁ : Type u₁} {K₁ : Type v₁} {R₁ : Type w₁}
+    {C₂ : Type u₂} {K₂ : Type v₂} {R₂ : Type w₂}
+    {C₃ : Type u₃} {K₃ : Type v₃} {R₃ : Type w₃}
+    {F : Framework C₁ K₁ R₁}
+    {G : Framework C₂ K₂ R₂}
+    {H : Framework C₃ K₃ R₃}
+
+def identity
+    (F : Framework C₁ K₁ R₁) :
+    FrameworkEquivalence F F where
+  toMorphism := FrameworkMorphism.identity F
+  invMorphism := FrameworkMorphism.identity F
+  leftCondition := fun _ => rfl
+  rightCondition := fun _ => rfl
+  leftCapability := fun _ => rfl
+  rightCapability := fun _ => rfl
+  leftRealization := fun _ => rfl
+  rightRealization := fun _ => rfl
+
+def symm
+    (e : FrameworkEquivalence F G) :
+    FrameworkEquivalence G F where
+  toMorphism := e.invMorphism
+  invMorphism := e.toMorphism
+  leftCondition := e.rightCondition
+  rightCondition := e.leftCondition
+  leftCapability := e.rightCapability
+  rightCapability := e.leftCapability
+  leftRealization := e.rightRealization
+  rightRealization := e.leftRealization
+
+def comp
+    (e₁₂ : FrameworkEquivalence F G)
+    (e₂₃ : FrameworkEquivalence G H) :
+    FrameworkEquivalence F H where
+  toMorphism :=
+    FrameworkMorphism.comp e₁₂.toMorphism e₂₃.toMorphism
+  invMorphism :=
+    FrameworkMorphism.comp e₂₃.invMorphism e₁₂.invMorphism
+  leftCondition := by
+    intro condition
+    change
+      e₁₂.invMorphism.mapCondition
+          (e₂₃.invMorphism.mapCondition
+            (e₂₃.toMorphism.mapCondition
+              (e₁₂.toMorphism.mapCondition condition))) =
+        condition
+    rw [e₂₃.leftCondition, e₁₂.leftCondition]
+  rightCondition := by
+    intro condition
+    change
+      e₂₃.toMorphism.mapCondition
+          (e₁₂.toMorphism.mapCondition
+            (e₁₂.invMorphism.mapCondition
+              (e₂₃.invMorphism.mapCondition condition))) =
+        condition
+    rw [e₁₂.rightCondition, e₂₃.rightCondition]
+  leftCapability := by
+    intro capability
+    change
+      e₁₂.invMorphism.mapCapability
+          (e₂₃.invMorphism.mapCapability
+            (e₂₃.toMorphism.mapCapability
+              (e₁₂.toMorphism.mapCapability capability))) =
+        capability
+    rw [e₂₃.leftCapability, e₁₂.leftCapability]
+  rightCapability := by
+    intro capability
+    change
+      e₂₃.toMorphism.mapCapability
+          (e₁₂.toMorphism.mapCapability
+            (e₁₂.invMorphism.mapCapability
+              (e₂₃.invMorphism.mapCapability capability))) =
+        capability
+    rw [e₁₂.rightCapability, e₂₃.rightCapability]
+  leftRealization := by
+    intro realization
+    change
+      e₁₂.invMorphism.mapRealization
+          (e₂₃.invMorphism.mapRealization
+            (e₂₃.toMorphism.mapRealization
+              (e₁₂.toMorphism.mapRealization realization))) =
+        realization
+    rw [e₂₃.leftRealization, e₁₂.leftRealization]
+  rightRealization := by
+    intro realization
+    change
+      e₂₃.toMorphism.mapRealization
+          (e₁₂.toMorphism.mapRealization
+            (e₁₂.invMorphism.mapRealization
+              (e₂₃.invMorphism.mapRealization realization))) =
+        realization
+    rw [e₁₂.rightRealization, e₂₃.rightRealization]
+
+theorem condition_bijective
+    (e : FrameworkEquivalence F G) :
+    Function.Bijective e.toMorphism.mapCondition := by
+  constructor
+  · intro a b hab
+    have := congrArg e.invMorphism.mapCondition hab
+    simpa [e.leftCondition] using this
+  · intro targetCondition
+    exact ⟨e.invMorphism.mapCondition targetCondition,
+      e.rightCondition targetCondition⟩
+
+theorem capability_bijective
+    (e : FrameworkEquivalence F G) :
+    Function.Bijective e.toMorphism.mapCapability := by
+  constructor
+  · intro a b hab
+    have := congrArg e.invMorphism.mapCapability hab
+    simpa [e.leftCapability] using this
+  · intro targetCapability
+    exact ⟨e.invMorphism.mapCapability targetCapability,
+      e.rightCapability targetCapability⟩
+
+/-- The inverse morphism turns a framework equivalence's forward derivation
+preservation into derivation reflection. -/
+theorem reflectsDerivation
+    (e : FrameworkEquivalence F G) :
+    e.toMorphism.ReflectsDerivation := by
+  intro conditions capability htarget
+  have hback :=
+    e.invMorphism.preservesDerivation htarget
+  have himage :
+      e.invMorphism.mapCondition ''
+          (e.toMorphism.mapCondition '' conditions) =
+        conditions := by
+    ext condition
+    constructor
+    · rintro ⟨targetCondition,
+        ⟨sourceCondition, hsource, rfl⟩, rfl⟩
+      rw [e.leftCondition]
+      exact hsource
+    · intro hsource
+      refine ⟨e.toMorphism.mapCondition condition,
+        ⟨condition, hsource, rfl⟩, ?_⟩
+      exact e.leftCondition condition
+  rw [himage, e.leftCapability capability] at hback
+  exact hback
+
+/-- Capability dominance is invariant under a genuine framework equivalence. -/
+theorem preservesDominance
+    (e : FrameworkEquivalence F G)
+    {A B : Set C₁}
+    (hdom : F.graph.Dominates A B) :
+    G.graph.Dominates
+      (e.toMorphism.mapConditions A)
+      (e.toMorphism.mapConditions B) :=
+  e.toMorphism.preservesDominance_of_surjective
+    e.reflectsDerivation
+    e.capability_bijective.2
+    hdom
+
+end FrameworkEquivalence
+
+/--
 The invariant condition core induced by two certified translations into one
 shared target framework.
 -/
