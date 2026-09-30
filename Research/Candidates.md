@@ -4,8 +4,8 @@ Status labels:
 
 - **PROVED HERE**: checked by Lean in this repository.
 - **ESTABLISHED EXTERNAL**: standard theorem or existing formalization; not newly proved here.
-- **TARGET**: promising next theorem.
-- **CONJECTURAL PROGRAM**: research direction, not a theorem claim.
+- **TARGET**: open or deferred theorem candidate; not part of the frozen v1.0 result set unless promoted by a checked theorem.
+- **CONJECTURAL PROGRAM**: optional post-v1.0 research direction, not a theorem claim.
 
 ## Layer 0: minimal crossing
 
