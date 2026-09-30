@@ -642,6 +642,48 @@ Important limits:
 4. goal-relevant preservation remains edge-level rather than a general evaluator morphism;
 5. external goals are still represented mainly by Nat/Bool decisions rather than general ordered/vector/risk-sensitive objectives.
 
+### P6.23 — quantitative decision-relative grounding
+
+Move the exact stochastic grounding boundary into an epsilon-risk layer.
+
+Status: **PROVED HERE** in `QuantitativeGrounding`.
+
+For a fixed decision problem, `RiskGapAtMost C ε approx gold prior` states
+that the Bayes risk of the approximate experiment is at most the gold risk plus
+`C * ε`. The current results prove:
+
+- monotonicity in epsilon;
+- exact simulation gives zero risk gap;
+- epsilon = 0 approximate grounding is exactly the existing zero-risk
+  `DecisionGrounded` notion;
+- a grounded reference plus an epsilon gap gives epsilon approximate grounding;
+- further garbling cannot create an epsilon-gap guarantee that the finer source
+  lacked;
+- risk-gap bounds compose additively;
+- all of these lift to a chosen family of decision losses with loss-dependent
+  scale;
+- `UniformBoundedRiskGapAtMost` quantifies the same ε guarantee over every bounded loss on one decision space and inherits zero-error simulation, monotonicity, source-before-garbling preservation, and additive transitivity;
+- `BinaryStrictnessExample` gives a concrete Boolean 0–1-loss experiment where the exact signal has Bayes risk 0 while complete discard has Bayes risk 1, so zero gap fails strictly and unit gap succeeds.
+
+Interpretation: this is deliberately the **risk side** of a Blackwell–Le Cam approximation layer, not yet a formal claim that total-variation deficiency and the full randomization theorem are present in Lean. The strict binary example shows that the quantitative layer is not vacuous: a genuine Markov garbling can force a positive decision-risk gap.
+
+### P6.24 — sharp task-family scheduling
+
+Replace single-task adequacy by a chosen family of already-stable Boolean
+tasks.
+
+Status: **PROVED HERE** in `TaskFamilyScheduling`.
+
+A schedule preserves a family exactly when, for every task in the family, it
+eventually samples only source indices on which that task already equals its
+eventual target. For the family of **all** stable Boolean tasks this criterion is
+equivalent to universal eventual freshness. For a concrete singleton nonconstant
+family, the permanently stale-at-one schedule satisfies the family criterion
+while failing eventual freshness.
+
+Interpretation: the source-schedule condition is genuinely task-family relative;
+universal freshness is recovered only at the universal task family.
+
 ## Meta-framework target
 
 Let a framework be represented by:
