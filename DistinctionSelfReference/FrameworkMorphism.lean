@@ -297,6 +297,24 @@ theorem preservesDominance_of_surjective
   rcases hsurj targetCapability with ⟨sourceCapability, rfl⟩
   exact m.preservesMappedDominance hreflect hdom sourceCapability hB
 
+/-- Capability equivalence of translated condition sets is preserved under the
+same reflection + capability-surjectivity hypotheses needed for full
+dominance. -/
+theorem preservesCapabilityEquivalent_of_surjective
+    (m : FrameworkMorphism F G)
+    {A B : Set C₁}
+    (hreflect : m.ReflectsDerivation)
+    (hsurj : Function.Surjective m.mapCapability)
+    (heq : F.graph.CapabilityEquivalent A B) :
+    G.graph.CapabilityEquivalent
+      (m.mapConditions A)
+      (m.mapConditions B) := by
+  rw [G.graph.capabilityEquivalent_iff_mutualDominance]
+  rw [F.graph.capabilityEquivalent_iff_mutualDominance] at heq
+  exact ⟨
+    m.preservesDominance_of_surjective hreflect hsurj heq.1,
+    m.preservesDominance_of_surjective hreflect hsurj heq.2⟩
+
 end FrameworkMorphism
 
 /--
@@ -334,6 +352,99 @@ theorem mem_invariantConditionCore_iff
       (∃ source, source ∈ conditions₁ ∧ m₁.mapCondition source = c) ∧
       (∃ source, source ∈ conditions₂ ∧ m₂.mapCondition source = c) := by
   rfl
+
+namespace PreservationWithoutReflectionCounterexample
+
+abbrev SourceCondition := PUnit
+abbrev SourceCapability := Bool
+abbrev TargetCondition := Bool
+abbrev TargetCapability := Bool
+
+def sourceGraph : FrameworkGraph SourceCondition SourceCapability where
+  derives _ capability := capability = false
+  monotone := by
+    intro A B capability hAB h
+    exact h
+
+def targetGraph : FrameworkGraph TargetCondition TargetCapability where
+  derives conditions capability :=
+    capability = false ∨
+      (capability = true ∧ false ∈ conditions)
+  monotone := by
+    intro A B capability hAB h
+    rcases h with hfalse | ⟨htrue, hmem⟩
+    · exact Or.inl hfalse
+    · exact Or.inr ⟨htrue, hAB hmem⟩
+
+def source : Framework SourceCondition SourceCapability (Set SourceCondition) :=
+  Framework.free sourceGraph
+
+def target : Framework TargetCondition TargetCapability (Set TargetCondition) :=
+  Framework.free targetGraph
+
+def morphism : FrameworkMorphism source target :=
+  FrameworkMorphism.freeMorphism
+    sourceGraph targetGraph
+    (fun _ => false)
+    id
+    (by
+      intro conditions capability h
+      exact Or.inl h)
+
+def strong : Set SourceCondition := ∅
+def weak : Set SourceCondition := {PUnit.unit}
+
+theorem source_dominance :
+    sourceGraph.Dominates strong weak := by
+  intro capability h
+  exact h
+
+theorem capability_map_surjective :
+    Function.Surjective morphism.mapCapability := by
+  intro capability
+  exact ⟨capability, rfl⟩
+
+theorem target_weak_derives_extra :
+    targetGraph.derives
+      (morphism.mapConditions weak)
+      true := by
+  exact Or.inr ⟨rfl, ⟨PUnit.unit, by simp [weak], rfl⟩⟩
+
+theorem target_strong_does_not_derive_extra :
+    ¬ targetGraph.derives
+      (morphism.mapConditions strong)
+      true := by
+  intro h
+  rcases h with hfalse | ⟨_, hmem⟩
+  · cases hfalse
+  · rcases hmem with ⟨sourceCondition, hsource, _⟩
+    simpa [strong] using hsource
+
+theorem does_not_reflect_derivation :
+    ¬ morphism.ReflectsDerivation := by
+  intro hreflect
+  have hsource :
+      sourceGraph.derives weak true :=
+    hreflect target_weak_derives_extra
+  simpa [sourceGraph] using hsource
+
+/--
+One-way derivation preservation, even with a surjective capability map, does
+not preserve full target dominance. Reflection is a genuinely additional
+condition rather than a convenience assumption.
+-/
+theorem preservation_alone_does_not_preserve_dominance :
+    sourceGraph.Dominates strong weak ∧
+    Function.Surjective morphism.mapCapability ∧
+    ¬ targetGraph.Dominates
+      (morphism.mapConditions strong)
+      (morphism.mapConditions weak) := by
+  refine ⟨source_dominance, capability_map_surjective, ?_⟩
+  intro hdom
+  exact target_strong_does_not_derive_extra
+    (hdom true target_weak_derives_extra)
+
+end PreservationWithoutReflectionCounterexample
 
 end FrameworkMorphisms
 end DistinctionSelfReference
