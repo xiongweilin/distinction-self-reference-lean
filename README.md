@@ -38,7 +38,7 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Local/global | family of local constraints | even pairwise joint satisfiability need not imply a global witness |
 | Nested gluing | finite nonempty linear order + nested constraints | local satisfiability already implies one global witness |
 | Overlap gluing | local scopes + cover + agreement on overlaps | compatible local patches construct a global assignment; nesting is not required |
-| Local sufficiency | observation + required commitment | sufficiency is factorization through the current observation; ambiguity witnesses certify insufficiency |
+| Local sufficiency | observation + required commitment | sufficiency is factorization through the observation and is equivalent to absence of an ambiguity witness |
 | Compositional sufficiency | locally sufficient observations + cover + overlap compatibility | local commitments glue into a global commitment decodable from combined observations |
 | Conditional composition | compositional sufficiency + finite recoverability | constructs a global commitment witness together with a recovery plan back to viability |
 | Local sufficiency | observation + commitment requirement | sufficiency is factorization of the required commitment through the current observation; ambiguity certifies insufficiency |
@@ -71,7 +71,9 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Ranked capability growth | strict-growth-reflecting rank into a WellFoundedGT order | such a rank rules out infinite strict capability growth; open-ended Nat capability growth forbids every such rank |
 | Full RSI invariant-role core | two distinct RSI condition languages + semantic role translation | both cover self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability |
 | Self-certification barrier | internal certification + semantic soundness + abstract Löb rule | universal self-certification can be semantically unsound; internal reflection collapses to proof under Löb; a grounded root restores sound transfer |
-| Changing evaluator | time-indexed local improvement relations | coherent embedding into one transitive global relation composes local improvements; arbitrary changing evaluators can rationalize a recurrent path |
+| Changing evaluator | time-indexed local improvement relations | strict global extension exists iff the local-edge union is acyclic; on finite states this is equivalent to a Nat common potential |
+| Evaluator grounding | fixed external goal + anchor + changing evaluator | sufficient anchor + semantic evaluator soundness + local improvement imply global goal improvement; a finite insufficient anchor permits validated proxy regression |
+| Evaluator provenance | versioned evaluator evidence + anchor evidence | history is retained while current qualification is selectively invalidated; preservation/refinement permits justified evidence migration |
 | Branch/archive RSI | recurrent selected branch + retained archive | branch recurrence and branch-score plateau can coexist with strict archive growth; WQO makes antichain frontiers finite but does not itself imply archive stabilization |
 | Partial Lawvere | Option-valued evaluator + diagonal representation | a represented partial diagonal forces a fixed point exactly when self-application is defined; fixed-point-free steps force the representing self-application to be undefined |
 
@@ -142,6 +144,8 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/FullRSIInvariantCore.lean` — six-role full-RSI semantic core across two distinct condition languages.
 - `DistinctionSelfReference/SelfCertificationBarrier.lean` — circular-certification countermodel, semantic transfer with an external anchor, and an abstract Löb reflection barrier.
 - `DistinctionSelfReference/ChangingEvaluator.lean` — exact acyclicity iff for strict global extensions; finite-state acyclicity iff Nat common potential; infinite-state counterexample separating the two.
+- `DistinctionSelfReference/EvaluatorGrounding.lean` — semantic grounding through sufficient anchors, global external-goal improvement, and a finite-anchor proxy-regression counterexample.
+- `DistinctionSelfReference/EvaluatorProvenance.lean` — evaluator-version provenance, selective current-evidence invalidation, and preservation/refinement-based evidence migration.
 - `DistinctionSelfReference/ArchiveRSI.lean` — branch/archive separation, WQO stabilization for monotone antichains, dominance-complete Pareto frontiers, perpetual replacement under WQO, and the `WellFoundedGT` obstruction.
 - `DistinctionSelfReference/PartialLawvere.lean` — partial diagonal representation and the defined-self-application threshold for Lawvere fixed points.
 - `DistinctionSelfReference/GuardedLawvere.lean` — guard-separated diagonal representation; open self-application forces a fixed point and fixed-point-free maps force the self guard closed.
@@ -186,6 +190,7 @@ The RSI line has now moved beyond a single monotone-upgrade model into a family 
 - **Self-modification and invariant preservation** — verified upgrades, verifier migration, trusted-kernel handoff, proof-checked expansion, and compromise-aware delegation are formalized separately.
 - **Capability order and long-run dynamics** — strict growth, plateaus, recurrence, full-version cycles, finite growth bounds, infinite strict chains, and well-founded-rank obstructions are distinguished.
 - **Reality verification** — exact correction, fixed/variable delay, reordered observations, eventual freshness, and an iff criterion for preservation of all eventually stable Boolean requirements are proved.
+- **Evaluator grounding** — an external signal is distinguished from a sufficient external anchor; local evaluator improvement is meaningful only through a semantic factorization to one fixed external goal, and evaluator-version provenance is tracked independently of historical retention.
 - **Verification resources** — certification is separated from callability; exogenous budgets, endogenous consumption/regeneration, indefinite callability, and a resource viability kernel are formalized.
 - **Trust and certification** — predecessor migration, dual overlap, quorum delegation, compromise recovery, and translated trust-role invariant cores are present, but they still assume some non-circular soundness premise.
 - **Meta-framework comparison** — feasible-minimal condition sets, incompatibility edges, semantic role translations, and a six-role RSI invariant core have been constructed.
@@ -196,17 +201,17 @@ The current frontier is therefore no longer “can a monotone RSI chain grow?”
 
 This section is updated at the end of every completed construction phase.
 
-Current deep-frontier priorities, in order:
+Current priorities, in order:
 
-1. **Self-modifying verifier without an independent trust anchor** — instantiate the current abstract Löb interface with `FormalizedFormalLogic/Foundation` once the Lean/Mathlib pins align, then characterize exactly which self-certification / verifier-migration interfaces imply an internal reflection principle. Connect those interfaces to Löb, Gödel II, and Tarski rather than treating verifier soundness as an external invariant by default. The key target is an iff-style boundary between circular/vacuous certification and migration justified by a genuinely non-circular grounding.
+1. **Minimal sufficient grounding under finite observation** — the exact fiber-level criterion is now proved: an anchor is sufficient for a goal-relevant commitment iff no anchor-indistinguishable states require different judgments. Next classify or construct minimal sufficient finite anchors under refinement/information order, and quantify what additional distinctions are required to eliminate each ambiguity class.
 
-2. **Changing evaluator beyond finite potentials** — the existence question is exact, and on finite state spaces acyclicity is now equivalent to a Nat-valued common potential. The equivalence fails on infinite state spaces. Next targets are ordinal/well-founded potentials and genuine evaluator-to-evaluator morphisms.
+2. **Evaluator migration as a structure-preserving map** — provenance now separates historical retention from current qualification, and judgment preservation is compositional. Next formalize richer evaluator morphisms/refinements that preserve selected goal judgments, calibrated confidence, or decision regions rather than all raw `better` edges.
 
-3. **Archive / branching RSI beyond simple replacement** — WQO stabilizes monotone antichain archives but does not stabilize recomputed Pareto frontiers: a Nat example gives perpetual dominance-complete singleton replacement. `WellFoundedGT` blocks perpetual strict frontier progress. Next characterize weaker chain conditions that separate harmless frontier replacement, recurrent replacement, and genuine unbounded archive progress.
+3. **Long-run proxy drift under imperfect anchors** — the finite Bool counterexample proves that anchor validation can coexist with true goal regression when the anchor is insufficient. Next characterize when repeated migration yields regression, cycles, or stable-but-wrong proxy optimization under delayed/noisy/partial anchors, reusing the existing scheduling and information-order machinery.
 
-4. **Typed/modal guarded Lawvere self-reference** — the Option-specific result now has a guard-separated abstraction: represented diagonal self-application forces a fixed point exactly when its self guard is open. Next replace the Boolean guard by typed/later modalities or effectful computation and compare the resulting thresholds.
+4. **Self-modifying verifier without an independent trust anchor** — instantiate the abstract Löb interface with `FormalizedFormalLogic/Foundation` once Lean/Mathlib pins align, then connect verifier self-certification to Gödel II, Löb, and Tarski.
 
-5. **Resources remain a feasibility dimension** — keep `IndefiniteCallability`, endogenous resources, and resource viability as constraints on the four theories above. Finite capability universes and finite strict-growth bounds remain useful baseline models, not the main frontier.
+5. **Archive and guarded-self-reference refinements** — continue non-monotone Pareto replacement criteria and typed/modal/effectful guarded Lawvere only after the grounding/provenance layer above is stable. Resource/callability remains a feasibility dimension throughout.
 
 ## Scope warning
 
