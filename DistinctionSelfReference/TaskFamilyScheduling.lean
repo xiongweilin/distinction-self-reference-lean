@@ -51,6 +51,23 @@ theorem preservesFamily_iff_criterion
   rfl
 
 /-- Universal eventual freshness is sufficient for every stable task family. -/
+def allStableTasks : Set StableTask :=
+  Set.univ
+
+theorem allStableTasks_criterion_iff_eventuallyFresh
+    (S : Schedule) :
+    FamilySchedulingCriterion S allStableTasks ↔ S.EventuallyFresh := by
+  constructor
+  · intro hfamily
+    apply eventuallyFresh_of_preservesStableBool S
+    intro required target hstable
+    let t : StableTask := ⟨required, target, hstable⟩
+    exact hfamily t (by simp [allStableTasks])
+  · intro hfresh
+    intro t _
+    exact preservesStableBool_of_eventuallyFresh S hfresh
+      t.signal t.target t.stable
+
 theorem eventuallyFresh_implies_familyCriterion
     (S : Schedule)
     (hfresh : S.EventuallyFresh)
