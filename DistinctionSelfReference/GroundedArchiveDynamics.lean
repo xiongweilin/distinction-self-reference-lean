@@ -215,6 +215,69 @@ theorem goalFrontierProgress_of_strictFrontierProgress
   rcases hprogress x hx with ⟨y, hy, hxy⟩
   exact ⟨y, hy, hsound hxy⟩
 
+/--
+Strict progress from a nonempty Pareto-style frontier forces genuine capability
+novelty once the old frontier is both an antichain and dominance-complete for
+the old archive.
+
+This is the bridge from "frontier replacement" to "new capability" that is
+missing from archive cardinality growth alone.
+-/
+theorem novelCapability_of_strictFrontierProgress
+    {Version : Type u}
+    [Preorder Version]
+    (oldArchive oldFrontier newFrontier : Archive Version)
+    (h0 : oldFrontier.Nonempty)
+    (hanti : IsAntichain (· ≤ ·) oldFrontier)
+    (hcomplete :
+      DominanceComplete oldFrontier oldArchive)
+    (hprogress :
+      StrictFrontierProgress oldFrontier newFrontier) :
+    HasNovelCapability oldArchive newFrontier := by
+  rcases h0 with ⟨x, hx⟩
+  rcases hprogress x hx with ⟨y, hyNew, hxy⟩
+  have hnotDominated :
+      ∀ z, z ∈ oldArchive → ¬ y ≤ z := by
+    intro z hz hyz
+    rcases hcomplete.2 z hz with ⟨f, hf, hzf⟩
+    have hyf : y ≤ f := le_trans hyz hzf
+    have hxf : x < f := lt_of_lt_of_le hxy hyf
+    have hne : x ≠ f := ne_of_lt hxf
+    exact hne (hanti.eq hx hf (le_of_lt hxf))
+  have hyOld : y ∉ oldArchive := by
+    intro hy
+    exact (hnotDominated y hy) le_rfl
+  exact ⟨y, hyNew, hyOld, hnotDominated⟩
+
+namespace FrontierReplacementWithoutNovelty
+
+def old : Archive Nat := {1}
+
+def new : Archive Nat := {0}
+
+theorem frontier_replaced :
+    old ≠ new := by
+  intro h
+  have h1 : 1 ∈ old := by simp [old]
+  have := h ▸ h1
+  simp [new] at this
+
+theorem no_novel_capability :
+    ¬ HasNovelCapability old new := by
+  rintro ⟨y, hyNew, _, hnovel⟩
+  have hy0 : y = 0 := by
+    simpa [new] using hyNew
+  subst y
+  exact (hnovel 1 (by simp [old])) (by omega)
+
+/-- Merely replacing the frontier set says nothing about improvement direction:
+a replacement can move strictly downward in the capability order. -/
+theorem frontier_replacement_does_not_imply_novelty :
+    old ≠ new ∧ ¬ HasNovelCapability old new :=
+  ⟨frontier_replaced, no_novel_capability⟩
+
+end FrontierReplacementWithoutNovelty
+
 namespace ArchiveGrowthWithoutFrontierChange
 
 def before : Archive Nat := {1}
