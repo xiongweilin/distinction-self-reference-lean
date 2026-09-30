@@ -638,8 +638,8 @@ Important limits:
 
 1. stochastic grounding currently captures the exact zero-Bayes-risk boundary; quantitative approximate sufficiency, regret, calibration, and noisy recovery remain open;
 2. task-relative scheduling has a strict separation example but not yet a full characterization for arbitrary task families;
-3. dependency provenance uses an abstract dependency relation rather than explicit proof terms, timestamps, confidence, or cryptographic/typed bridge certificates;
-4. goal-relevant preservation remains edge-level rather than a general evaluator morphism;
+3. dependency provenance still uses an abstract dependency relation rather than explicit proof terms, timestamps, confidence, or cryptographic attestations, but evaluator migration now carries explicit typed bridge certificates;
+4. the edge-level preservation limitation is closed by `EvaluatorMorphism`; repository-wide framework morphisms remain open for PR #9;
 5. external goals are still represented mainly by Nat/Bool decisions rather than general ordered/vector/risk-sensitive objectives.
 
 ### P6.23 — quantitative decision-relative grounding
@@ -683,6 +683,28 @@ while failing eventual freshness.
 
 Interpretation: the source-schedule condition is genuinely task-family relative;
 universal freshness is recovered only at the universal task family.
+
+### P6.25 — evaluator morphisms and proof-carrying provenance
+
+Replace evaluator-preservation edges by explicit compositional structure.
+
+Status: **PROVED HERE** in `EvaluatorMorphism` and `MorphismProvenance`.
+
+The formal layer now provides:
+
+- `BridgeCertificate`, carrying both judgment preservation and preservation of one fixed external goal under an explicit state map;
+- first-class `EvaluatorMorphism` values with identity and composition;
+- `VersionBridge` as the identity-state specialization for evaluator-version migration;
+- composition and conversion between version bridges and general evaluator morphisms;
+- `HasVersionBridge` as a provenance policy;
+- certified revalidation of old evaluator evidence without rewriting history;
+- transport of dependency-current evidence when the conclusion and all transitive premise sources are covered by the bridge;
+- a two-step `v0 → v1 → v2` example where composed certificates keep original evaluator evidence current at the final version;
+- direct recovery of the existing PR #3 selective-cascade example under an explicit bridge;
+- a necessity countermodel: a goal-only candidate map can preserve the external goal while mapping an old accepted judgment to an edge rejected by the new evaluator, so judgment preservation cannot be omitted;
+- a second strict separation: existing goal-relevant edge preservation does not imply existence of a full version bridge.
+
+Interpretation: selective erasure is now structural rather than an ad hoc policy. Anchor evidence remains independent of evaluator migration; evaluator-dependent evidence migrates only when an explicit preservation certificate exists; dependency-qualified conclusions migrate only when their required provenance chain is covered.
 
 ## Meta-framework target
 
