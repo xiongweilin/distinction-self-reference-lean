@@ -211,17 +211,16 @@ The current frontier is therefore no longer “can a monotone RSI chain grow?”
 The remaining large program is now intentionally finite and phase-gated.
 See `Research/Roadmap.md` for the maintained PR #4 → PR #9 → v1.0 plan.
 
-Current phase: **PR #4 — Quantitative Grounding**.
+PR #4 — **Quantitative Grounding** is now complete on its research branch and awaiting/undergoing merge.
 
-Its scope is deliberately limited to:
+It closes four items:
 
 1. quantitative decision-risk gaps as the risk-side Blackwell–Le Cam layer;
-2. monotonicity and composition of those bounds;
-3. exact task-family scheduling criteria and strict separations.
+2. monotonicity, composition, and a uniform bounded-loss risk surrogate;
+3. a concrete strict Boolean Bayes-risk degradation example under discard garbling;
+4. exact task-family scheduling criteria with both universal recovery and strict family-relative separation.
 
-Evaluator morphisms, grounded archive dynamics, framework morphisms, and the
-Foundation/Löb integration are separate later phases rather than extensions of
-this PR.
+The next mainline phase after merge is **PR #5 — Evaluator Morphisms & Proof-Carrying Provenance**. Evaluator morphisms, grounded archive dynamics, framework morphisms, and the Foundation/Löb integration remain separate later phases.
 
 ## Scope warning
 
