@@ -615,7 +615,9 @@ Results:
 - `EvidenceDependency` adds dependency-aware qualification: an evidence item is current only if it is itself current and every transitive premise is current;
 - a stale evaluator-dependent premise invalidates every directly or transitively dependent conclusion;
 - independent conclusions supported only by anchor/reality evidence remain current after evaluator migration;
-- history is still not rewritten: dependency invalidation changes current qualification, not the historical evidence archive.
+- preservation policies form a monotone revalidation order: if a new policy extends an old one, every currently qualified evidence item, dependency-qualified conclusion, and dependency-current history record remains current;
+- a concrete repair theorem shows that adding an explicit old→current preservation bridge revalidates the previously stale evaluator premise and restores its derived conclusion, while independent reality-supported conclusions remain current throughout;
+- history is still not rewritten: invalidation and revalidation change current qualification, not the historical evidence archive.
 
 Interpretation: meaningful evaluator improvement now requires three separable layers:
 (1) the anchor must contain sufficient goal-relevant information,
@@ -627,7 +629,7 @@ Important limits:
 
 1. delayed grounding is exact for deterministic scheduled sampling and eventually stable Boolean judgments; noisy/stochastic channels and approximate sufficiency remain open;
 2. eventual freshness is necessary for preserving all stable Boolean grounded judgments, but weaker task-specific recurring-disambiguation conditions may suffice for narrower goals;
-3. dependency provenance currently uses an abstract transitive dependency relation rather than explicit proof terms, timestamps, confidence, or revalidation events;
+3. dependency provenance now includes monotone revalidation under stronger preservation policies, but still uses an abstract transitive dependency relation rather than explicit proof terms, timestamps, confidence, bridge certificates, or partial premise repair;
 4. goal-relevant preservation remains edge-level rather than a general evaluator morphism;
 5. external goals remain Nat/Bool based in the present grounding theorems; richer partial orders, vector objectives, calibration, uncertainty, and risk-sensitive objectives remain future work.
 
