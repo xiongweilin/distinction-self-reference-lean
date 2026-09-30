@@ -52,7 +52,7 @@ theorem riskGapAtMost_mono
   unfold RiskGapAtMost at h ⊢
   have hmul : C * ε ≤ C * ε' := by
     simpa [mul_comm] using (mul_le_mul_left hε C)
-  exact h.trans (add_le_add_left hmul _)
+  exact h.trans (add_le_add_right hmul _)
 
 theorem exact_simulation_has_zero_gap
     {Theta : Type u} {X : Type v} {Y : Type w} {Decision : Type z}
