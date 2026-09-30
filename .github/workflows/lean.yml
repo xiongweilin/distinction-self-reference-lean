@@ -78,9 +78,10 @@ jobs:
           sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=l \
             apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
           profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
-          test -f "$profile"
-          sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
-          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          if [ -f "$profile" ]; then
+            sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
+            sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          fi
           bwrap --version
           bwrap --unshare-user --uid 0 --gid 0 --ro-bind / / /bin/true
 
@@ -131,9 +132,10 @@ jobs:
           sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=l \
             apt-get install -yq bubblewrap apparmor apparmor-utils apparmor-profiles
           profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
-          test -f "$profile"
-          sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
-          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          if [ -f "$profile" ]; then
+            sudo install -m 0644 "$profile" /etc/apparmor.d/bwrap-userns-restrict
+            sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          fi
           bwrap --version
           bwrap --unshare-user --uid 0 --gid 0 --ro-bind / / /bin/true
 
