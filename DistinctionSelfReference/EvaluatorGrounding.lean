@@ -64,6 +64,21 @@ theorem grounded_local_improvement_implies_global_goal_improvement
   | succ n ih =>
       exact lt_trans ih (hstep (n + 1))
 
+/--
+Goal-grounding form of the LocalSufficiency theorem:
+the anchor is sufficient exactly when no anchor-indistinguishable worlds demand
+different goal-relevant judgments.
+-/
+theorem anchor_sufficient_iff_no_goal_ambiguity
+    {World : Type u}
+    {Anchor : Type v}
+    {Judgment : Type*}
+    [Nonempty Judgment]
+    {anchor : World → Anchor}
+    {required : World → Judgment} :
+    Sufficient anchor required ↔ ¬ Ambiguous anchor required :=
+  sufficient_iff_not_ambiguous
+
 namespace ProxyDriftExample
 
 abbrev World := Bool × Bool
