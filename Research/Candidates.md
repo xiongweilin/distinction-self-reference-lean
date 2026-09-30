@@ -1,5 +1,7 @@
 # Candidate propositions and framework ladder
 
+[English](Candidates.md) | [简体中文](./Candidates.zh-CN.md)
+
 Status labels:
 
 - **PROVED HERE**: checked by Lean in this repository.
