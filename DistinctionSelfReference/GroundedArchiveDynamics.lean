@@ -51,6 +51,81 @@ def HasNovelCapability
   ∃ y, y ∈ new ∧ y ∉ old ∧
     ∀ x, x ∈ old → ¬ y ≤ x
 
+/-- Map an archive along an explicit state translation. -/
+def mapArchive
+    {Source Target : Type*}
+    (f : Source → Target)
+    (archive : Archive Source) :
+    Archive Target :=
+  f '' archive
+
+/-- A general evaluator morphism transports evaluator-relative frontier
+progress to the image frontiers. -/
+theorem evaluatorFrontierProgress_map_morphism
+    {Source Target : Type*}
+    {source : Evaluator Source}
+    {target : Evaluator Target}
+    {sourceGoal : Source → Nat}
+    {targetGoal : Target → Nat}
+    (m :
+      EvaluatorMorphism source target sourceGoal targetGoal)
+    (old new : Archive Source)
+    (hprogress :
+      EvaluatorFrontierProgress source old new) :
+    EvaluatorFrontierProgress target
+      (mapArchive m.mapState old)
+      (mapArchive m.mapState new) := by
+  intro x hx
+  rcases hx with ⟨a, ha, rfl⟩
+  rcases hprogress a ha with ⟨b, hb, hab⟩
+  exact ⟨m.mapState b, ⟨b, hb, rfl⟩,
+    m.mapJudgment hab⟩
+
+/-- Because evaluator morphisms also preserve the fixed external goal, they
+transport grounded goal progress to image frontiers as well. -/
+theorem goalFrontierProgress_map_morphism
+    {Source Target : Type*}
+    {source : Evaluator Source}
+    {target : Evaluator Target}
+    {sourceGoal : Source → Nat}
+    {targetGoal : Target → Nat}
+    (m :
+      EvaluatorMorphism source target sourceGoal targetGoal)
+    (old new : Archive Source)
+    (hprogress :
+      GoalFrontierProgress sourceGoal old new) :
+    GoalFrontierProgress targetGoal
+      (mapArchive m.mapState old)
+      (mapArchive m.mapState new) := by
+  intro x hx
+  rcases hx with ⟨a, ha, rfl⟩
+  rcases hprogress a ha with ⟨b, hb, hab⟩
+  refine ⟨m.mapState b, ⟨b, hb, rfl⟩, ?_⟩
+  rw [m.mapGoal a, m.mapGoal b]
+  exact hab
+
+/-- Same-state evaluator migration preserves a certified frontier-improvement
+claim directly. -/
+theorem evaluatorFrontierProgress_transport_versionBridge
+    {Version State : Type*}
+    (evaluators : Version → Evaluator State)
+    (goal : State → Nat)
+    {oldVersion newVersion : Version}
+    (bridge :
+      VersionBridge evaluators goal oldVersion newVersion)
+    (oldFrontier newFrontier : Archive State)
+    (hprogress :
+      EvaluatorFrontierProgress
+        (evaluators oldVersion)
+        oldFrontier newFrontier) :
+    EvaluatorFrontierProgress
+      (evaluators newVersion)
+      oldFrontier newFrontier := by
+  intro x hx
+  rcases hprogress x hx with ⟨y, hy, hxy⟩
+  exact ⟨y, hy,
+    bridge.certificate.preservesJudgment hxy⟩
+
 /-- Grounding is exactly the missing bridge from evaluator-relative frontier
 progress to progress in one fixed external goal. -/
 theorem goalFrontierProgress_of_evaluatorFrontierProgress
