@@ -346,6 +346,30 @@ the old archive.
 This is the bridge from "frontier replacement" to "new capability" that is
 missing from archive cardinality growth alone.
 -/
+/--
+A fixed external goal reflects the capability order when every strict goal
+improvement is also a strict capability improvement.
+-/
+def GoalReflectsCapability
+    {Version : Type u}
+    [Preorder Version]
+    (goal : Version → Nat) : Prop :=
+  ∀ {a b}, goal a < goal b → a < b
+
+/-- Goal-frontier progress becomes genuine strict capability-frontier progress
+under an explicit goal-to-capability reflection condition. -/
+theorem strictFrontierProgress_of_goalFrontierProgress
+    {Version : Type u}
+    [Preorder Version]
+    (goal : Version → Nat)
+    (old new : Archive Version)
+    (hreflect : GoalReflectsCapability goal)
+    (hprogress : GoalFrontierProgress goal old new) :
+    StrictFrontierProgress old new := by
+  intro x hx
+  rcases hprogress x hx with ⟨y, hy, hxy⟩
+  exact ⟨y, hy, hreflect hxy⟩
+
 theorem novelCapability_of_strictFrontierProgress
     {Version : Type u}
     [Preorder Version]
