@@ -18,6 +18,7 @@ import DistinctionSelfReference.LocalGlobal
 import DistinctionSelfReference.NestedGluing
 import DistinctionSelfReference.OverlapGluing
 import DistinctionSelfReference.LocalSufficiency
+import DistinctionSelfReference.AnchorMinimality
 import DistinctionSelfReference.CompositionalSufficiency
 import DistinctionSelfReference.ConditionalComposition
 import DistinctionSelfReference.FeasibleFramework
