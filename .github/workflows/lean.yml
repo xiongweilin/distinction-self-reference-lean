@@ -18,19 +18,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Reject unfinished or project-local axiom declarations
-        shell: bash
-        run: |
-          set -euo pipefail
-          if grep -RInE '(^|[^[:alnum:]_])(sorry|admit)([^[:alnum:]_]|$)' \
-              --include='*.lean' DistinctionSelfReference DistinctionSelfReference.lean; then
-            echo "Found sorry/admit in project Lean sources."
-            exit 1
-          fi
-          if grep -RInE '^[[:space:]]*(axiom|constant)[[:space:]]' \
-              --include='*.lean' DistinctionSelfReference DistinctionSelfReference.lean; then
-            echo "Found project-local axiom/constant declaration."
-            exit 1
-          fi
+        run: python3 scripts/source_audit.py
 
       - name: Install Elan
         run: |
@@ -60,12 +48,22 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
       - name: Install proof-check sandbox
+        shell: bash
         run: |
+          set -euo pipefail
           if ! command -v bwrap >/dev/null 2>&1; then
             sudo apt-get update
             sudo apt-get install -y bubblewrap
           fi
           bwrap --version
+          if ! bwrap --unshare-user --uid 0 --gid 0 \
+              --ro-bind / / --proc /proc --dev /dev /bin/true; then
+            echo "Unprivileged user namespaces are unavailable; enabling the setuid-root mode supported by bubblewrap."
+            sudo chown root:root "$(command -v bwrap)"
+            sudo chmod u+s "$(command -v bwrap)"
+            bwrap --unshare-user --uid 0 --gid 0 \
+              --ro-bind / / --proc /proc --dev /dev /bin/true
+          fi
 
       - name: Resolve dependencies and create manifest
         run: lake update
