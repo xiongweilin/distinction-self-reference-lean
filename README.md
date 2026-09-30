@@ -175,6 +175,9 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/ControlAblation.lean` — independent counterexamples showing the directional simulation and safety conditions cannot simply be dropped.
 - `DistinctionSelfReference/ControlDependencyGraph.lean` — concrete minimal sufficient condition sets for the proved control capabilities.
 - `DistinctionSelfReference/MetaFramework.lean` — condition/capability graphs plus semantic compatibility and incompatibility.
+- `DistinctionSelfReference/FrameworkMorphism.lean` — compositional translations of conditions, capabilities, and realizations with derivation/satisfaction/compatibility transport, reflection criteria, and morphism-defined invariant cores.
+- `DistinctionSelfReference/RSIFrameworkMorphisms.lean` — upgrades advanced/next RSI role translations into certified framework morphisms and recovers the legacy six-role core from morphism images.
+- `DistinctionSelfReference/GuideCore.lean` — formalizes only the guide dependency spine with corrigibility as an independent branch, effective finitude separated from finite state spaces, and conditional composition backed by existing local-sufficiency/recoverability theorems.
 - `DistinctionSelfReference/OrderTheoretic.lean` — Mathlib / Knaster-Tarski bridge.
 - `DistinctionSelfReference/Representational.lean` — Mathlib's type-level Lawvere fixed-point bridge.
 - `DistinctionSelfReference/RepresentationalObstruction.lean` — fixed-point-free endomaps forbid Lawvere-style universal surjective representation.
@@ -225,7 +228,11 @@ It closes four items:
 
 PR #5 — **Evaluator Morphisms & Proof-Carrying Provenance** is merged. It packages evaluator migration as explicit compositional certificates, transports evidence/dependencies through certified bridges, and proves by countermodel that goal preservation alone is insufficient for judgment transport.
 
-PR #7 — **Grounded Branching & Archive Dynamics** is the current mainline phase. It keeps five notions separate: archive growth, frontier replacement, evaluator-relative progress, externally grounded progress, and novel capability. Current results include strict separation countermodels, sufficient bridges between adjacent layers, evidence-archive migration criteria, and bounded-goal / well-founded-order obstructions to perpetual grounded frontier progress. PR #6 remains blocked on Foundation/toolchain alignment.
+PR #7 — **Grounded Branching & Archive Dynamics** is merged. It keeps five notions separate: archive growth, frontier replacement, evaluator-relative progress, externally grounded progress, and novel capability, with explicit bridges and countermodels between them.
+
+PR #8 — **Typed / Modal / Computational Self-Reference** exists as a parallel draft gate only. It does not block v1.0 and currently claims no new theorem unless it sharpens the self-application threshold.
+
+PR #9 — **Framework Morphisms + guide Core** is implemented on its research branch. Cross-framework comparison now uses certified morphisms rather than raw role maps; the guide integration is restricted to its mathematically explicit dependency spine. PR #6 remains blocked on Foundation/toolchain alignment.
 
 ## Scope warning
 
