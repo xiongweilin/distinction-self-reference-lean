@@ -211,7 +211,10 @@ theorem cycling_local_improvement_every_step :
     LocalImprovement evaluators
       (fun n => anchor (cyclingTrajectory n)) := by
   intro n
-  rw [cycling_anchor_constant, cycling_anchor_constant]
+  change (evaluators n).better
+    (anchor (cyclingTrajectory n))
+    (anchor (cyclingTrajectory (n + 1)))
+  rw [cycling_anchor_constant n, cycling_anchor_constant (n + 1)]
   cases n with
   | zero =>
       simp [evaluators, evaluator₀]
