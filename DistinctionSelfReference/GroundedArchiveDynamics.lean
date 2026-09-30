@@ -425,6 +425,7 @@ theorem frontier_before :
     ParetoFrontier before = ({1} : Set Nat) := by
   ext x
   simp [ParetoFrontier, before]
+  omega
 
 theorem frontier_after :
     ParetoFrontier after = ({1} : Set Nat) := by
