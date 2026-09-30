@@ -117,13 +117,13 @@ def AnchorValidated (evaluator : Evaluator Bool) : Prop :=
 theorem evaluator₀_validated :
     AnchorValidated evaluator₀ := by
   intro a b hab
-  simpa [evaluator₀] using congrArg anchorScore hab
+  exact le_of_eq (congrArg anchorScore hab)
 
 theorem evaluator₁_validated :
     AnchorValidated evaluator₁ := by
   intro a b hab
   rcases hab with hab | ⟨ha, hb⟩
-  · simpa [evaluator₁] using congrArg anchorScore hab
+  · exact le_of_eq (congrArg anchorScore hab)
   · subst a
     subst b
     simp [anchorScore]
