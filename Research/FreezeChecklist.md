@@ -1,6 +1,6 @@
 # v1.0 freeze checklist
 
-Status: **pre-freeze hardening in progress**.
+Status: **pre-freeze hardening in PR #10; stable-release gate remains external.**
 
 The repository currently uses Lean `4.35.0-rc3`. On 2026-09-30, Lean 4.35 has
 not yet reached a stable release, so the final v1.0 toolchain pin and release tag
@@ -20,11 +20,11 @@ downgrade merely to claim a stable tag.
 - [x] project Lean source currently declares no project-local `axiom` or
       `constant`.
 - [x] v1.0 core theorem names and explicit assumption scopes indexed.
-- [ ] CI: `lake build`.
-- [ ] CI: elaborate `FreezeAudit.lean` and print core theorem axioms.
-- [ ] CI: `lake check`.
-- [ ] CI: `lake check --paranoid`.
-- [ ] CI: source audit rejects future `sorry`, `admit`, `axiom`, and
+- [x] CI: `lake build`.
+- [x] CI: elaborate `FreezeAudit.lean` and print core theorem axioms.
+- [x] CI: kernel replay of the exact build export via `lake check --from-export`.
+- [ ] CI: complete the full bundled paranoid checker set on the exact build export: Lean paranoid kernel, `lean4lean`, `nanoda`, `con-leche`, and `con-ron`. GitHub CI runs these as independent sandboxed jobs because the combined upstream sequence exceeds the hosted runner lifetime.
+- [x] CI: comment/string-aware source audit rejects future `sorry`, `admit`, `axiom`, and
       `constant` declarations.
 
 ## Final stable-release gates
