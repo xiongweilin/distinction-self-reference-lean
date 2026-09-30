@@ -594,40 +594,42 @@ Important limits:
 4. Lawvere partiality is now abstracted to an explicit guard predicate, but typed guarded/later modalities and effects remain open;
 5. resource/callability conditions are intentionally secondary feasibility constraints in this phase.
 
-### P6.24 — finite-anchor grounding, proxy drift, and evaluator provenance
+### P6.24 — finite-anchor grounding, proxy drift, evaluator provenance, and delayed access
 
-Move the changing-evaluator program from internal coherence to semantic grounding against a fixed external goal.
+Move the changing-evaluator program from internal coherence to semantic grounding against a fixed external goal, then extend the grounding condition through time and evidence dependencies.
 
-Status: **SECOND FORMAL LAYER PROVED HERE** in `LocalSufficiency`, `AnchorMinimality`, `EvaluatorGrounding`, and `EvaluatorProvenance`.
+Status: **THIRD FORMAL LAYER PROVED HERE** in `LocalSufficiency`, `AnchorMinimality`, `EvaluatorGrounding`, `EvaluatorProvenance`, `DynamicAnchorGrounding`, and `EvidenceDependency`.
 
 Results:
 
-- `LocalSufficiency` gives the exact static grounding boundary: assuming a nonempty judgment type, an anchor is sufficient for a goal-relevant commitment iff no two anchor-indistinguishable worlds require different judgments;
-- equivalently, sufficiency is exactly constancy of the required commitment on every anchor fiber;
-- `AnchorMinimality` identifies the canonical minimal information content: the required goal-judgment map itself is least sufficient, every sufficient anchor refines it, and every least sufficient anchor is information-equivalent to it;
-- therefore least sufficient anchors are unique up to deterministic post-processing equivalence and have exactly the same world-state fibers as the goal-relevant judgment map;
-- if the actually reachable anchor observations are finite, every sufficient anchor has at least as many reachable observation classes as there are reachable required-judgment classes; a least sufficient anchor attains this bound exactly;
-- `EvaluatorGrounding` proves the semantic baseline: fixed external goal + sufficient anchor + evaluator soundness relative to a valid anchor factorization + local evaluator improvement imply strict improvement of the same external goal over every finite nonempty trajectory prefix;
-- “grounded” is therefore semantic rather than architectural: the evaluator need not sit outside the system;
-- a finite Bool-anchor counterexample proves the sharp failure mode: evaluator migration occurs, every evaluator passes anchor-only validation, every step is locally evaluator-improving, yet the hidden external goal regresses because the anchor is insufficient;
-- the same finite insufficient anchor supports a perpetual proxy cycle with infinitely many true-goal regressions while anchor validation and local evaluator improvement continue forever;
-- this formalizes the separation `external signal exists ≠ external signal is sufficient for the claimed improvement`;
-- `EvaluatorProvenance` separates immutable historical retention from current evidential qualification;
-- anchor/reality evidence remains current across every evaluator migration;
-- exact old-evaluator judgment preservation is reflexive/transitive and justifies evidence migration;
-- a weaker relation preserving only judgments that genuinely increase a fixed external goal is also reflexive/transitive and sufficient for goal-relevant evidence migration;
-- this weaker relation is strictly weaker than full evaluator preservation: a concrete migration may delete old goal-regressing judgments while preserving every goal-improving judgment;
-- unsupported old evaluator evidence remains in history but is excluded from the new current-evidence view.
+- static anchor sufficiency is exact: assuming a nonempty judgment type, an anchor is sufficient for a goal-relevant commitment iff no two anchor-indistinguishable worlds require different judgments;
+- least sufficient anchors are characterized up to deterministic information equivalence, have exactly the same fibers as the required goal-judgment map, and attain the finite reachable-observation cardinality lower bound;
+- fixed external goal + sufficient anchor + evaluator soundness relative to an anchor factorization + local evaluator improvement imply strict global improvement of the same external goal;
+- an insufficient finite Bool anchor can pass validator checks indefinitely while the hidden external goal suffers one-step regression or infinitely many regressions in a perpetual proxy cycle;
+- evaluator provenance separates immutable history from current qualification; anchor evidence survives migration, and evaluator-dependent evidence migrates only under justified preservation;
+- preserving only genuine external-goal-improving judgments is compositional and strictly weaker than preserving the whole old evaluator relation;
+- `DynamicAnchorGrounding` gives an exact temporal criterion: a source schedule is eventually fresh iff it preserves every eventually stable Boolean judgment that is grounded through a sufficient finite Boolean anchor;
+- bounded staleness is therefore a concrete sufficient delayed-grounding condition;
+- if eventual freshness fails, there exists an eventually stable Boolean goal whose own two-valued judgment is already a sufficient anchor, yet delayed sampling still fails to converge to the true target;
+- thus **static sufficiency alone is not enough under stale access**: semantic sufficiency and temporal freshness are independent load-bearing conditions;
+- `EvidenceDependency` adds dependency-aware qualification: an evidence item is current only if it is itself current and every transitive premise is current;
+- a stale evaluator-dependent premise invalidates every directly or transitively dependent conclusion;
+- independent conclusions supported only by anchor/reality evidence remain current after evaluator migration;
+- history is still not rewritten: dependency invalidation changes current qualification, not the historical evidence archive.
 
-Interpretation: internal coherence, local improvement, evaluator migration, and even persistent anchor validation do not by themselves make improvement meaningful. The load-bearing static condition is goal-relative anchor sufficiency; provenance then determines which historical judgments survive evaluator change, and only goal-relevant semantic preservation is required when the claim itself is goal-relative.
+Interpretation: meaningful evaluator improvement now requires three separable layers:
+(1) the anchor must contain sufficient goal-relevant information,
+(2) access to that anchor must remain temporally adequate,
+and (3) migrated evidence must retain valid provenance through evaluator changes and proof dependencies.
+An external signal can therefore fail grounding by **semantic ambiguity**, **temporal staleness**, or **provenance breakage**.
 
 Important limits:
 
-1. the baseline external goal is currently Nat-valued with strict improvement; partial orders, vector goals, uncertainty, calibration, and risk-sensitive objectives remain open;
-2. least sufficient anchors are characterized exactly under deterministic refinement, but noisy/stochastic or delayed anchors require a different sufficiency notion;
-3. perpetual proxy drift is proved by a deterministic finite-anchor cycle; criteria such as eventual sufficiency, recurring disambiguation, or probabilistic identifiability have not yet been characterized;
-4. goal-relevant preservation is still an edge-level relation; a general evaluator-morphism notion preserving richer semantic structure remains open;
-5. provenance tracks source/version and current qualification but not proof dependencies, timestamps, confidence, revocation graphs, or cascading invalidation.
+1. delayed grounding is exact for deterministic scheduled sampling and eventually stable Boolean judgments; noisy/stochastic channels and approximate sufficiency remain open;
+2. eventual freshness is necessary for preserving all stable Boolean grounded judgments, but weaker task-specific recurring-disambiguation conditions may suffice for narrower goals;
+3. dependency provenance currently uses an abstract transitive dependency relation rather than explicit proof terms, timestamps, confidence, or revalidation events;
+4. goal-relevant preservation remains edge-level rather than a general evaluator morphism;
+5. external goals remain Nat/Bool based in the present grounding theorems; richer partial orders, vector objectives, calibration, uncertainty, and risk-sensitive objectives remain future work.
 
 ## Meta-framework target
 
