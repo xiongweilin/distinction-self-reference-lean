@@ -424,8 +424,20 @@ theorem strict_archive_growth :
 theorem frontier_before :
     ParetoFrontier before = ({1} : Set Nat) := by
   ext x
-  simp [ParetoFrontier, before]
-  omega
+  constructor
+  · intro hx
+    simpa [before] using hx.1
+  · intro hx
+    have hx1 : x = 1 := by
+      simpa using hx
+    subst x
+    constructor
+    · simp [before]
+    · intro y hy
+      have hy1 : y = 1 := by
+        simpa [before] using hy
+      subst y
+      exact lt_irrefl 1
 
 theorem frontier_after :
     ParetoFrontier after = ({1} : Set Nat) := by
