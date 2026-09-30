@@ -1,3 +1,4 @@
+import Mathlib.Data.Set.Card
 import DistinctionSelfReference.LocalSufficiency
 
 namespace DistinctionSelfReference
@@ -161,6 +162,45 @@ theorem least_anchor_same_fibers_as_required
   constructor
   · exact equality_preserved_by_postprocessing har
   · exact equality_preserved_by_postprocessing hra
+
+/--
+For any sufficient anchor with finitely many actually reachable observations,
+the number of reachable goal judgments cannot exceed the number of reachable
+anchor observations.
+-/
+theorem sufficient_anchor_range_card_lower_bound
+    {World : Type u}
+    {Anchor : Type v}
+    {Choice : Type w}
+    {anchor : World → Anchor}
+    {required : World → Choice}
+    (hs : Sufficient anchor required)
+    (hfinite : (Set.range anchor).Finite) :
+    (Set.range required).ncard ≤ (Set.range anchor).ncard := by
+  rcases hs with ⟨post, hfactor⟩
+  rw [hfactor, Set.range_comp]
+  exact Set.ncard_image_le hfinite
+
+/--
+A least sufficient anchor attains the lower bound exactly: its reachable
+observation classes are equinumerous with the reachable goal-judgment classes.
+-/
+theorem least_anchor_range_card_eq_required
+    {World : Type u}
+    {Anchor : Type v}
+    {Choice : Type w}
+    {anchor : World → Anchor}
+    {required : World → Choice}
+    (hleast : LeastSufficient anchor required)
+    (hfinite : (Set.range anchor).Finite) :
+    (Set.range anchor).ncard = (Set.range required).ncard := by
+  have hreqFinite : (Set.range required).Finite := by
+    rcases hleast.1 with ⟨post, hfactor⟩
+    rw [hfactor, Set.range_comp]
+    exact hfinite.image post
+  apply Nat.le_antisymm
+  · exact sufficient_anchor_range_card_lower_bound hleast.2 hreqFinite
+  · exact sufficient_anchor_range_card_lower_bound hleast.1 hfinite
 
 end AnchorMinimality
 end DistinctionSelfReference
