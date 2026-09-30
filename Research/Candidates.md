@@ -765,6 +765,61 @@ grounded objective progress, and capability novelty are different mathematical
 questions. Archive cardinality growth alone is not evidence of RSI capability
 growth.
 
+### P6.27 — framework morphisms and guide dependency core
+
+Replace raw cross-framework role maps by explicit compositional translations
+that preserve both derivability and semantic satisfiability.
+
+Status: **PROVED HERE** in `FrameworkMorphism`,
+`RSIFrameworkMorphisms`, and `GuideCore`.
+
+The generic layer provides:
+
+- `Framework` = monotone derivability graph + condition-realization semantics;
+- `FrameworkMorphism` with condition, capability, and realization maps;
+- preservation of individual conditions, whole condition-set satisfaction,
+  semantic compatibility, and derivability;
+- identity and composition;
+- transport of sufficiency and feasible sufficiency;
+- explicit `ReflectsDerivation` as the extra condition needed for dominance
+  preservation;
+- a countermodel showing one-way derivation preservation plus surjective
+  capability mapping is not enough to preserve target dominance;
+- transport of capability equivalence under preservation + reflection +
+  surjective capability translation;
+- `InvariantConditionCore` defined from intersections of certified morphism
+  images rather than manually declared role correspondences.
+
+The RSI instance upgrades the existing advanced/next condition maps into
+certified morphisms to a common role framework. The morphism-induced role core
+is proved equal to the previous six-role `FullRSIInvariantCore`, so the legacy
+result is recovered rather than replaced by an unrelated definition.
+
+The guide instance formalizes only explicit dependency claims:
+
+- external constraint + reflexive distinction + maintained re-entry form the
+  minimal self-reference dependency set;
+- identity continuity extends this to persistent self;
+- reality-side revisability remains an independent corrigibility branch and is
+  not an agency prerequisite;
+- reality-changing agency, effective finitude, purpose, and explore/commit
+  choice are added successively toward the local-sufficiency problem;
+- local sufficiency + compatibility + recoverability is connected to the
+  repository's existing constructive conditional-composition witness.
+
+Two scope boundaries are formally protected:
+
+- effective finitude is defined as per-state finiteness of currently effective
+  capabilities; a concrete model has finite effective capabilities at every
+  state while the state space is infinite, so it cannot be collapsed to
+  `Fintype State`;
+- the conditional-composition theorem leaves `World` and `State` as
+  arbitrary types, so no exhaustive enumerable "reality state" is introduced.
+
+Interpretation: the meta-framework now has a genuine morphism layer.
+Invariant-core claims can be stated as structure preserved by certified
+translations rather than by post-hoc manually assigned role labels.
+
 ## Meta-framework target
 
 Let a framework be represented by:
@@ -815,10 +870,10 @@ Interpretation: derivability-minimal but semantically impossible condition sets 
 
 If several incomparable minimal sufficient frameworks exist, extract the structure preserved by translations between all of them.
 
-Status: **MULTIPLE CROSS-FRAMEWORK INSTANCES PROVED HERE; GENERAL MORPHISM PROGRAM ONGOING**.
+Status: **GENERAL MORPHISM LAYER PROVED HERE; FIRST RSI CORE LIFT COMPLETE**.
 
 `RSIInvariantCore` translates three syntactically different trust architectures — conservative verifier refinement, proof-checked verifier expansion, and predecessor-checked kernel migration — into a shared semantic role vocabulary. Their translated intersection contains exactly `trustAnchor` and `soundnessTransfer`; `validationEvidence` is architecture-specific.
 
 `FullRSIInvariantCore` extends this comparison to six RSI roles — self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability — and proves that two distinct condition languages each cover all six after translation.
 
-The next M5 step is no longer to find a first invariant core, but to formalize **framework morphisms** themselves so that invariant cores are defined by structure preserved under translations rather than by manually supplied role maps.
+`FrameworkMorphism` now provides this structure: condition/capability/realization maps, derivation and satisfaction preservation, identity/composition, compatibility transport, reflection criteria, and morphism-induced invariant cores. `RSIFrameworkMorphisms` proves that the previous six-role core is recovered from certified morphism images. Remaining work is artifact stabilization and broader instantiation, not the absence of a morphism abstraction.
