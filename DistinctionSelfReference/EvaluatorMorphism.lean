@@ -1,7 +1,7 @@
 import DistinctionSelfReference.EvaluatorProvenance
 
 namespace DistinctionSelfReference
-namespace EvaluatorMorphism
+namespace EvaluatorMorphisms
 
 open ChangingEvaluator
 open EvaluatorProvenance
@@ -22,7 +22,7 @@ structure BridgeCertificate
     (target : Evaluator TargetState)
     (mapState : SourceState → TargetState)
     (sourceGoal : SourceState → Nat)
-    (targetGoal : TargetState → Nat) where
+    (targetGoal : TargetState → Nat) : Type (max u v) where
   preservesJudgment :
     ∀ {a b},
       source.better a b →
@@ -66,7 +66,7 @@ structure EvaluatorMorphism
     (source : Evaluator SourceState)
     (target : Evaluator TargetState)
     (sourceGoal : SourceState → Nat)
-    (targetGoal : TargetState → Nat) where
+    (targetGoal : TargetState → Nat) : Type (max u v) where
   mapState : SourceState → TargetState
   certificate :
     BridgeCertificate source target mapState sourceGoal targetGoal
@@ -149,7 +149,7 @@ structure VersionBridge
     {Version : Type u} {State : Type v}
     (evaluators : Version → Evaluator State)
     (goal : State → Nat)
-    (old new : Version) where
+    (old new : Version) : Type (max u v) where
   certificate :
     BridgeCertificate
       (evaluators old) (evaluators new) id goal goal
@@ -197,7 +197,8 @@ def ofPreservesJudgments
     (h : PreservesJudgments evaluators old new) :
     VersionBridge evaluators goal old new where
   certificate := {
-    preservesJudgment := h
+    preservesJudgment := fun {a b} hab => by
+      simpa using h a b hab
     preservesGoal := fun _ => rfl
   }
 
@@ -231,5 +232,5 @@ theorem hasVersionBridge_trans
   rcases h₁₂ with ⟨b₁₂⟩
   exact ⟨VersionBridge.comp evaluators goal b₀₁ b₁₂⟩
 
-end EvaluatorMorphism
+end EvaluatorMorphisms
 end DistinctionSelfReference
