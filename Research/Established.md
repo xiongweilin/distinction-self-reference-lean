@@ -1,5 +1,7 @@
 # Established results relevant to distinction and self-reference
 
+[English](Established.md) | [简体中文](./Established.zh-CN.md)
+
 This file separates established mathematics from experiments in this repository.
 
 ## 1. Spencer-Brown: distinction, calling, crossing

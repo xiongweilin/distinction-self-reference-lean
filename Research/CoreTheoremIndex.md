@@ -1,5 +1,7 @@
 # v1.0 core theorem index
 
+[English](CoreTheoremIndex.md) | [简体中文](./CoreTheoremIndex.zh-CN.md)
+
 This file defines the **v1.0 core** for stability and assumption review. It is
 not a claim that every theorem outside this list is secondary mathematics; it is
 the public cross-section whose names, scopes, and assumptions are expected to

@@ -1,5 +1,7 @@
 # Distinction / Self-Reference in Lean
 
+[English](README.md) | [简体中文](./README.zh-CN.md)
+
 A formal research project for studying which additional conditions turn a minimal distinction-and-reentry system into progressively stronger forms of self-reference.
 
 The project deliberately separates:

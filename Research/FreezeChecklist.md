@@ -1,5 +1,7 @@
 # v1.0 freeze checklist
 
+[English](FreezeChecklist.md) | [简体中文](./FreezeChecklist.zh-CN.md)
+
 Status: **PR #10 merged; repository content is pre-v1.0 frozen and the stable-release gate remains external.**
 
 The repository currently uses Lean `4.35.0-rc3`. On 2026-09-30, Lean 4.35 has
