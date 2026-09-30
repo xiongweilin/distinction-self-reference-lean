@@ -157,6 +157,7 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/TaskFamilyScheduling.lean` — exact family-relative schedule criterion, universal-family recovery of eventual freshness, and strict singleton-family separation.
 - `DistinctionSelfReference/TaskRelativeScheduling.lean` — fixed-task preservation, universal-to-task implication, and a strict counterexample separating task adequacy from global eventual freshness.
 - `DistinctionSelfReference/EvidenceDependency.lean` — dependency-aware current evidence, transitive stale-premise invalidation, selective survival of anchor-supported conclusions, and monotone revalidation under stronger preservation bridges.
+- `DistinctionSelfReference/GroundedArchiveDynamics.lean` — separates archive growth, frontier replacement, evaluator-relative progress, fixed-goal grounded progress, capability novelty, evaluator migration, and two stopping criteria.
 - `DistinctionSelfReference/ArchiveRSI.lean` — branch/archive separation, WQO stabilization for monotone antichains, dominance-complete Pareto frontiers, perpetual replacement under WQO, and the `WellFoundedGT` obstruction.
 - `DistinctionSelfReference/PartialLawvere.lean` — partial diagonal representation and the defined-self-application threshold for Lawvere fixed points.
 - `DistinctionSelfReference/GuardedLawvere.lean` — guard-separated diagonal representation; open self-application forces a fixed point and fixed-point-free maps force the self guard closed.
@@ -222,7 +223,9 @@ It closes four items:
 3. a concrete strict Boolean Bayes-risk degradation example under discard garbling;
 4. exact task-family scheduling criteria with both universal recovery and strict family-relative separation.
 
-PR #5 — **Evaluator Morphisms & Proof-Carrying Provenance** is implemented on its research branch. It packages evaluator migration as explicit compositional certificates, transports evidence/dependencies through certified bridges, and proves by countermodel that goal preservation alone is insufficient for judgment transport. Grounded archive dynamics, framework morphisms, and Foundation/Löb integration remain separate later phases.
+PR #5 — **Evaluator Morphisms & Proof-Carrying Provenance** is merged. It packages evaluator migration as explicit compositional certificates, transports evidence/dependencies through certified bridges, and proves by countermodel that goal preservation alone is insufficient for judgment transport.
+
+PR #7 — **Grounded Branching & Archive Dynamics** is the current mainline phase. It keeps five notions separate: archive growth, frontier replacement, evaluator-relative progress, externally grounded progress, and novel capability. Current results include strict separation countermodels, sufficient bridges between adjacent layers, evidence-archive migration criteria, and bounded-goal / well-founded-order obstructions to perpetual grounded frontier progress. PR #6 remains blocked on Foundation/toolchain alignment.
 
 ## Scope warning
 

@@ -36,7 +36,7 @@ Implemented additions also include a uniform bounded-loss risk surrogate and a c
 
 ## PR #5 — Evaluator Morphisms & Proof-Carrying Provenance
 
-Status: **implemented; final merge gate is successful CI on the synchronized PR head.**
+Status: **merged.**
 
 Goal: replace edge-by-edge evaluator preservation predicates by a compositional
 structure.
@@ -56,6 +56,8 @@ The existing RQGM-style selective-erasure pattern is now captured structurally: 
 
 ## PR #6 — Self-Certification / Loeb Boundary
 
+Status: **blocked by toolchain alignment; tracked as issue #6.**
+
 Goal: replace the current abstract Loeb interface by concrete formal-logic
 instances: reflection, Loeb, Goedel II, and Tarski boundaries.
 
@@ -65,6 +67,8 @@ Hard prerequisite: compatible Lean / Mathlib pins with
 Do not weaken the trust boundary merely to make the dependency compile.
 
 ## PR #7 — Grounded Branching & Archive Dynamics
+
+Status: **implemented in code; final synchronized PR-head CI is the merge gate.**
 
 Goal: combine the archive, changing-evaluator, and grounding lines.
 
@@ -76,9 +80,7 @@ Keep the following distinctions explicit:
 - externally grounded improvement;
 - genuinely novel capability.
 
-Targets should include evaluator migration and evidence validity, plus sharper
-WQO / chain-condition criteria. Do not treat archive growth alone as capability
-progress.
+Implemented targets include evaluator migration and evidence validity; explicit separation of archive growth, frontier replacement, evaluator-relative progress, externally grounded progress, and capability novelty; morphism transport of frontier progress; and two sharper stopping criteria: a `WellFoundedGT` capability order under capability-sound evaluators, or a uniformly bounded fixed external goal under goal-sound evaluators. Do not treat archive growth alone as capability progress.
 
 ## PR #8 — Typed / Modal / Computational Self-Reference
 
