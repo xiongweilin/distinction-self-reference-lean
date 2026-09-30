@@ -339,14 +339,6 @@ theorem goalFrontierProgress_of_strictFrontierProgress
   exact ⟨y, hy, hsound hxy⟩
 
 /--
-Strict progress from a nonempty Pareto-style frontier forces genuine capability
-novelty once the old frontier is both an antichain and dominance-complete for
-the old archive.
-
-This is the bridge from "frontier replacement" to "new capability" that is
-missing from archive cardinality growth alone.
--/
-/--
 A fixed external goal reflects the capability order when every strict goal
 improvement is also a strict capability improvement.
 -/
@@ -370,6 +362,14 @@ theorem strictFrontierProgress_of_goalFrontierProgress
   rcases hprogress x hx with ⟨y, hy, hxy⟩
   exact ⟨y, hy, hreflect hxy⟩
 
+/--
+Strict progress from a nonempty Pareto-style frontier forces genuine capability
+novelty once the old frontier is both an antichain and dominance-complete for
+the old archive.
+
+This is the bridge from "frontier replacement" to "new capability" that is
+missing from archive cardinality growth alone.
+-/
 theorem novelCapability_of_strictFrontierProgress
     {Version : Type u}
     [Preorder Version]
