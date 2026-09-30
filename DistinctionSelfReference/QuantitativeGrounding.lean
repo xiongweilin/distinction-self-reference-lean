@@ -50,7 +50,9 @@ theorem riskGapAtMost_mono
     (h : RiskGapAtMost C ε loss approx gold prior) :
     RiskGapAtMost C ε' loss approx gold prior := by
   unfold RiskGapAtMost at h ⊢
-  exact h.trans (add_le_add_left (mul_le_mul_left hε C) _)
+  have hmul : C * ε ≤ C * ε' := by
+    simpa [mul_comm] using (mul_le_mul_left hε C)
+  exact h.trans (add_le_add_left hmul _)
 
 theorem exact_simulation_has_zero_gap
     {Theta : Type u} {X : Type v} {Y : Type w} {Decision : Type z}
