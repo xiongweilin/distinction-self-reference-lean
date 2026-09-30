@@ -13,7 +13,7 @@ def mismatchLoss (theta decision : Bool) : ℝ≥0∞ :=
   if theta = decision then 0 else 1
 
 /-- Two equally weighted parameter points; normalization is unnecessary for strictness. -/
-def prior : Measure Bool :=
+noncomputable def prior : Measure Bool :=
   Measure.dirac false + Measure.dirac true
 
 theorem mismatchLoss_measurable :
@@ -26,7 +26,7 @@ theorem bayesRisk_exact_zero :
   apply le_antisymm
   · have h := bayesRisk_le_avgRisk mismatchLoss
       (Kernel.id : Kernel Bool Bool) (Kernel.id : Kernel Bool Bool) prior
-    simpa [avgRisk, mismatchLoss] using h
+    simpa [avgRisk, mismatchLoss, Kernel.id_apply] using h
   · exact bot_le
 
 /-- With the observation discarded, either fixed Boolean decision incurs unit total loss. -/
