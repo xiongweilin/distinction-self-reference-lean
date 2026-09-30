@@ -152,6 +152,7 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/EvaluatorGrounding.lean` — semantic grounding through sufficient anchors, global external-goal improvement, finite-anchor regression, and a perpetual hidden proxy cycle.
 - `DistinctionSelfReference/EvaluatorProvenance.lean` — evaluator-version provenance, selective current-evidence invalidation, exact/full preservation, and weaker goal-relevant evidence migration.
 - `DistinctionSelfReference/DynamicAnchorGrounding.lean` — exact eventual-freshness criterion for delayed/reordered grounded Boolean judgments, plus stale-schedule counterexamples.
+- `DistinctionSelfReference/TaskFamilyScheduling.lean` — exact family-relative schedule criterion, universal-family recovery of eventual freshness, and strict singleton-family separation.
 - `DistinctionSelfReference/TaskRelativeScheduling.lean` — fixed-task preservation, universal-to-task implication, and a strict counterexample separating task adequacy from global eventual freshness.
 - `DistinctionSelfReference/EvidenceDependency.lean` — dependency-aware current evidence, transitive stale-premise invalidation, selective survival of anchor-supported conclusions, and monotone revalidation under stronger preservation bridges.
 - `DistinctionSelfReference/ArchiveRSI.lean` — branch/archive separation, WQO stabilization for monotone antichains, dominance-complete Pareto frontiers, perpetual replacement under WQO, and the `WellFoundedGT` obstruction.
@@ -207,17 +208,20 @@ The current frontier is therefore no longer “can a monotone RSI chain grow?”
 
 ## Next construction directions
 
-This phase is closed and merged as one evaluator-grounding layer. The next phase should start from a fresh branch.
+The remaining large program is now intentionally finite and phase-gated.
+See `Research/Roadmap.md` for the maintained PR #4 → PR #9 → v1.0 plan.
 
-Current follow-on priorities:
+Current phase: **PR #4 — Quantitative Grounding**.
 
-1. **Approximate stochastic sufficiency** — the zero-risk boundary is now formal: Markov garbling cannot create decision grounding, and positive Bayes risk cannot disappear under further garbling. The next step is quantitative approximate grounding: bounded excess Bayes risk, calibration, or task-relative regret rather than exact risk zero.
+Its scope is deliberately limited to:
 
-2. **Richer task-relative recurring disambiguation** — universal eventual freshness is exact for preserving all stable Boolean tasks, while a concrete non-fresh schedule can still preserve one nonconstant stable task. Next characterize the minimal source-index recurrence / disambiguation condition for a fixed task family.
+1. quantitative decision-risk gaps as the risk-side Blackwell–Le Cam layer;
+2. monotonicity and composition of those bounds;
+3. exact task-family scheduling criteria and strict separations.
 
-3. **Evaluator morphisms and proof-carrying provenance** — goal-relevant edge preservation and monotone evidence revalidation are established. Next package them as general evaluator morphisms with explicit bridge certificates and dependency-aware transport.
-
-4. **Deferred deeper frontiers** — direct Foundation/Löb integration still waits for compatible Lean/Mathlib pins. Non-monotone archive criteria and typed/modal/effectful guarded Lawvere remain valid later targets.
+Evaluator morphisms, grounded archive dynamics, framework morphisms, and the
+Foundation/Löb integration are separate later phases rather than extensions of
+this PR.
 
 ## Scope warning
 
