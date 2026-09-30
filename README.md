@@ -72,8 +72,8 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Full RSI invariant-role core | two distinct RSI condition languages + semantic role translation | both cover self-modification, capability order, invariant preservation, reality verification, trust transfer, and resource callability |
 | Self-certification barrier | internal certification + semantic soundness + abstract Löb rule | universal self-certification can be semantically unsound; internal reflection collapses to proof under Löb; a grounded root restores sound transfer |
 | Changing evaluator | time-indexed local improvement relations | strict global extension exists iff the local-edge union is acyclic; on finite states this is equivalent to a Nat common potential |
-| Evaluator grounding | fixed external goal + anchor + changing evaluator | sufficient anchor + semantic evaluator soundness + local improvement imply global goal improvement; a finite insufficient anchor permits validated proxy regression |
-| Evaluator provenance | versioned evaluator evidence + anchor evidence | history is retained while current qualification is selectively invalidated; preservation/refinement permits justified evidence migration |
+| Evaluator grounding | fixed external goal + anchor + changing evaluator | sufficient anchor + semantic evaluator soundness + local improvement imply global goal improvement; insufficient finite anchors permit one-step and perpetual proxy regression |
+| Evaluator provenance | versioned evaluator evidence + anchor evidence | history is retained while current qualification is selectively invalidated; full or goal-relevant preservation permits justified migration |
 | Branch/archive RSI | recurrent selected branch + retained archive | branch recurrence and branch-score plateau can coexist with strict archive growth; WQO makes antichain frontiers finite but does not itself imply archive stabilization |
 | Partial Lawvere | Option-valued evaluator + diagonal representation | a represented partial diagonal forces a fixed point exactly when self-application is defined; fixed-point-free steps force the representing self-application to be undefined |
 
@@ -104,7 +104,8 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/LocalSufficiency.lean` — observation-relative commitment sufficiency and ambiguity witnesses.
 - `DistinctionSelfReference/CompositionalSufficiency.lean` — composition of locally sufficient commitments under cover and overlap agreement.
 - `DistinctionSelfReference/ConditionalComposition.lean` — compositional commitment witness augmented with finite recovery to viability.
-- `DistinctionSelfReference/LocalSufficiency.lean` — observation-relative commitment sufficiency and ambiguity obstruction.
+- `DistinctionSelfReference/LocalSufficiency.lean` — observation-relative commitment sufficiency with the exact no-ambiguity iff.
+- `DistinctionSelfReference/AnchorMinimality.lean` — least sufficient anchors, information-equivalence uniqueness, fiber characterization, and finite reachable-range cardinal lower bounds.
 - `DistinctionSelfReference/CompositionalSufficiency.lean` — local sufficiency + overlap gluing constructs a globally decodable commitment.
 - `DistinctionSelfReference/ConditionalComposition.lean` — adds minimum recoverability to produce a conditional composition witness.
 - `DistinctionSelfReference/FeasibleFramework.lean` — combines capability sufficiency with joint semantic realizability.
@@ -144,8 +145,8 @@ This is intentionally a branching ladder: static, dynamic, order-theoretic, diag
 - `DistinctionSelfReference/FullRSIInvariantCore.lean` — six-role full-RSI semantic core across two distinct condition languages.
 - `DistinctionSelfReference/SelfCertificationBarrier.lean` — circular-certification countermodel, semantic transfer with an external anchor, and an abstract Löb reflection barrier.
 - `DistinctionSelfReference/ChangingEvaluator.lean` — exact acyclicity iff for strict global extensions; finite-state acyclicity iff Nat common potential; infinite-state counterexample separating the two.
-- `DistinctionSelfReference/EvaluatorGrounding.lean` — semantic grounding through sufficient anchors, global external-goal improvement, and a finite-anchor proxy-regression counterexample.
-- `DistinctionSelfReference/EvaluatorProvenance.lean` — evaluator-version provenance, selective current-evidence invalidation, and preservation/refinement-based evidence migration.
+- `DistinctionSelfReference/EvaluatorGrounding.lean` — semantic grounding through sufficient anchors, global external-goal improvement, finite-anchor regression, and a perpetual hidden proxy cycle.
+- `DistinctionSelfReference/EvaluatorProvenance.lean` — evaluator-version provenance, selective current-evidence invalidation, exact/full preservation, and weaker goal-relevant evidence migration.
 - `DistinctionSelfReference/ArchiveRSI.lean` — branch/archive separation, WQO stabilization for monotone antichains, dominance-complete Pareto frontiers, perpetual replacement under WQO, and the `WellFoundedGT` obstruction.
 - `DistinctionSelfReference/PartialLawvere.lean` — partial diagonal representation and the defined-self-application threshold for Lawvere fixed points.
 - `DistinctionSelfReference/GuardedLawvere.lean` — guard-separated diagonal representation; open self-application forces a fixed point and fixed-point-free maps force the self guard closed.
@@ -203,15 +204,15 @@ This section is updated at the end of every completed construction phase.
 
 Current priorities, in order:
 
-1. **Minimal sufficient grounding under finite observation** — the exact fiber-level criterion is now proved: an anchor is sufficient for a goal-relevant commitment iff no anchor-indistinguishable states require different judgments. Next classify or construct minimal sufficient finite anchors under refinement/information order, and quantify what additional distinctions are required to eliminate each ambiguity class.
+1. **Dynamic/noisy anchor sufficiency** — static goal-relative sufficiency is now exact, and least sufficient anchors are unique up to deterministic information equivalence. For finite reachable observation ranges, every sufficient anchor needs at least as many reachable classes as the goal-relevant judgment map, and a least anchor attains the bound exactly. Next replace exact observations by delayed/noisy/stochastic anchors and characterize when sufficiency is preserved, recovered, or only approximate.
 
-2. **Evaluator migration as a structure-preserving map** — provenance now separates historical retention from current qualification, and judgment preservation is compositional. Next formalize richer evaluator morphisms/refinements that preserve selected goal judgments, calibrated confidence, or decision regions rather than all raw `better` edges.
+2. **Goal-relevant evaluator morphisms** — full judgment preservation is stronger than necessary. The current provenance layer proves that preservation restricted to genuine external-goal-improving judgments is compositional and strictly weaker than preserving the whole old evaluator relation. Next lift this from a predicate on edges to a general evaluator morphism preserving selected semantic regions, confidence/calibration, or decision boundaries.
 
-3. **Long-run proxy drift under imperfect anchors** — the finite Bool counterexample proves that anchor validation can coexist with true goal regression when the anchor is insufficient. Next characterize when repeated migration yields regression, cycles, or stable-but-wrong proxy optimization under delayed/noisy/partial anchors, reusing the existing scheduling and information-order machinery.
+3. **Long-run proxy drift criteria** — an insufficient finite Bool anchor can now pass validation forever while the hidden external goal suffers infinitely many regressions in a persistent proxy cycle. Next characterize which dynamic anchor conditions exclude such cycles, including eventual sufficiency, recurring disambiguation, delayed truth, and noisy observations.
 
-4. **Self-modifying verifier without an independent trust anchor** — instantiate the abstract Löb interface with `FormalizedFormalLogic/Foundation` once Lean/Mathlib pins align, then connect verifier self-certification to Gödel II, Löb, and Tarski.
+4. **Dependency-aware evidence provenance** — history/current qualification separation and selective erasure are formalized. Next add evidence dependencies so invalidating an evaluator-version premise propagates only to dependent conclusions, while independent reality/anchor evidence remains reusable.
 
-5. **Archive and guarded-self-reference refinements** — continue non-monotone Pareto replacement criteria and typed/modal/effectful guarded Lawvere only after the grounding/provenance layer above is stable. Resource/callability remains a feasibility dimension throughout.
+5. **Deferred deeper frontiers** — direct Foundation/Löb integration still waits for compatible Lean/Mathlib pins. Non-monotone archive criteria and typed/modal/effectful guarded Lawvere remain valid later targets, with resources/callability treated as feasibility constraints.
 
 ## Scope warning
 
