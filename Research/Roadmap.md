@@ -112,8 +112,9 @@ Implemented interface:
 - derivability and condition-satisfaction preservation;
 - compatibility preservation derived from realization transport;
 - identity and composition;
+- first-class framework equivalence with identity/symmetry/composition and mutual inverse laws;
 - sufficiency and feasible-sufficiency transport;
-- explicit derivation reflection for dominance/equivalence transport;
+- derivation reflection and dominance invariance under equivalence;
 - a necessity countermodel showing preservation alone is insufficient;
 - invariant condition cores induced by certified morphism images.
 
