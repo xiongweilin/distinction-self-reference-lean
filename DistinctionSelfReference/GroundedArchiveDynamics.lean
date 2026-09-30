@@ -396,6 +396,29 @@ theorem novelCapability_of_strictFrontierProgress
     exact (hnotDominated y hy) le_rfl
   exact ⟨y, hyNew, hyOld, hnotDominated⟩
 
+/--
+Grounded progress yields genuinely novel capability only after the external goal
+is explicitly linked back to the capability order and the old frontier is a
+complete antichain summary.
+-/
+theorem novelCapability_of_groundedFrontierProgress
+    {Version : Type u}
+    [Preorder Version]
+    (goal : Version → Nat)
+    (oldArchive oldFrontier newFrontier : Archive Version)
+    (h0 : oldFrontier.Nonempty)
+    (hanti : IsAntichain (· ≤ ·) oldFrontier)
+    (hcomplete :
+      DominanceComplete oldFrontier oldArchive)
+    (hreflect : GoalReflectsCapability goal)
+    (hprogress :
+      GoalFrontierProgress goal oldFrontier newFrontier) :
+    HasNovelCapability oldArchive newFrontier := by
+  apply novelCapability_of_strictFrontierProgress
+    oldArchive oldFrontier newFrontier h0 hanti hcomplete
+  exact strictFrontierProgress_of_goalFrontierProgress
+    goal oldFrontier newFrontier hreflect hprogress
+
 namespace FrontierReplacementWithoutNovelty
 
 def old : Archive Nat := {1}
