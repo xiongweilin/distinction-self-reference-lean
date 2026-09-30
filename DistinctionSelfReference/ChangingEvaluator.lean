@@ -323,6 +323,14 @@ Nat would require an impossible infinite strictly decreasing potential.
 def predecessorEvaluators (_ : Nat) : Evaluator Nat where
   better a b := a = b + 1
 
+theorem predecessor_localEdge_iff {a b : Nat} :
+    LocalEdge predecessorEvaluators a b ↔ a = b + 1 := by
+  constructor
+  · rintro ⟨n, hn⟩
+    simpa [predecessorEvaluators] using hn
+  · intro hab
+    exact ⟨0, by simpa [predecessorEvaluators] using hab⟩
+
 theorem predecessor_acyclic :
     AcyclicLocalUnion predecessorEvaluators := by
   intro x hcycle
@@ -333,14 +341,10 @@ theorem predecessor_acyclic :
     intro a b hab
     induction hab with
     | single hab =>
-        rcases hab with ⟨n, hn⟩
-        have hn' : a = b + 1 := by
-          simpa [predecessorEvaluators] using hn
+        have hedge := predecessor_localEdge_iff.mp hab
         omega
     | tail _ hbc ih =>
-        rcases hbc with ⟨n, hn⟩
-        have hn' := hn
-        simp [predecessorEvaluators] at hn'
+        have hedge := predecessor_localEdge_iff.mp hbc
         omega
   exact (lt_irrefl x) (hdecreases hcycle)
 
