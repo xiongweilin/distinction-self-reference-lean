@@ -553,6 +553,79 @@ theorem evaluator_progress_does_not_imply_grounded_progress :
 
 end EvaluatorProgressWithoutGrounding
 
+namespace GoalProgressWithoutCapabilityNovelty
+
+def old : Archive Nat := {1}
+
+def new : Archive Nat := {0}
+
+def externalGoal : Nat → Nat
+  | 0 => 1
+  | _ => 0
+
+theorem grounded_goal_progress :
+    GoalFrontierProgress externalGoal old new := by
+  intro x hx
+  have hx1 : x = 1 := by
+    simpa [old] using hx
+  subst x
+  exact ⟨0, by simp [new], by simp [externalGoal]⟩
+
+theorem no_novel_capability :
+    ¬ HasNovelCapability old new := by
+  rintro ⟨y, hyNew, _, hnovel⟩
+  have hy0 : y = 0 := by
+    simpa [new] using hyNew
+  subst y
+  exact (hnovel 1 (by simp [old])) (by omega)
+
+/--
+Progress in one externally fixed objective need not add a capability in an
+independent capability preorder. Grounded goal progress is therefore still
+task/objective relative.
+-/
+theorem grounded_progress_does_not_imply_capability_novelty :
+    GoalFrontierProgress externalGoal old new ∧
+    ¬ HasNovelCapability old new :=
+  ⟨grounded_goal_progress, no_novel_capability⟩
+
+end GoalProgressWithoutCapabilityNovelty
+
+namespace CapabilityNoveltyWithoutGoalProgress
+
+def old : Archive Nat := {0}
+
+def new : Archive Nat := {1}
+
+def externalGoal (_ : Nat) : Nat := 0
+
+theorem novel_capability :
+    HasNovelCapability old new := by
+  refine ⟨1, by simp [new], by simp [old], ?_⟩
+  intro x hx hle
+  have hx0 : x = 0 := by
+    simpa [old] using hx
+  subst x
+  omega
+
+theorem no_grounded_goal_progress :
+    ¬ GoalFrontierProgress externalGoal old new := by
+  intro h
+  rcases h 0 (by simp [old]) with ⟨y, _, hy⟩
+  simp [externalGoal] at hy
+
+/--
+A genuinely new capability can be irrelevant to the chosen external objective.
+Capability novelty therefore does not imply grounded progress for an arbitrary
+fixed goal.
+-/
+theorem capability_novelty_does_not_imply_grounded_progress :
+    HasNovelCapability old new ∧
+    ¬ GoalFrontierProgress externalGoal old new :=
+  ⟨novel_capability, no_grounded_goal_progress⟩
+
+end CapabilityNoveltyWithoutGoalProgress
+
 namespace EvidenceArchiveMigration
 
 open EvidenceDependency.SelectiveCascadeExample
