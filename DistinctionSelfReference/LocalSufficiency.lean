@@ -46,6 +46,71 @@ theorem ambiguous_not_sufficient
   exact sufficient_not_ambiguous hs h
 
 /--
+Fiber constancy is the pointwise form of anchor sufficiency: states with the
+same observation must require the same commitment.
+-/
+def FiberConstant
+    {World : Type u} {Obs : Type v} {Choice : Type w}
+    (observe : World → Obs)
+    (required : World → Choice) : Prop :=
+  ∀ x y, observe x = observe y → required x = required y
+
+theorem not_ambiguous_iff_fiberConstant
+    {World : Type u} {Obs : Type v} {Choice : Type w}
+    {observe : World → Obs} {required : World → Choice} :
+    ¬ Ambiguous observe required ↔ FiberConstant observe required := by
+  constructor
+  · intro hno x y hobs
+    by_contra hchoice
+    exact hno ⟨x, y, hobs, hchoice⟩
+  · intro hconst
+    rintro ⟨x, y, hobs, hchoice⟩
+    exact hchoice (hconst x y hobs)
+
+/--
+If commitments are constant on every observation fiber, they factor through
+the observation. Nonempty Choice only supplies an arbitrary value for
+observations that no actual world realizes.
+-/
+theorem sufficient_of_fiberConstant
+    {World : Type u} {Obs : Type v} {Choice : Type w}
+    [Nonempty Choice]
+    {observe : World → Obs} {required : World → Choice}
+    (hconst : FiberConstant observe required) :
+    Sufficient observe required := by
+  classical
+  let post : Obs → Choice := fun o =>
+    if h : ∃ x, observe x = o then
+      required (Classical.choose h)
+    else
+      Classical.choice inferInstance
+  refine ⟨post, ?_⟩
+  funext x
+  change required x = post (observe x)
+  rw [show post (observe x) =
+      required (Classical.choose (show ∃ y, observe y = observe x from ⟨x, rfl⟩)) by
+    simp [post]]
+  apply hconst
+  exact (Classical.choose_spec
+    (show ∃ y, observe y = observe x from ⟨x, rfl⟩)).symm
+
+/--
+Sharp local-sufficiency criterion:
+an observation is sufficient exactly when there is no pair of
+observation-indistinguishable worlds requiring different commitments.
+-/
+theorem sufficient_iff_not_ambiguous
+    {World : Type u} {Obs : Type v} {Choice : Type w}
+    [Nonempty Choice]
+    {observe : World → Obs} {required : World → Choice} :
+    Sufficient observe required ↔ ¬ Ambiguous observe required := by
+  constructor
+  · exact sufficient_not_ambiguous
+  · intro hno
+    exact sufficient_of_fiberConstant
+      ((not_ambiguous_iff_fiberConstant).1 hno)
+
+/--
 More informative observations preserve sufficiency: if coarse is obtained by
 post-processing fine and coarse already determines the required commitment,
 then fine determines it as well.
