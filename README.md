@@ -14,9 +14,9 @@ The first milestone starts from the weakest concrete crossing model we can test 
 
 ## Experimental action-first branch (not v1.0 freeze)
 
-This research branch changes the **actual GuideCore dependency graph**: basic action and bounded purposeful control no longer require reflexive self-reference or identity continuity. [RobustAction.lean](DistinctionSelfReference/RobustAction.lean) proves that a common safe action can exist across unresolved possible worlds, that safety survives valid information refinement, and that incompatible worlds can have no common action. These are mathematical facts **conditional on the declared possible-state set and safe-action predicate**, not evidence that reality or external authorization are correctly modeled.
+This research branch adds an **independent ActionFirstGuideCore dependency graph**: basic action and bounded purposeful control do not require reflexive self-reference or identity continuity. The frozen `GuideCore.required` remains bit-for-bit unchanged, so the existing v1.0 core proof statements retain their original semantics. [RobustAction.lean](DistinctionSelfReference/RobustAction.lean) proves that a common safe action can exist across unresolved possible worlds, that safety survives valid information refinement, and that incompatible worlds can have no common action. These are mathematical facts **conditional on the declared possible-state set and safe-action predicate**, not evidence that reality or external authorization are correctly modeled.
 
-The v1.0 frozen core remains a historical reference. This graph change is **a new research proposal**, not a backward-compatible frozen-v1 semantics update, and must not be tagged v1.0 without separate core review.
+The action-first graph is a **new post-freeze research proposal**. Its [strict weakening proof](DistinctionSelfReference/ActionFirstGuideCore.lean) formally separates it from the untouched frozen `GuideCore`; the project still needs stable-toolchain gates before tagging v1.0.
 
 ## Verified scope at a glance
 
