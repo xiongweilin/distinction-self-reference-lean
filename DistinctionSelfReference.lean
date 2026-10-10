@@ -19,6 +19,7 @@ import DistinctionSelfReference.NestedGluing
 import DistinctionSelfReference.OverlapGluing
 import DistinctionSelfReference.LocalSufficiency
 import DistinctionSelfReference.RobustAction
+import DistinctionSelfReference.ActionFirstGuideCore
 import DistinctionSelfReference.AnchorMinimality
 import DistinctionSelfReference.CompositionalSufficiency
 import DistinctionSelfReference.ConditionalComposition
