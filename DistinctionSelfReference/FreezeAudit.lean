@@ -27,3 +27,12 @@ non-standard axioms across the complete default target.
 #print axioms DistinctionSelfReference.RSIFrameworkMorphisms.morphismRoleCore_eq_legacy_fullCore
 #print axioms DistinctionSelfReference.GuideCore.effectiveFinitude_does_not_imply_finite_state
 #print axioms DistinctionSelfReference.GuideCore.conditionalComposition_minimal
+
+-- These action-first boundaries are audited as explicitly named kernel
+-- theorems. A proof of model-relative safety is not model completeness.
+#print axioms DistinctionSelfReference.RobustAction.safe_for_actual
+#print axioms DistinctionSelfReference.RobustAction.survives_information_refinement
+#print axioms DistinctionSelfReference.RobustAction.commonSafe_union_iff
+#print axioms DistinctionSelfReference.RobustAction.common_action_without_world_identification
+#print axioms DistinctionSelfReference.RobustAction.incompatible_boolean_worlds_no_common_action
+#print axioms DistinctionSelfReference.RobustAction.omitted_actual_state_can_invalidate_safety
