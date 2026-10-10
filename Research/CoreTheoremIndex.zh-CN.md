@@ -42,3 +42,7 @@
 3. `lake check` 必须接受整个默认 target；
 4. 独立 checker 必须在选定 stable toolchain 上重放通过；
 5. necessity claim 必须保留 theorem-level countermodel 或 ablation result。
+
+## 不属于冻结 v1.0 核心的实验性分支
+
+行动优先分支新增 `RobustAction.CommonSafe`、`safe_for_actual`、`survives_information_refinement`、`commonSafe_union_iff`，及有、无共同行动的布尔反例；同时新增**独立的** `ActionFirstGuideCore.required` 行动与充分性依赖图，由严格弱化定理说明其相对于原 `GuideCore.required` 的真差异。冻结 v1.0 的定义、定理签名与显式前提全部保持不变，新图明确在冻结范围之外。

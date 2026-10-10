@@ -12,6 +12,12 @@ The project deliberately separates:
 
 The first milestone starts from the weakest concrete crossing model we can test without pretending that it is the unique meaning of "distinction".
 
+## Experimental action-first branch (not v1.0 freeze)
+
+This research branch adds an **independent ActionFirstGuideCore dependency graph**: basic action and bounded purposeful control do not require reflexive self-reference or identity continuity. The frozen `GuideCore.required` remains bit-for-bit unchanged, so the existing v1.0 core proof statements retain their original semantics. [RobustAction.lean](DistinctionSelfReference/RobustAction.lean) proves that a common safe action can exist across unresolved possible worlds, that safety survives valid information refinement, and that incompatible worlds can have no common action. These are mathematical facts **conditional on the declared possible-state set and safe-action predicate**, not evidence that reality or external authorization are correctly modeled.
+
+The action-first graph is a **new post-freeze research proposal**. Its [strict weakening proof](DistinctionSelfReference/ActionFirstGuideCore.lean) formally separates it from the untouched frozen `GuideCore`; the project still needs stable-toolchain gates before tagging v1.0.
+
 ## Verified scope at a glance
 
 This project proves conditional mathematical statements, not an ontology of mind, an empirical claim about AI, or the unconditional safety of recursive self-improvement. The minimal externally inspectable claims are:
