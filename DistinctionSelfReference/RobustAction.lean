@@ -1,3 +1,4 @@
+import Mathlib.Data.Set.Finite.Basic
 import DistinctionSelfReference.LocalSufficiency
 
 namespace DistinctionSelfReference
