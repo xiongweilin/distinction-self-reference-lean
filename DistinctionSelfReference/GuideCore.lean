@@ -140,8 +140,6 @@ theorem conditionalComposition_minimal :
       {.conditionalComposition} :=
   required_minimal .conditionalComposition
 
-/-- Self-model corrigibility is an independent strengthening branch, not an
-agency prerequisite. -/
 /-- There is an action-capability path that does not contain the reflexive
 self-model conditions. This is an explicit graph separation, not an ontology. -/
 theorem action_independent_of_reflexive_self_reference :
@@ -149,6 +147,7 @@ theorem action_independent_of_reflexive_self_reference :
     Condition.maintainedReentry ∉ required Capability.purposefulFiniteActor := by
   constructor <;> simp [required]
 
+/-- Self-model corrigibility remains a separate strengthening branch. -/
 theorem corrigibility_branch_independent_of_agency :
     Condition.realityChangingAgency ∉
       required Capability.corrigibleSelfModel ∧
