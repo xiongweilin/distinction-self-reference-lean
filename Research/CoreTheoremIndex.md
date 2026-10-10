@@ -53,3 +53,7 @@ For the freeze:
 4. `lake check --paranoid` must additionally be accepted by all independent
    checkers bundled with the selected stable Lean release;
 5. necessity claims must retain a theorem-level countermodel or ablation result.
+
+## Experimental research branch outside the frozen core
+
+The action-first branch adds `RobustAction.CommonSafe`, `safe_for_actual`, `survives_information_refinement`, `commonSafe_union_iff`, and explicit Boolean examples with and without a common action. It also changes `GuideCore.required` for actor, finite actor, purposeful finite actor and local-sufficiency problem so self-reference is not compulsory for elementary action. The existing v1.0 table remains a historical core contract; this change is **not silently absorbed into the frozen semantics**.
