@@ -56,4 +56,4 @@ For the freeze:
 
 ## Experimental research branch outside the frozen core
 
-The action-first branch adds `RobustAction.CommonSafe`, `safe_for_actual`, `survives_information_refinement`, `commonSafe_union_iff`, and explicit Boolean examples with and without a common action. It also changes `GuideCore.required` for actor, finite actor, purposeful finite actor and local-sufficiency problem so self-reference is not compulsory for elementary action. The existing v1.0 table remains a historical core contract; this change is **not silently absorbed into the frozen semantics**.
+The action-first branch adds `RobustAction.CommonSafe`, `safe_for_actual`, `survives_information_refinement`, `commonSafe_union_iff`, and explicit Boolean examples with and without a common action. It adds the independent `ActionFirstGuideCore.required` graph for actors and local sufficiency, with a **strict-weakening theorem** relative to the still-unchanged frozen `GuideCore.required`. The v1.0 theorem signatures and assumptions stay untouched; the new graph is explicitly outside their release scope.
