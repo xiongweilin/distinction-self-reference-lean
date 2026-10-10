@@ -42,6 +42,7 @@ The first milestone starts from the weakest concrete crossing model we can test 
 | Local sufficiency | observation + required commitment | sufficiency is factorization through the observation and is equivalent to absence of an ambiguity witness |
 | Compositional sufficiency | locally sufficient observations + cover + overlap compatibility | local commitments glue into a global commitment decodable from combined observations |
 | Conditional composition | compositional sufficiency + finite recoverability | constructs a global commitment witness together with a recovery plan back to viability |
+| Guide's interpretive sufficiency | context, purpose, evidence, residual unknowns, and a proposed transition | not formalized or empirically validated by these theorems; see [guide's broader account](https://github.com/xiongweilin/guide/blob/main/framework/sufficiency.md) |
 | Deterministic information order | representation + post-processing factorization | post-processing cannot create new distinctions; strict information loss exists |
 | Markov garbling | experiment + Markov post-processing | Bayes risk cannot improve, risk-based information and KL divergence cannot increase |
 | Information → future bridge | coarse summary factors through residual language | FutureEq histories remain equal under every such summary |
