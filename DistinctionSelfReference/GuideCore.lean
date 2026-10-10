@@ -19,9 +19,8 @@ open Viability
 universe u v w x y a b
 
 /--
-This revision keeps minimal self-reference on an independent branch and makes
-reality-changing action the first controller-relevant capability. Only the
-mathematically explicit dependency graph is represented. These constructors are dependency labels, not claims that the
+Only the mathematically explicit dependency spine from the guide repository is
+represented here. These constructors are dependency labels, not claims that the
 corresponding philosophical notions have been reduced to one Lean datatype.
 -/
 inductive Condition
@@ -51,8 +50,8 @@ inductive Capability
   deriving DecidableEq, Repr
 
 /--
-Guide dependency sets. Neither reflective self-reference nor corrigibility
-is a prerequisite for a bounded controller.
+Guide dependency sets. The corrigibility/self-revision branch is intentionally
+not a prerequisite for becoming an actor.
 -/
 def required : Capability → Set Condition
   | .minimalSelfReference =>
@@ -64,14 +63,18 @@ def required : Capability → Set Condition
       { .externalConstraint, .reflexiveDistinction, .maintainedReentry,
         .identityContinuity, .realitySideRevisability }
   | .actor =>
-      { .externalConstraint, .realityChangingAgency }
+      { .externalConstraint, .reflexiveDistinction, .maintainedReentry,
+        .identityContinuity, .realityChangingAgency }
   | .finiteActor =>
-      { .externalConstraint, .realityChangingAgency, .effectiveFinitude }
+      { .externalConstraint, .reflexiveDistinction, .maintainedReentry,
+        .identityContinuity, .realityChangingAgency, .effectiveFinitude }
   | .purposefulFiniteActor =>
-      { .externalConstraint, .realityChangingAgency, .effectiveFinitude,
+      { .externalConstraint, .reflexiveDistinction, .maintainedReentry,
+        .identityContinuity, .realityChangingAgency, .effectiveFinitude,
         .purpose }
   | .localSufficiencyProblem =>
-      { .externalConstraint, .realityChangingAgency, .effectiveFinitude,
+      { .externalConstraint, .reflexiveDistinction, .maintainedReentry,
+        .identityContinuity, .realityChangingAgency, .effectiveFinitude,
         .purpose, .exploreCommitChoice }
   | .conditionalComposition =>
       { .localSufficiency, .compatibility, .recoverability }
@@ -140,14 +143,8 @@ theorem conditionalComposition_minimal :
       {.conditionalComposition} :=
   required_minimal .conditionalComposition
 
-/-- There is an action-capability path that does not contain the reflexive
-self-model conditions. This is an explicit graph separation, not an ontology. -/
-theorem action_independent_of_reflexive_self_reference :
-    Condition.reflexiveDistinction ∉ required Capability.actor ∧
-    Condition.maintainedReentry ∉ required Capability.purposefulFiniteActor := by
-  constructor <;> simp [required]
-
-/-- Self-model corrigibility remains a separate strengthening branch. -/
+/-- Self-model corrigibility is an independent strengthening branch, not an
+agency prerequisite. -/
 theorem corrigibility_branch_independent_of_agency :
     Condition.realityChangingAgency ∉
       required Capability.corrigibleSelfModel ∧
