@@ -80,5 +80,19 @@ theorem incompatible_boolean_worlds_no_common_action :
   have ht : true = a := ha true (Set.mem_univ true)
   exact Bool.false_ne_true (hf.trans ht.symm)
 
+/--
+A declared safe action need not be safe in an omitted actual state. This is
+a necessity witness for the `actual ∈ possible` premise of `safe_for_actual`,
+not evidence that any deployed possible-world model is complete.
+-/
+theorem omitted_actual_state_can_invalidate_safety :
+    CommonSafe ({false} : Set Bool)
+      (fun world (_ : Bool) => world = false) false ∧
+    ¬ (fun world (_ : Bool) => world = false) true false := by
+  constructor
+  · intro world hw
+    simpa using hw
+  · decide
+
 end RobustAction
 end DistinctionSelfReference
