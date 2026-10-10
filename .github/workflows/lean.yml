@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Check Lean source audit lexical behavior
+        run: python3 -m unittest discover -s .github/scripts -p "test_*.py" -v
+
       - name: Reject unfinished or project-local axiom declarations
         run: python3 .github/scripts/audit_lean_sources.py
 
