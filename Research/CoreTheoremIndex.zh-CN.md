@@ -45,4 +45,4 @@
 
 ## 不属于冻结 v1.0 核心的实验性分支
 
-行动优先分支新增 `RobustAction.CommonSafe`、`safe_for_actual`、`survives_information_refinement`、`commonSafe_union_iff`，及有、无共同行动的布尔反例；同时更改 `GuideCore.required` 的行动者、有限行动者、目的性行动者和局部充分性问题依赖集合，不再要求基础行动必须先有自指。上面的 v1.0 表格保留为历史冻结契约，**不能悄悄把本次语义更改归为冻结版本**。
+行动优先分支新增 `RobustAction.CommonSafe`、`safe_for_actual`、`survives_information_refinement`、`commonSafe_union_iff`，及有、无共同行动的布尔反例；同时新增**独立的** `ActionFirstGuideCore.required` 行动与充分性依赖图，由严格弱化定理说明其相对于原 `GuideCore.required` 的真差异。冻结 v1.0 的定义、定理签名与显式前提全部保持不变，新图明确在冻结范围之外。
