@@ -40,6 +40,9 @@ jobs:
       - name: Audit v1.0 core theorem names and axioms
         run: lake env lean DistinctionSelfReference/FreezeAudit.lean
 
+      - name: Audit additive action-first research theorem names and axioms
+        run: lake env lean DistinctionSelfReference/ResearchActionAudit.lean
+
       - name: Export checked root module once
         shell: bash
         run: |
