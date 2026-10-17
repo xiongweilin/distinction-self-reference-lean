@@ -23,7 +23,7 @@
 | framework equivalence | `FrameworkMorphisms.FrameworkEquivalence.preservesDominance` | 双向 morphism + inverse laws | one-way morphism countermodel |
 | RSI invariant core | `RSIFrameworkMorphisms.morphismRoleCore_eq_legacy_fullCore` | advanced / next RSI 到共享 role framework 的 certified translations | 精确恢复旧手工 core |
 | effective finitude 边界 | `GuideCore.effectiveFinitude_does_not_imply_finite_state` | 每状态有效 capability set 有限 | 显式无限 `Nat` state space |
-| guide 依赖主干 | `GuideCore.conditionalComposition_minimal` | 形式 dependency graph 内 | corrigibility 保持独立支路 |
+| 冻结的自指依赖图 | `GuideCore.conditionalComposition_minimal` | 仅在历史形式模型内 | corrigibility 保持独立支路 |
 
 ## 分类规则
 

@@ -1,5 +1,5 @@
 /-
-Guide dependency spine formalization.
+Frozen scoped self-reference dependency graph; not guide's current universal foundation.
 -/
 import Mathlib.Data.Set.Finite.Basic
 import Mathlib.Algebra.CharZero.Infinite
@@ -19,9 +19,10 @@ open Viability
 universe u v w x y a b
 
 /--
-Only the mathematically explicit dependency spine from the guide repository is
-represented here. These constructors are dependency labels, not claims that the
-corresponding philosophical notions have been reduced to one Lean datatype.
+This frozen graph formalizes a historical self-reference-centered dependency
+model. It is not a proof that actors or bounded controllers universally require
+self-reference. Constructors are local dependency labels, not reductions of
+general philosophical concepts to one Lean datatype.
 -/
 inductive Condition
   | externalConstraint
@@ -50,8 +51,9 @@ inductive Capability
   deriving DecidableEq, Repr
 
 /--
-Guide dependency sets. The corrigibility/self-revision branch is intentionally
-not a prerequisite for becoming an actor.
+Frozen model-relative dependency sets. The actor branch here includes reflexive
+conditions by definition; the current bounded-action model in ActionFirstGuideCore
+does not impose them. Corrigibility is independent in this graph.
 -/
 def required : Capability → Set Condition
   | .minimalSelfReference =>

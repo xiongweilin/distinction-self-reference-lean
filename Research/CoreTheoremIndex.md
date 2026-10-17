@@ -28,7 +28,7 @@ prints kernel axioms for every theorem listed here.
 | Framework equivalence | `FrameworkMorphisms.FrameworkEquivalence.preservesDominance` | two-sided morphisms with inverse laws | one-way morphism countermodel |
 | RSI invariant core | `RSIFrameworkMorphisms.morphismRoleCore_eq_legacy_fullCore` | certified advanced/next translations to shared role framework | legacy manual core is recovered exactly |
 | Effective finitude boundary | `GuideCore.effectiveFinitude_does_not_imply_finite_state` | per-state finite effective capability sets | explicit infinite `Nat` state space |
-| guide dependency spine | `GuideCore.conditionalComposition_minimal` | formal dependency graph only | corrigibility kept on independent branch |
+| frozen self-reference dependency graph | `GuideCore.conditionalComposition_minimal` | historical scoped formal graph only | corrigibility kept on independent branch |
 
 ## Classification policy
 
