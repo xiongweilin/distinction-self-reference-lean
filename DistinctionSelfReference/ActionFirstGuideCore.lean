@@ -7,9 +7,9 @@ namespace ActionFirstGuideCore
 open MetaFramework
 
 /--
-Post-freeze action-first proposal. Reuse the exact same dependency vocabulary
-as the frozen GuideCore, but do not rewrite its historically audited required
-function or the statements imported by FreezeAudit.
+Current scoped bounded-action dependency model. Reuse the frozen graph's labels
+for comparability without altering historically audited proofs. This graph
+neither formalizes all of guide nor guarantees deployed safety/authorization.
 -/
 def required : GuideCore.Capability → Set GuideCore.Condition
   | .minimalSelfReference =>
@@ -31,7 +31,7 @@ def required : GuideCore.Capability → Set GuideCore.Condition
   | .conditionalComposition =>
       GuideCore.required .conditionalComposition
 
-/-- Revised finite graph, distinct from the frozen v1.0 GuideCore graph. -/
+/-- Bounded-action dependency graph, distinct from the archived GuideCore graph. -/
 def graph : FrameworkGraph GuideCore.Condition GuideCore.Capability where
   derives conditions capability := required capability ⊆ conditions
   monotone := by

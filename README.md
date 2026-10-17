@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](./README.zh-CN.md)
 
-A formal research project for studying which additional conditions turn a minimal distinction-and-reentry system into progressively stronger forms of self-reference.
+A formal research project about scoped distinction, self-reference, persistence, bounded action and related proof obligations. Particular dependency graphs are models, not universal prerequisites for action or the ontology of guide.
 
 The project deliberately separates:
 
@@ -12,11 +12,11 @@ The project deliberately separates:
 
 The first milestone starts from the weakest concrete crossing model we can test without pretending that it is the unique meaning of "distinction".
 
-## Experimental action-first branch (not v1.0 freeze)
+## Bounded-action model and frozen self-reference model
 
 This research branch adds an **independent ActionFirstGuideCore dependency graph**: basic action and bounded purposeful control do not require reflexive self-reference or identity continuity. The frozen `GuideCore.required` remains bit-for-bit unchanged, so the existing v1.0 core proof statements retain their original semantics. [RobustAction.lean](DistinctionSelfReference/RobustAction.lean) proves that a common safe action can exist across unresolved possible worlds, that safety survives valid information refinement, and that incompatible worlds can have no common action. These are mathematical facts **conditional on the declared possible-state set and safe-action predicate**, not evidence that reality or external authorization are correctly modeled.
 
-The action-first graph is a **new post-freeze research proposal**. Its [strict weakening proof](DistinctionSelfReference/ActionFirstGuideCore.lean) formally separates it from the untouched frozen `GuideCore`; the project still needs stable-toolchain gates before tagging v1.0.
+The [strict weakening proof](DistinctionSelfReference/ActionFirstGuideCore.lean) distinguishes the current bounded-action model from the archived, frozen `GuideCore` dependency graph. Both are valid formal objects under their stated definitions, but the reflexive prerequisite of the frozen graph is **not** a requirement of current guide's general framework. Stable-toolchain release gates remain separate.
 
 ## Verified scope at a glance
 
@@ -24,7 +24,7 @@ This project proves conditional mathematical statements, not an ontology of mind
 
 - **Involutions:** a crossing state is fixed or belongs to a two-cycle; finite odd carriers have a fixed point.
 - **Representation:** the Lawvere-style fixed-point obstruction requires a representability/diagonal assumption. A mere two-state swap does not prove general self-reference.
-- **Judgment:** observation-relative commitment sufficiency means factorization through an observation; it is **not** guide's real-world three-way judgment or its causal benefit.
+- **Judgment:** observation-relative commitment sufficiency is a formal factorization condition; it is distinct from guide's optional, purpose-relative interpretive sufficiency and from empirical judgment benefit.
 - **Composition:** local statements compose only with the specified coverage, overlap-compatibility, and where applicable recovery assumptions.
 - **RSI/evaluators:** soundness or improvement transfers only under named trust, anchor, goal-preservation, and resource/freshness assumptions. Those assumptions are not guaranteed by the theorem itself.
 
